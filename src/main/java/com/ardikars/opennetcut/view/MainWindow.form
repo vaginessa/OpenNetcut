@@ -2,14 +2,14 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Menu class="javax.swing.JMenuBar" name="MainMenu">
+    <Menu class="javax.swing.JMenuBar" name="_MenuBar">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="FileMenu">
+        <Menu class="javax.swing.JMenu" name="_FileMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="OpenMenu">
+            <MenuItem class="javax.swing.JMenuItem" name="_OpenMenu">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+O"/>
@@ -20,10 +20,10 @@
                 <Property name="text" type="java.lang.String" value="Open"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OpenMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_OpenMenuActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="SaveMenu">
+            <MenuItem class="javax.swing.JMenuItem" name="_SaveMenu">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+S"/>
@@ -34,10 +34,10 @@
                 <Property name="text" type="java.lang.String" value="Save"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SaveMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_SaveMenuActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="ExitMenu">
+            <MenuItem class="javax.swing.JMenuItem" name="_ExitMenu">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/window-close.png"/>
@@ -45,17 +45,17 @@
                 <Property name="text" type="java.lang.String" value="Exit"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ExitMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_ExitMenuActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="EditMenu">
+        <Menu class="javax.swing.JMenu" name="_EditMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="NICMenu">
+            <MenuItem class="javax.swing.JMenuItem" name="_NICMenu">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+E"/>
@@ -66,17 +66,42 @@
                 <Property name="text" type="java.lang.String" value="Network Interface Card"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NICMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_NICMenuActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="HelpMenu">
+        <Menu class="javax.swing.JMenu" name="_PluginsMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Plugins"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="_DNSSpoofPluginMenu">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="DNSSpoof"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="_SSLSniffPluginMenu">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="SSLSniff"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="_NDPSupport">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="NDPSupport"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="_HelpMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Help"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="UpdateMenu">
+            <MenuItem class="javax.swing.JMenuItem" name="_UpdateMenu">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+U"/>
@@ -87,10 +112,10 @@
                 <Property name="text" type="java.lang.String" value="Check For Update"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="UpdateMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_UpdateMenuActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="AboutMenu">
+            <MenuItem class="javax.swing.JMenuItem" name="_AboutMenu">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+A"/>
@@ -101,7 +126,7 @@
                 <Property name="text" type="java.lang.String" value="About"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AboutMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_AboutMenuActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -117,7 +142,7 @@
     </Property>
   </Properties>
   <SyntheticProperties>
-    <SyntheticProperty name="menuBar" type="java.lang.String" value="MainMenu"/>
+    <SyntheticProperty name="menuBar" type="java.lang.String" value="_MenuBar"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
@@ -143,45 +168,45 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="LogsSP" alignment="0" max="32767" attributes="0"/>
+                  <Component id="_LogsSP" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="ScanPanel" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="TargetPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="_TargetPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="LogoPanel" min="-2" max="-2" attributes="0"/>
+                      <Component id="_LogoPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="progress" max="32767" attributes="0"/>
+                  <Component id="_progressBar" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Component id="Toolbar" alignment="0" max="32767" attributes="0"/>
+          <Component id="_Toolbar" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="Toolbar" min="-2" pref="25" max="-2" attributes="0"/>
+              <Component id="_Toolbar" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="LogoPanel" min="-2" max="-2" attributes="0"/>
+              <Component id="_LogoPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="TargetPanel" max="32767" attributes="0"/>
+                  <Component id="_TargetPanel" max="32767" attributes="0"/>
                   <Component id="ScanPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="LogsSP" min="-2" pref="64" max="-2" attributes="0"/>
+              <Component id="_LogsSP" min="-2" pref="64" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="progress" min="-2" pref="8" max="-2" attributes="0"/>
+              <Component id="_progressBar" min="-2" pref="8" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="TargetPanel">
+    <Container class="javax.swing.JPanel" name="_TargetPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -196,16 +221,16 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="TargetSP" pref="0" max="32767" attributes="0"/>
+                      <Component id="_TargetSP" pref="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="btn_cut" pref="120" max="32767" attributes="0"/>
-                              <Component id="btn_move_to_left" pref="120" max="32767" attributes="0"/>
+                              <Component id="_btnCut" pref="120" max="32767" attributes="0"/>
+                              <Component id="_btnMoveToLeft" pref="120" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btn_mitm" max="32767" attributes="0"/>
-                              <Component id="btn_target_check" min="-2" pref="120" max="-2" attributes="0"/>
+                              <Component id="_btnMITM" max="32767" attributes="0"/>
+                              <Component id="_btnAddTarget" min="-2" pref="120" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -218,23 +243,23 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btn_cut" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btn_mitm" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_btnCut" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_btnMITM" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btn_move_to_left" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btn_target_check" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_btnMoveToLeft" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_btnAddTarget" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="TargetSP" pref="221" max="32767" attributes="0"/>
+                  <Component id="_TargetSP" pref="220" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JScrollPane" name="TargetSP">
+        <Container class="javax.swing.JScrollPane" name="_TargetSP">
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>
@@ -256,7 +281,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="btn_cut">
+        <Component class="javax.swing.JButton" name="_btnCut">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/edit-cut.png"/>
@@ -264,10 +289,10 @@
             <Property name="text" type="java.lang.String" value="Cut"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cutActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnCutActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_mitm">
+        <Component class="javax.swing.JButton" name="_btnMITM">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/network-idle.png"/>
@@ -275,27 +300,27 @@
             <Property name="text" type="java.lang.String" value="MITM"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_mitmActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnMITMActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_move_to_left">
+        <Component class="javax.swing.JButton" name="_btnMoveToLeft">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/go-next-rtl.png"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_move_to_leftActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnMoveToLeftActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_target_check">
+        <Component class="javax.swing.JButton" name="_btnAddTarget">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/zoom-in.png"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_target_checkActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnAddTargetActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -315,34 +340,34 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="ScanSP" max="32767" attributes="0"/>
+                      <Component id="_ScanSP" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lbl_find_by" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lbl_nic_name" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="_lblFindBy" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="_lblNICName" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="cb_scan_by" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="_cbScanBy" min="-2" pref="100" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txt_input_find" pref="79" max="32767" attributes="0"/>
+                                  <Component id="_txtInputFind" pref="79" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="txt_nic_name" max="32767" attributes="0"/>
+                              <Component id="_txt_NICName" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="btn_scan" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="_btnScan" min="-2" pref="80" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btn_scan_check" min="-2" pref="120" max="-2" attributes="0"/>
+                                  <Component id="_btnScanAddToTarget" min="-2" pref="120" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btn_move_to_right" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="_btnMoveToRight" min="-2" pref="80" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
-                                  <Component id="lbl_hw_addr" min="-2" max="-2" attributes="0"/>
+                                  <Component id="_lblHwAddr" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="txt_hw_addr" max="32767" attributes="0"/>
+                                  <Component id="_txtHwAddr" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -356,29 +381,29 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lbl_nic_name" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lbl_hw_addr" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txt_nic_name" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="txt_hw_addr" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="_lblNICName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_lblHwAddr" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_txt_NICName" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="_txtHwAddr" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btn_scan" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cb_scan_by" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lbl_find_by" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txt_input_find" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="btn_scan_check" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btn_move_to_right" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_btnScan" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_cbScanBy" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_lblFindBy" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_txtInputFind" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="_btnScanAddToTarget" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_btnMoveToRight" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="ScanSP" pref="0" max="32767" attributes="0"/>
+                  <Component id="_ScanSP" pref="0" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JScrollPane" name="ScanSP">
+        <Container class="javax.swing.JScrollPane" name="_ScanSP">
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>
@@ -403,17 +428,17 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="btn_scan">
+        <Component class="javax.swing.JButton" name="_btnScan">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/media-playback-start.png"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_scanActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnScanActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cb_scan_by">
+        <Component class="javax.swing.JComboBox" name="_cbScanBy">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
@@ -423,69 +448,69 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cb_scan_byActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_cbScanByActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="lbl_find_by">
+        <Component class="javax.swing.JLabel" name="_lblFindBy">
           <Properties>
             <Property name="text" type="java.lang.String" value="Find target by"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txt_input_find">
+        <Component class="javax.swing.JTextField" name="_txtInputFind">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_scan_check">
+        <Component class="javax.swing.JButton" name="_btnScanAddToTarget">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/zoom-in.png"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_scan_checkActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnScanAddToTargetActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_move_to_right">
+        <Component class="javax.swing.JButton" name="_btnMoveToRight">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/go-next.png"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_move_to_rightActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnMoveToRightActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="lbl_nic_name">
+        <Component class="javax.swing.JLabel" name="_lblNICName">
           <Properties>
             <Property name="text" type="java.lang.String" value="NIC Name"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lbl_hw_addr">
+        <Component class="javax.swing.JLabel" name="_lblHwAddr">
           <Properties>
             <Property name="text" type="java.lang.String" value="Hardware Address"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txt_nic_name">
+        <Component class="javax.swing.JTextField" name="_txt_NICName">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txt_hw_addr">
+        <Component class="javax.swing.JTextField" name="_txtHwAddr">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JScrollPane" name="LogsSP">
+    <Container class="javax.swing.JScrollPane" name="_LogsSP">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTextArea" name="txt_logs">
+        <Component class="javax.swing.JTextArea" name="_txt_logs">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
             <Property name="columns" type="int" value="20"/>
@@ -494,18 +519,18 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="LogoPanel">
+    <Container class="javax.swing.JPanel" name="_LogoPanel">
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lbl_logo" pref="451" max="32767" attributes="0"/>
+                  <Component id="_lblLogo" pref="451" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="lbl_jxnet" min="-2" max="-2" attributes="0"/>
+                  <Component id="_lblJxnet" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="167" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -514,16 +539,16 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace pref="22" max="32767" attributes="0"/>
-                  <Component id="lbl_logo" min="-2" pref="52" max="-2" attributes="0"/>
+                  <Component id="_lblLogo" min="-2" pref="52" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lbl_jxnet" min="-2" max="-2" attributes="0"/>
+                  <Component id="_lblJxnet" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="lbl_logo">
+        <Component class="javax.swing.JLabel" name="_lblLogo">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial Black" size="48" style="1"/>
@@ -532,7 +557,7 @@
             <Property name="text" type="java.lang.String" value=" [ OpenNetcut ] "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lbl_jxnet">
+        <Component class="javax.swing.JLabel" name="_lblJxnet">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="12" style="3"/>
@@ -542,14 +567,14 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JProgressBar" name="progress">
+    <Component class="javax.swing.JProgressBar" name="_progressBar">
       <Properties>
         <Property name="maximum" type="int" value="255"/>
         <Property name="string" type="java.lang.String" value=""/>
         <Property name="stringPainted" type="boolean" value="true"/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JToolBar" name="Toolbar">
+    <Container class="javax.swing.JToolBar" name="_Toolbar">
       <Properties>
         <Property name="floatable" type="boolean" value="false"/>
         <Property name="borderPainted" type="boolean" value="false"/>
@@ -557,7 +582,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
-        <Component class="javax.swing.Box$Filler" name="filler1">
+        <Component class="javax.swing.Box$Filler" name="_filler1">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[10, 10]"/>
@@ -573,14 +598,14 @@
             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="OpenIcon">
+        <Component class="javax.swing.JLabel" name="_OpenIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/32x32/document-open.png"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.Box$Filler" name="filler2">
+        <Component class="javax.swing.Box$Filler" name="_filler2">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[10, 10]"/>
@@ -596,14 +621,14 @@
             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="SaveIcon">
+        <Component class="javax.swing.JLabel" name="_SaveIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/32x32/document-save.png"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.Box$Filler" name="filler4">
+        <Component class="javax.swing.Box$Filler" name="_filler4">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[10, 10]"/>
@@ -619,14 +644,14 @@
             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="SettingIcon">
+        <Component class="javax.swing.JLabel" name="_SettingIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/32x32/applications-system.png"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.Box$Filler" name="filler5">
+        <Component class="javax.swing.Box$Filler" name="_filler5">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[10, 10]"/>
@@ -642,14 +667,14 @@
             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="WifiIcon">
+        <Component class="javax.swing.JLabel" name="_WifiIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/32x32/network-wireless.png"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.Box$Filler" name="filler6">
+        <Component class="javax.swing.Box$Filler" name="_filler6">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[10, 10]"/>
@@ -665,7 +690,7 @@
             <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="HelpIcon">
+        <Component class="javax.swing.JLabel" name="_HelpIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/32x32/help-browser.png"/>

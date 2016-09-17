@@ -19,53 +19,57 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        TargetPanel = new javax.swing.JPanel();
-        TargetSP = new javax.swing.JScrollPane();
+        _TargetPanel = new javax.swing.JPanel();
+        _TargetSP = new javax.swing.JScrollPane();
         TargetTable = new javax.swing.JTable();
-        btn_cut = new javax.swing.JButton();
-        btn_mitm = new javax.swing.JButton();
-        btn_move_to_left = new javax.swing.JButton();
-        btn_target_check = new javax.swing.JButton();
+        _btnCut = new javax.swing.JButton();
+        _btnMITM = new javax.swing.JButton();
+        _btnMoveToLeft = new javax.swing.JButton();
+        _btnAddTarget = new javax.swing.JButton();
         ScanPanel = new javax.swing.JPanel();
-        ScanSP = new javax.swing.JScrollPane();
+        _ScanSP = new javax.swing.JScrollPane();
         ScanTable = new javax.swing.JTable();
-        btn_scan = new javax.swing.JButton();
-        cb_scan_by = new javax.swing.JComboBox();
-        lbl_find_by = new javax.swing.JLabel();
-        txt_input_find = new javax.swing.JTextField();
-        btn_scan_check = new javax.swing.JButton();
-        btn_move_to_right = new javax.swing.JButton();
-        lbl_nic_name = new javax.swing.JLabel();
-        lbl_hw_addr = new javax.swing.JLabel();
-        txt_nic_name = new javax.swing.JTextField();
-        txt_hw_addr = new javax.swing.JTextField();
-        LogsSP = new javax.swing.JScrollPane();
-        txt_logs = new javax.swing.JTextArea();
-        LogoPanel = new javax.swing.JPanel();
-        lbl_logo = new javax.swing.JLabel();
-        lbl_jxnet = new javax.swing.JLabel();
-        progress = new javax.swing.JProgressBar();
-        Toolbar = new javax.swing.JToolBar();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
-        OpenIcon = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
-        SaveIcon = new javax.swing.JLabel();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
-        SettingIcon = new javax.swing.JLabel();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
-        WifiIcon = new javax.swing.JLabel();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
-        HelpIcon = new javax.swing.JLabel();
-        MainMenu = new javax.swing.JMenuBar();
-        FileMenu = new javax.swing.JMenu();
-        OpenMenu = new javax.swing.JMenuItem();
-        SaveMenu = new javax.swing.JMenuItem();
-        ExitMenu = new javax.swing.JMenuItem();
-        EditMenu = new javax.swing.JMenu();
-        NICMenu = new javax.swing.JMenuItem();
-        HelpMenu = new javax.swing.JMenu();
-        UpdateMenu = new javax.swing.JMenuItem();
-        AboutMenu = new javax.swing.JMenuItem();
+        _btnScan = new javax.swing.JButton();
+        _cbScanBy = new javax.swing.JComboBox();
+        _lblFindBy = new javax.swing.JLabel();
+        _txtInputFind = new javax.swing.JTextField();
+        _btnScanAddToTarget = new javax.swing.JButton();
+        _btnMoveToRight = new javax.swing.JButton();
+        _lblNICName = new javax.swing.JLabel();
+        _lblHwAddr = new javax.swing.JLabel();
+        _txt_NICName = new javax.swing.JTextField();
+        _txtHwAddr = new javax.swing.JTextField();
+        _LogsSP = new javax.swing.JScrollPane();
+        _txt_logs = new javax.swing.JTextArea();
+        _LogoPanel = new javax.swing.JPanel();
+        _lblLogo = new javax.swing.JLabel();
+        _lblJxnet = new javax.swing.JLabel();
+        _progressBar = new javax.swing.JProgressBar();
+        _Toolbar = new javax.swing.JToolBar();
+        _filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
+        _OpenIcon = new javax.swing.JLabel();
+        _filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
+        _SaveIcon = new javax.swing.JLabel();
+        _filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
+        _SettingIcon = new javax.swing.JLabel();
+        _filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
+        _WifiIcon = new javax.swing.JLabel();
+        _filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
+        _HelpIcon = new javax.swing.JLabel();
+        _MenuBar = new javax.swing.JMenuBar();
+        _FileMenu = new javax.swing.JMenu();
+        _OpenMenu = new javax.swing.JMenuItem();
+        _SaveMenu = new javax.swing.JMenuItem();
+        _ExitMenu = new javax.swing.JMenuItem();
+        _EditMenu = new javax.swing.JMenu();
+        _NICMenu = new javax.swing.JMenuItem();
+        _PluginsMenu = new javax.swing.JMenu();
+        _DNSSpoofPluginMenu = new javax.swing.JCheckBoxMenuItem();
+        _SSLSniffPluginMenu = new javax.swing.JCheckBoxMenuItem();
+        _NDPSupport = new javax.swing.JCheckBoxMenuItem();
+        _HelpMenu = new javax.swing.JMenu();
+        _UpdateMenu = new javax.swing.JMenuItem();
+        _AboutMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OpenNetcut");
@@ -79,7 +83,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        TargetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Attack ]"));
+        _TargetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Attack ]"));
 
         TargetTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -92,69 +96,69 @@ public class MainWindow extends javax.swing.JFrame {
 
             }
         ));
-        TargetSP.setViewportView(TargetTable);
+        _TargetSP.setViewportView(TargetTable);
 
-        btn_cut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/edit-cut.png"))); // NOI18N
-        btn_cut.setText("Cut");
-        btn_cut.addActionListener(new java.awt.event.ActionListener() {
+        _btnCut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/edit-cut.png"))); // NOI18N
+        _btnCut.setText("Cut");
+        _btnCut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cutActionPerformed(evt);
+                _btnCutActionPerformed(evt);
             }
         });
 
-        btn_mitm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/network-idle.png"))); // NOI18N
-        btn_mitm.setText("MITM");
-        btn_mitm.addActionListener(new java.awt.event.ActionListener() {
+        _btnMITM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/network-idle.png"))); // NOI18N
+        _btnMITM.setText("MITM");
+        _btnMITM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_mitmActionPerformed(evt);
+                _btnMITMActionPerformed(evt);
             }
         });
 
-        btn_move_to_left.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/go-next-rtl.png"))); // NOI18N
-        btn_move_to_left.addActionListener(new java.awt.event.ActionListener() {
+        _btnMoveToLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/go-next-rtl.png"))); // NOI18N
+        _btnMoveToLeft.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_move_to_leftActionPerformed(evt);
+                _btnMoveToLeftActionPerformed(evt);
             }
         });
 
-        btn_target_check.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-in.png"))); // NOI18N
-        btn_target_check.addActionListener(new java.awt.event.ActionListener() {
+        _btnAddTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-in.png"))); // NOI18N
+        _btnAddTarget.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_target_checkActionPerformed(evt);
+                _btnAddTargetActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout TargetPanelLayout = new javax.swing.GroupLayout(TargetPanel);
-        TargetPanel.setLayout(TargetPanelLayout);
-        TargetPanelLayout.setHorizontalGroup(
-            TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(TargetPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout _TargetPanelLayout = new javax.swing.GroupLayout(_TargetPanel);
+        _TargetPanel.setLayout(_TargetPanelLayout);
+        _TargetPanelLayout.setHorizontalGroup(
+            _TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(_TargetPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TargetSP, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(TargetPanelLayout.createSequentialGroup()
-                        .addGroup(TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btn_cut, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(btn_move_to_left, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(_TargetSP, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(_TargetPanelLayout.createSequentialGroup()
+                        .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(_btnCut, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(_btnMoveToLeft, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_mitm, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_target_check, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(_btnMITM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(_btnAddTarget, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
-        TargetPanelLayout.setVerticalGroup(
-            TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TargetPanelLayout.createSequentialGroup()
+        _TargetPanelLayout.setVerticalGroup(
+            _TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, _TargetPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_cut)
-                    .addComponent(btn_mitm))
+                .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(_btnCut)
+                    .addComponent(_btnMITM))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_move_to_left)
-                    .addComponent(btn_target_check))
+                .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(_btnMoveToLeft)
+                    .addComponent(_btnAddTarget))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TargetSP, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                .addComponent(_TargetSP, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -173,47 +177,47 @@ public class MainWindow extends javax.swing.JFrame {
                 ScanTableComponentResized(evt);
             }
         });
-        ScanSP.setViewportView(ScanTable);
+        _ScanSP.setViewportView(ScanTable);
 
-        btn_scan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png"))); // NOI18N
-        btn_scan.addActionListener(new java.awt.event.ActionListener() {
+        _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png"))); // NOI18N
+        _btnScan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_scanActionPerformed(evt);
+                _btnScanActionPerformed(evt);
             }
         });
 
-        cb_scan_by.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auto", "IP Address" }));
-        cb_scan_by.addActionListener(new java.awt.event.ActionListener() {
+        _cbScanBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auto", "IP Address" }));
+        _cbScanBy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_scan_byActionPerformed(evt);
+                _cbScanByActionPerformed(evt);
             }
         });
 
-        lbl_find_by.setText("Find target by");
+        _lblFindBy.setText("Find target by");
 
-        txt_input_find.setEditable(false);
+        _txtInputFind.setEditable(false);
 
-        btn_scan_check.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-in.png"))); // NOI18N
-        btn_scan_check.addActionListener(new java.awt.event.ActionListener() {
+        _btnScanAddToTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-in.png"))); // NOI18N
+        _btnScanAddToTarget.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_scan_checkActionPerformed(evt);
+                _btnScanAddToTargetActionPerformed(evt);
             }
         });
 
-        btn_move_to_right.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/go-next.png"))); // NOI18N
-        btn_move_to_right.addActionListener(new java.awt.event.ActionListener() {
+        _btnMoveToRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/go-next.png"))); // NOI18N
+        _btnMoveToRight.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_move_to_rightActionPerformed(evt);
+                _btnMoveToRightActionPerformed(evt);
             }
         });
 
-        lbl_nic_name.setText("NIC Name");
+        _lblNICName.setText("NIC Name");
 
-        lbl_hw_addr.setText("Hardware Address");
+        _lblHwAddr.setText("Hardware Address");
 
-        txt_nic_name.setEditable(false);
+        _txt_NICName.setEditable(false);
 
-        txt_hw_addr.setEditable(false);
+        _txtHwAddr.setEditable(false);
 
         javax.swing.GroupLayout ScanPanelLayout = new javax.swing.GroupLayout(ScanPanel);
         ScanPanel.setLayout(ScanPanelLayout);
@@ -222,30 +226,30 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(ScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ScanSP)
+                    .addComponent(_ScanSP)
                     .addGroup(ScanPanelLayout.createSequentialGroup()
                         .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbl_find_by)
-                            .addComponent(lbl_nic_name))
+                            .addComponent(_lblFindBy)
+                            .addComponent(_lblNICName))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(ScanPanelLayout.createSequentialGroup()
-                                .addComponent(cb_scan_by, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(_cbScanBy, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_input_find, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
-                            .addComponent(txt_nic_name))
+                                .addComponent(_txtInputFind, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
+                            .addComponent(_txt_NICName))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(ScanPanelLayout.createSequentialGroup()
-                                .addComponent(btn_scan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(_btnScan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_scan_check, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(_btnScanAddToTarget, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_move_to_right, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(_btnMoveToRight, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(ScanPanelLayout.createSequentialGroup()
-                                .addComponent(lbl_hw_addr)
+                                .addComponent(_lblHwAddr)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txt_hw_addr)))))
+                                .addComponent(_txtHwAddr)))))
                 .addContainerGap())
         );
         ScanPanelLayout.setVerticalGroup(
@@ -253,156 +257,172 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_nic_name)
-                    .addComponent(lbl_hw_addr)
-                    .addComponent(txt_nic_name, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_hw_addr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(_lblNICName)
+                    .addComponent(_lblHwAddr)
+                    .addComponent(_txt_NICName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(_txtHwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_scan)
-                    .addComponent(cb_scan_by, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_find_by)
-                    .addComponent(txt_input_find, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_scan_check)
-                    .addComponent(btn_move_to_right))
+                    .addComponent(_btnScan)
+                    .addComponent(_cbScanBy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(_lblFindBy)
+                    .addComponent(_txtInputFind, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(_btnScanAddToTarget)
+                    .addComponent(_btnMoveToRight))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ScanSP, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(_ScanSP, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        txt_logs.setEditable(false);
-        txt_logs.setColumns(20);
-        txt_logs.setRows(5);
-        LogsSP.setViewportView(txt_logs);
+        _txt_logs.setEditable(false);
+        _txt_logs.setColumns(20);
+        _txt_logs.setRows(5);
+        _LogsSP.setViewportView(_txt_logs);
 
-        lbl_logo.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
-        lbl_logo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbl_logo.setText(" [ OpenNetcut ] ");
+        _lblLogo.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
+        _lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        _lblLogo.setText(" [ OpenNetcut ] ");
 
-        lbl_jxnet.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
-        lbl_jxnet.setText("Powered by Jxnet");
+        _lblJxnet.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        _lblJxnet.setText("Powered by Jxnet");
 
-        javax.swing.GroupLayout LogoPanelLayout = new javax.swing.GroupLayout(LogoPanel);
-        LogoPanel.setLayout(LogoPanelLayout);
-        LogoPanelLayout.setHorizontalGroup(
-            LogoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(LogoPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout _LogoPanelLayout = new javax.swing.GroupLayout(_LogoPanel);
+        _LogoPanel.setLayout(_LogoPanelLayout);
+        _LogoPanelLayout.setHorizontalGroup(
+            _LogoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(_LogoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbl_logo, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogoPanelLayout.createSequentialGroup()
+                .addComponent(_lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, _LogoPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbl_jxnet)
+                .addComponent(_lblJxnet)
                 .addGap(167, 167, 167))
         );
-        LogoPanelLayout.setVerticalGroup(
-            LogoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(LogoPanelLayout.createSequentialGroup()
+        _LogoPanelLayout.setVerticalGroup(
+            _LogoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(_LogoPanelLayout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
-                .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(_lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl_jxnet)
+                .addComponent(_lblJxnet)
                 .addGap(6, 6, 6))
         );
 
-        progress.setMaximum(255);
-        progress.setString("");
-        progress.setStringPainted(true);
+        _progressBar.setMaximum(255);
+        _progressBar.setString("");
+        _progressBar.setStringPainted(true);
 
-        Toolbar.setFloatable(false);
-        Toolbar.setBorderPainted(false);
-        Toolbar.add(filler1);
+        _Toolbar.setFloatable(false);
+        _Toolbar.setBorderPainted(false);
+        _Toolbar.add(_filler1);
 
-        OpenIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/document-open.png"))); // NOI18N
-        Toolbar.add(OpenIcon);
-        Toolbar.add(filler2);
+        _OpenIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/document-open.png"))); // NOI18N
+        _Toolbar.add(_OpenIcon);
+        _Toolbar.add(_filler2);
 
-        SaveIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/document-save.png"))); // NOI18N
-        Toolbar.add(SaveIcon);
-        Toolbar.add(filler4);
+        _SaveIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/document-save.png"))); // NOI18N
+        _Toolbar.add(_SaveIcon);
+        _Toolbar.add(_filler4);
 
-        SettingIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/applications-system.png"))); // NOI18N
-        Toolbar.add(SettingIcon);
-        Toolbar.add(filler5);
+        _SettingIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/applications-system.png"))); // NOI18N
+        _Toolbar.add(_SettingIcon);
+        _Toolbar.add(_filler5);
 
-        WifiIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/network-wireless.png"))); // NOI18N
-        Toolbar.add(WifiIcon);
-        Toolbar.add(filler6);
+        _WifiIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/network-wireless.png"))); // NOI18N
+        _Toolbar.add(_WifiIcon);
+        _Toolbar.add(_filler6);
 
-        HelpIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/help-browser.png"))); // NOI18N
-        Toolbar.add(HelpIcon);
+        _HelpIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/help-browser.png"))); // NOI18N
+        _Toolbar.add(_HelpIcon);
 
-        FileMenu.setText("File");
+        _FileMenu.setText("File");
 
-        OpenMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        OpenMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-open.png"))); // NOI18N
-        OpenMenu.setText("Open");
-        OpenMenu.addActionListener(new java.awt.event.ActionListener() {
+        _OpenMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        _OpenMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-open.png"))); // NOI18N
+        _OpenMenu.setText("Open");
+        _OpenMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OpenMenuActionPerformed(evt);
+                _OpenMenuActionPerformed(evt);
             }
         });
-        FileMenu.add(OpenMenu);
+        _FileMenu.add(_OpenMenu);
 
-        SaveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        SaveMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-save.png"))); // NOI18N
-        SaveMenu.setText("Save");
-        SaveMenu.addActionListener(new java.awt.event.ActionListener() {
+        _SaveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        _SaveMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-save.png"))); // NOI18N
+        _SaveMenu.setText("Save");
+        _SaveMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SaveMenuActionPerformed(evt);
+                _SaveMenuActionPerformed(evt);
             }
         });
-        FileMenu.add(SaveMenu);
+        _FileMenu.add(_SaveMenu);
 
-        ExitMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/window-close.png"))); // NOI18N
-        ExitMenu.setText("Exit");
-        ExitMenu.addActionListener(new java.awt.event.ActionListener() {
+        _ExitMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/window-close.png"))); // NOI18N
+        _ExitMenu.setText("Exit");
+        _ExitMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ExitMenuActionPerformed(evt);
+                _ExitMenuActionPerformed(evt);
             }
         });
-        FileMenu.add(ExitMenu);
+        _FileMenu.add(_ExitMenu);
 
-        MainMenu.add(FileMenu);
+        _MenuBar.add(_FileMenu);
 
-        EditMenu.setText("Edit");
+        _EditMenu.setText("Edit");
 
-        NICMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        NICMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/applications-system.png"))); // NOI18N
-        NICMenu.setText("Network Interface Card");
-        NICMenu.addActionListener(new java.awt.event.ActionListener() {
+        _NICMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        _NICMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/applications-system.png"))); // NOI18N
+        _NICMenu.setText("Network Interface Card");
+        _NICMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NICMenuActionPerformed(evt);
+                _NICMenuActionPerformed(evt);
             }
         });
-        EditMenu.add(NICMenu);
+        _EditMenu.add(_NICMenu);
 
-        MainMenu.add(EditMenu);
+        _MenuBar.add(_EditMenu);
 
-        HelpMenu.setText("Help");
+        _PluginsMenu.setText("Plugins");
 
-        UpdateMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        UpdateMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
-        UpdateMenu.setText("Check For Update");
-        UpdateMenu.addActionListener(new java.awt.event.ActionListener() {
+        _DNSSpoofPluginMenu.setSelected(true);
+        _DNSSpoofPluginMenu.setText("DNSSpoof");
+        _PluginsMenu.add(_DNSSpoofPluginMenu);
+
+        _SSLSniffPluginMenu.setSelected(true);
+        _SSLSniffPluginMenu.setText("SSLSniff");
+        _PluginsMenu.add(_SSLSniffPluginMenu);
+
+        _NDPSupport.setSelected(true);
+        _NDPSupport.setText("NDPSupport");
+        _PluginsMenu.add(_NDPSupport);
+
+        _MenuBar.add(_PluginsMenu);
+
+        _HelpMenu.setText("Help");
+
+        _UpdateMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        _UpdateMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
+        _UpdateMenu.setText("Check For Update");
+        _UpdateMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateMenuActionPerformed(evt);
+                _UpdateMenuActionPerformed(evt);
             }
         });
-        HelpMenu.add(UpdateMenu);
+        _HelpMenu.add(_UpdateMenu);
 
-        AboutMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        AboutMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/help-browser.png"))); // NOI18N
-        AboutMenu.setText("About");
-        AboutMenu.addActionListener(new java.awt.event.ActionListener() {
+        _AboutMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        _AboutMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/help-browser.png"))); // NOI18N
+        _AboutMenu.setText("About");
+        _AboutMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AboutMenuActionPerformed(evt);
+                _AboutMenuActionPerformed(evt);
             }
         });
-        HelpMenu.add(AboutMenu);
+        _HelpMenu.add(_AboutMenu);
 
-        MainMenu.add(HelpMenu);
+        _MenuBar.add(_HelpMenu);
 
-        setJMenuBar(MainMenu);
+        setJMenuBar(_MenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -411,53 +431,53 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LogsSP)
+                    .addComponent(_LogsSP)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(TargetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(_TargetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(LogoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(_LogoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(progress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(_progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addComponent(Toolbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(_Toolbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(Toolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(_Toolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LogoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(_LogoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TargetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(_TargetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LogsSP, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(_LogsSP, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(progress, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(_progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_scanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_scanActionPerformed
-    }//GEN-LAST:event_btn_scanActionPerformed
+    private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanActionPerformed
+    }//GEN-LAST:event__btnScanActionPerformed
 
-    private void NICMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NICMenuActionPerformed
-    }//GEN-LAST:event_NICMenuActionPerformed
+    private void _NICMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__NICMenuActionPerformed
+    }//GEN-LAST:event__NICMenuActionPerformed
 
     private void ScanTableComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ScanTableComponentResized
     }//GEN-LAST:event_ScanTableComponentResized
 
-    private void cb_scan_byActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_scan_byActionPerformed
-    }//GEN-LAST:event_cb_scan_byActionPerformed
+    private void _cbScanByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__cbScanByActionPerformed
+    }//GEN-LAST:event__cbScanByActionPerformed
 
-    private void btn_move_to_rightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_move_to_rightActionPerformed
+    private void _btnMoveToRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMoveToRightActionPerformed
        
-    }//GEN-LAST:event_btn_move_to_rightActionPerformed
+    }//GEN-LAST:event__btnMoveToRightActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
     }//GEN-LAST:event_formWindowClosing
@@ -465,84 +485,88 @@ public class MainWindow extends javax.swing.JFrame {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
     }//GEN-LAST:event_formWindowClosed
 
-    private void btn_move_to_leftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_move_to_leftActionPerformed
-    }//GEN-LAST:event_btn_move_to_leftActionPerformed
+    private void _btnMoveToLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMoveToLeftActionPerformed
+    }//GEN-LAST:event__btnMoveToLeftActionPerformed
 
-    private void btn_scan_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_scan_checkActionPerformed
-    }//GEN-LAST:event_btn_scan_checkActionPerformed
+    private void _btnScanAddToTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanAddToTargetActionPerformed
+    }//GEN-LAST:event__btnScanAddToTargetActionPerformed
 
-    private void btn_target_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_target_checkActionPerformed
-    }//GEN-LAST:event_btn_target_checkActionPerformed
+    private void _btnAddTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnAddTargetActionPerformed
+    }//GEN-LAST:event__btnAddTargetActionPerformed
 
-    private void btn_cutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cutActionPerformed
-    }//GEN-LAST:event_btn_cutActionPerformed
+    private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnCutActionPerformed
+    }//GEN-LAST:event__btnCutActionPerformed
 
-    private void btn_mitmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mitmActionPerformed
-    }//GEN-LAST:event_btn_mitmActionPerformed
+    private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMITMActionPerformed
+    }//GEN-LAST:event__btnMITMActionPerformed
 
-    private void SaveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveMenuActionPerformed
-    }//GEN-LAST:event_SaveMenuActionPerformed
+    private void _SaveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__SaveMenuActionPerformed
+    }//GEN-LAST:event__SaveMenuActionPerformed
 
-    private void OpenMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenMenuActionPerformed
-    }//GEN-LAST:event_OpenMenuActionPerformed
+    private void _OpenMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__OpenMenuActionPerformed
+    }//GEN-LAST:event__OpenMenuActionPerformed
     
-    private void ExitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitMenuActionPerformed
-    }//GEN-LAST:event_ExitMenuActionPerformed
+    private void _ExitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__ExitMenuActionPerformed
+    }//GEN-LAST:event__ExitMenuActionPerformed
 
-    private void AboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AboutMenuActionPerformed
-    }//GEN-LAST:event_AboutMenuActionPerformed
+    private void _AboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__AboutMenuActionPerformed
+    }//GEN-LAST:event__AboutMenuActionPerformed
 
-    private void UpdateMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateMenuActionPerformed
-    }//GEN-LAST:event_UpdateMenuActionPerformed
+    private void _UpdateMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__UpdateMenuActionPerformed
+    }//GEN-LAST:event__UpdateMenuActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem AboutMenu;
-    private javax.swing.JMenu EditMenu;
-    private javax.swing.JMenuItem ExitMenu;
-    private javax.swing.JMenu FileMenu;
-    private javax.swing.JLabel HelpIcon;
-    private javax.swing.JMenu HelpMenu;
-    private javax.swing.JPanel LogoPanel;
-    private javax.swing.JScrollPane LogsSP;
-    private javax.swing.JMenuBar MainMenu;
-    private javax.swing.JMenuItem NICMenu;
-    private javax.swing.JLabel OpenIcon;
-    private javax.swing.JMenuItem OpenMenu;
-    private javax.swing.JLabel SaveIcon;
-    private javax.swing.JMenuItem SaveMenu;
     private javax.swing.JPanel ScanPanel;
-    private javax.swing.JScrollPane ScanSP;
     private javax.swing.JTable ScanTable;
-    private javax.swing.JLabel SettingIcon;
-    private javax.swing.JPanel TargetPanel;
-    private javax.swing.JScrollPane TargetSP;
     private javax.swing.JTable TargetTable;
-    private javax.swing.JToolBar Toolbar;
-    private javax.swing.JMenuItem UpdateMenu;
-    private javax.swing.JLabel WifiIcon;
-    private javax.swing.JButton btn_cut;
-    private javax.swing.JButton btn_mitm;
-    private javax.swing.JButton btn_move_to_left;
-    private javax.swing.JButton btn_move_to_right;
-    private javax.swing.JButton btn_scan;
-    private javax.swing.JButton btn_scan_check;
-    private javax.swing.JButton btn_target_check;
-    private javax.swing.JComboBox cb_scan_by;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
-    private javax.swing.JLabel lbl_find_by;
-    private javax.swing.JLabel lbl_hw_addr;
-    private javax.swing.JLabel lbl_jxnet;
-    private javax.swing.JLabel lbl_logo;
-    private javax.swing.JLabel lbl_nic_name;
-    private javax.swing.JProgressBar progress;
-    private javax.swing.JTextField txt_hw_addr;
-    private javax.swing.JTextField txt_input_find;
-    private javax.swing.JTextArea txt_logs;
-    private javax.swing.JTextField txt_nic_name;
+    private javax.swing.JMenuItem _AboutMenu;
+    private javax.swing.JCheckBoxMenuItem _DNSSpoofPluginMenu;
+    private javax.swing.JMenu _EditMenu;
+    private javax.swing.JMenuItem _ExitMenu;
+    private javax.swing.JMenu _FileMenu;
+    private javax.swing.JLabel _HelpIcon;
+    private javax.swing.JMenu _HelpMenu;
+    private javax.swing.JPanel _LogoPanel;
+    private javax.swing.JScrollPane _LogsSP;
+    private javax.swing.JMenuBar _MenuBar;
+    private javax.swing.JCheckBoxMenuItem _NDPSupport;
+    private javax.swing.JMenuItem _NICMenu;
+    private javax.swing.JLabel _OpenIcon;
+    private javax.swing.JMenuItem _OpenMenu;
+    private javax.swing.JMenu _PluginsMenu;
+    private javax.swing.JCheckBoxMenuItem _SSLSniffPluginMenu;
+    private javax.swing.JLabel _SaveIcon;
+    private javax.swing.JMenuItem _SaveMenu;
+    private javax.swing.JScrollPane _ScanSP;
+    private javax.swing.JLabel _SettingIcon;
+    private javax.swing.JPanel _TargetPanel;
+    private javax.swing.JScrollPane _TargetSP;
+    private javax.swing.JToolBar _Toolbar;
+    private javax.swing.JMenuItem _UpdateMenu;
+    private javax.swing.JLabel _WifiIcon;
+    private javax.swing.JButton _btnAddTarget;
+    private javax.swing.JButton _btnCut;
+    private javax.swing.JButton _btnMITM;
+    private javax.swing.JButton _btnMoveToLeft;
+    private javax.swing.JButton _btnMoveToRight;
+    private javax.swing.JButton _btnScan;
+    private javax.swing.JButton _btnScanAddToTarget;
+    private javax.swing.JComboBox _cbScanBy;
+    private javax.swing.Box.Filler _filler1;
+    private javax.swing.Box.Filler _filler2;
+    private javax.swing.Box.Filler _filler4;
+    private javax.swing.Box.Filler _filler5;
+    private javax.swing.Box.Filler _filler6;
+    private javax.swing.JLabel _lblFindBy;
+    private javax.swing.JLabel _lblHwAddr;
+    private javax.swing.JLabel _lblJxnet;
+    private javax.swing.JLabel _lblLogo;
+    private javax.swing.JLabel _lblNICName;
+    private javax.swing.JProgressBar _progressBar;
+    private javax.swing.JTextField _txtHwAddr;
+    private javax.swing.JTextField _txtInputFind;
+    private javax.swing.JTextField _txt_NICName;
+    private javax.swing.JTextArea _txt_logs;
     // End of variables declaration//GEN-END:variables
 
 }
