@@ -137,7 +137,7 @@ public class IPv6 {
         bb.put(this.sourceAddress, 0, IPv6.IPV6_BYTE_LENGTH);
         bb.put(this.destinationAddress, 0, IPv6.IPV6_BYTE_LENGTH);
     	if(this.payload != null) {
-    		bb.put(this.payload);
+            bb.put(this.payload);
     	}
         return data;
     }
