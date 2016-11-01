@@ -1,6 +1,5 @@
 package com.ardikars.opennetcut.packet.protocol.datalink;
 
-import com.ardikars.jxnet.MacAddress;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.zip.CRC32;
@@ -79,7 +78,7 @@ public class Ethernet {
             throw new ArrayIndexOutOfBoundsException();
         }
         final ByteBuffer bb = ByteBuffer.wrap(data, offset, length);
-        byte[] macBuf = new byte[MacAddress.MAC_ADDRESS_LENGTH];
+        byte[] macBuf = new byte[6];
         bb.get(macBuf);
         this.destinationMACAddress = macBuf;
         bb.get(macBuf);

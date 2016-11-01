@@ -1,9 +1,58 @@
 package com.ardikars.opennetcut.view;
 
+import com.ardikars.jxnet.Jxnet;
+import com.ardikars.jxnet.MacAddress;
+import com.ardikars.jxnet.PcapAddr;
+import com.ardikars.jxnet.PcapIf;
+import com.ardikars.jxnet.SockAddr;
+import com.ardikars.jxnet.exception.JxnetException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 public class NIC extends javax.swing.JFrame {
 
-    private NIC() {
+    private String source;
+    private int snaplen, promisc, to_ms;
+    private StringBuilder errbuf = new StringBuilder();
+    
+    public NIC(String source, int snaplen, int promisc, int to_ms) throws JxnetException {
         initComponents();
+        setLocationRelativeTo(null);
+        this.source = source;
+        this.snaplen = snaplen;
+        this.promisc = promisc;
+        this.to_ms = to_ms;
+        lbl_dev_name.setText(source);
+        DefaultTableModel dtm = new DefaultTableModel(null, new String[] {
+                "Name", "IPv4 Address", "IPv6 Address", "MAC Address", "Description"
+                }) {
+            
+        };
+        
+        List<PcapIf> alldevsp = new ArrayList<PcapIf>();
+        if(Jxnet.pcapFindAllDevs(alldevsp, errbuf) != 0) {
+            throw new JxnetException(errbuf.toString());
+        }
+        String[] list = new String[5];
+        for(PcapIf devs : alldevsp) {
+            list[0] = devs.getName();
+            for(PcapAddr dev : devs.getAddresses()) {
+                if(dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET) {
+                    list[1] = dev.getAddr().toString();
+                }
+                if(dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET6) {
+                    list[2] = dev.getAddr().toString();
+                }
+            }
+            MacAddress macAddr = devs.getHardwareAddress();
+            list[3] = (macAddr == null ? "" : macAddr.toString());
+            list[4] = devs.getDescription();
+            if(macAddr != null) {
+                dtm.addRow(list);
+            }
+        }
+        NICTable.setModel(dtm);
     }
     
     @SuppressWarnings("unchecked")

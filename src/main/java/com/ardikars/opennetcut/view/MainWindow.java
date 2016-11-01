@@ -1,14 +1,35 @@
 package com.ardikars.opennetcut.view;
 
+import com.ardikars.jxnet.exception.JxnetException;
+import com.ardikars.jxnet.util.AddrUtils;
+import com.ardikars.opennetcut.app.Utils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 @SuppressWarnings("deprecation")
 public class MainWindow extends javax.swing.JFrame {   
     
     public static MainWindow main_windows = new MainWindow();
+    
+    private String source;
+    
+    private DefaultTableModel scanTable;
+    private DefaultTableModel targetTable;
 
     private MainWindow() {
         initComponents();
-    }
-    
+        source = Utils.getDeviceName();
+        scanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
+        targetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
+        ScanTable.setModel(scanTable);
+        TargetTable.setModel(targetTable);
+        ScanTable.getColumnModel().getColumn(0).setMaxWidth(100);
+        ScanTable.getColumnModel().getColumn(1).setMaxWidth(100);
+        TargetTable.getColumnModel().getColumn(1).setMaxWidth(100);
+        _txt_NICName.setText(source);
+        _txtHwAddr.setText(AddrUtils.getHardwareAddress(source).toString());
+    }    
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -467,6 +488,11 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__btnScanActionPerformed
 
     private void _NICMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__NICMenuActionPerformed
+        try {
+            new NIC(source, 1500, 1, 1500).setVisible(true);
+        } catch (JxnetException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event__NICMenuActionPerformed
 
     private void ScanTableComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ScanTableComponentResized
