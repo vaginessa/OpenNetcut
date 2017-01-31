@@ -1,201 +1,241 @@
+
+/*
+ * Author	: Ardika Rommy Sanjaya
+ * Website	: http://ardikars.com
+ * Contact	: contact@ardikars.com
+ * License	: Lesser GNU Public License Version 3
+ */
+
 package com.ardikars.opennetcut.packet.protocol.datalink;
+
+import com.ardikars.jxnet.MacAddress;
+import com.ardikars.opennetcut.packet.Packet;
+import com.ardikars.opennetcut.packet.protocol.network.ARP;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.zip.CRC32;
+import javax.swing.JOptionPane;
 
-public class Ethernet {
+public class Ethernet extends Packet {
 	
-    public static final short VLAN_UNTAGGED = (short) 0xffff;
-
-    public static final short ETHERNET_HEADER_LENGTH = 14; // bytes
-
-    public static final short VLAN_HEADER_LENGTH = 4; // bytes
-
-    public static final short DATALAYER_ADDRESS_LENGTH = 6; // bytes
+	/**
+	 * Ethernet Type Codes
+	 */
+	public enum EtherType {
+		ARP((short) 0x0806, "ARP"),
+		VLAN((short) 0x8100, "VLAN");
+		
+		private short type;
+		private String description;
+		
+		private EtherType(short type, String description) {
+			this.type = type;
+			this.description = description;
+		}
+		
+		public short getType() {
+			return type;
+		}
+		
+		public String getDescription() {
+			return description;
+		}
+		
+		public static EtherType getEtherType(short type) {
+			for (EtherType t : values()) {
+				if (t.getType() == type) {
+					return t;
+				}
+			}
+			return null;
+		}
+		
+	}
 	
-    public enum EtherType {
-        
-    	ARP(Ethernet.TYPE_ARP, "arp"),
-        IPV4(Ethernet.TYPE_IPV4, "ipv4"),
-        IPV6(Ethernet.TYPE_IPV6, "ipv6"),
-        VLAN(Ethernet.TYPE_VLAN, "vlan"),
-        UNKNOWN(0, "unknown");
-    	
-    	private final int type;
-    	
-    	private final String description;
-    	
-    	public static String toString(int type) {
-            for(EtherType etherType : values()) {
-                if(etherType.type == type) {
-                    return etherType.description;
-                }
-            }
-            return null;
-    	};
-    	
-    	private EtherType(int type, String description) {
-            this.type = type;
-            this.description = description;
-    	}
-    	
-    	public int getType() {
-            return type;
-        }
-    	
-    	public String getDescription() {
-            return description;
-        }
-    	
-    	public short toShort() {
-            return (type > Short.MAX_VALUE ? Short.MAX_VALUE : type < Short.MIN_VALUE ? Short.MIN_VALUE : (short) type);
-    	}
+	public static final int ETHERNET_HEADER_LENGTH = 14;
+	
+	private MacAddress destinationMacAddress;
+	private MacAddress sourceMacAddress;
+	private byte priorityCodePoint;
+	private byte canonicalFormatIndicator;
+	private short vlanIdentifier;
+	private EtherType etherType;
+	private boolean padding;
+	
+	private byte[] data;
+	
+	public Ethernet() {
+		this.vlanIdentifier = (short) 0xffff;
+	}
+	
+	public MacAddress getDestinationMacAddress() {
+		return destinationMacAddress;
+	}
+	
+	public Ethernet setDestinationMacAddress(MacAddress destinationMacAddress) {
+		this.destinationMacAddress = destinationMacAddress;
+        return this;
+	}
+	
+	public MacAddress getSourceMacAddress() {
+		return sourceMacAddress;
+	}
+	
+	public Ethernet setSourceMacAddress(MacAddress sourceMacAddress) {
+		this.sourceMacAddress = sourceMacAddress;
+        return this;
+	}
+	
+	public byte getPriorityCodePoint() {
+		return (byte) (priorityCodePoint & 0x07);
+	}
+	
+	public Ethernet setPriorityCodePoint(byte priorityCodePoint) {
+		this.priorityCodePoint = (byte) (priorityCodePoint & 0x07);
+        return this;
+	}
+	
+	public byte getCanonicalFormatIndicator() {
+		return (byte) (canonicalFormatIndicator & 0x01);
+	}
+	
+	public Ethernet setCanonicalFormatIndicator(byte canonicalFormatIndicator) {
+		this.canonicalFormatIndicator = (byte) (canonicalFormatIndicator & 0x01);
+        return this;
+	}
+	
+	public short getVlanIdentifier() {
+		return (short) (vlanIdentifier & 0x0fff);
+	}
+	
+	public Ethernet setVlanIdentifier(short vlanIdentifier) {
+		this.vlanIdentifier = (short) (vlanIdentifier & 0x0fff);
+        return this;
+	}
+	
+	public EtherType getEtherType() {
+		return etherType;
+	}
+	
+	public Ethernet setEtherType(EtherType etherType) {
+		this.etherType = etherType;
+        return this;
+	}
+	
+	public boolean isPadding() {
+		return padding;
+	}
+	
+	public Ethernet setPadding(boolean padding) {
+		this.padding = padding;
+        return this;
+	}
+	
+//	public byte[] getData() {
+//		return data;
+//	}
+	
+//	public Ethernet setData(byte[] data) {
+//		this.data = data;
+//        return this;
+//	}
+	
+	public static Ethernet wrap(byte[] bytes) {
+		return Ethernet.wrap(bytes, 0, bytes.length);
+	}
+	
+	public static Ethernet wrap(byte[] bytes, int offset, int length) {
+		Ethernet ethernet = new Ethernet();
+		ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, length);
+		byte[] MACBuffer = new byte[6];
+		buffer.get(MACBuffer);
+		ethernet.destinationMacAddress = MacAddress.valueOf(MACBuffer);
+		buffer.get(MACBuffer);
+		ethernet.sourceMacAddress = MacAddress.valueOf(MACBuffer);
+		EtherType etherType = EtherType.getEtherType(buffer.getShort());
+		if (etherType == EtherType.VLAN) {
+			short tci = buffer.getShort();
+			ethernet.priorityCodePoint = (byte) (tci >> 13 & 0x07);
+			ethernet.canonicalFormatIndicator = (byte) (tci >> 14 & 0x01);
+			ethernet.vlanIdentifier = (short) (tci & 0x0fff);
+			etherType = EtherType.getEtherType(buffer.getShort());
+		} else {
+			ethernet.vlanIdentifier = (short) 0xffff;
+		}
+		ethernet.etherType = etherType;
+		if (ethernet.vlanIdentifier != (short) 0xffff) {
+			ethernet.data = new byte[(bytes.length - (ETHERNET_HEADER_LENGTH + 4))];
+			System.arraycopy(bytes, (ETHERNET_HEADER_LENGTH + 4), ethernet.data,
+					0, (bytes.length - (ETHERNET_HEADER_LENGTH + 4)));
+		} else {
+			ethernet.data = new byte[(bytes.length - ETHERNET_HEADER_LENGTH)];
+			System.arraycopy(bytes, (ETHERNET_HEADER_LENGTH), ethernet.data,
+					0, (bytes.length - (ETHERNET_HEADER_LENGTH)));
+		}
+		ethernet.rawPacket = bytes;
+		return ethernet;
+	}
+	
+	public byte[] toBytes() {
+		int headerLength = ETHERNET_HEADER_LENGTH +
+				((etherType == EtherType.VLAN) ? 4 : 0) +
+				((this.data == null) ? 0 : this.data.length);
+		if (padding && headerLength < 60) {
+			headerLength = 60;
+		}
+		byte[] newdata = new byte[headerLength];
+		ByteBuffer buffer = ByteBuffer.wrap(newdata);
+		buffer.put(destinationMacAddress.toBytes());
+		buffer.put(sourceMacAddress.toBytes());
+		if (vlanIdentifier != (short) 0xffff) {
+			buffer.putShort(EtherType.VLAN.getType());
+			buffer.putShort((short) (((priorityCodePoint << 13) & 0x07)
+					| ((canonicalFormatIndicator << 14) & 0x01) | (vlanIdentifier & 0x0fff)));
+		}
+		buffer.putShort(etherType.getType());
+		if (this.data != null) {
+			buffer.put(this.data);
+		}
+		if (padding && headerLength < 60) {
+			Arrays.fill(newdata, buffer.position(), newdata.length, (byte) 0x0);
+		}
+		return newdata;
+    }
+
+    public ByteBuffer toBuffer() {
+        byte[] bytes = toBytes();
+        ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
+        return buffer.put(bytes);
     }
     
-    public static final short TYPE_ARP = (short) 0x0806;
-    public static final short TYPE_IPV4 = (short) 0x0800;
-    public static final short TYPE_IPV6 = (short) 0x86dd;
-    public static final short TYPE_VLAN = (short) 0x8100;
-
-    private byte[] destinationMACAddress;
-    private byte[] sourceMACAddress;
-    private byte priorityCode;
-    private short vlanID;
-    private short etherType;
-    private boolean pad = false;
-
-    private byte[] payload;
-
-    private boolean fcs;
-
-    public Ethernet() {
-        this.vlanID = VLAN_UNTAGGED;
-    }
-
-    public Ethernet(final byte[] data, final int offset, final int length) {
-        if(length < ETHERNET_HEADER_LENGTH) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        final ByteBuffer bb = ByteBuffer.wrap(data, offset, length);
-        byte[] macBuf = new byte[6];
-        bb.get(macBuf);
-        this.destinationMACAddress = macBuf;
-        bb.get(macBuf);
-        this.sourceMACAddress = macBuf;
-        short ethType = bb.getShort();
-        if (ethType == TYPE_VLAN) {
-            final short tci = bb.getShort();
-            this.priorityCode = (byte) (tci >> 13 & 0x07);
-            this.vlanID = (short) (tci & 0x0fff);
-            ethType = bb.getShort();
-        } else {
-            this.vlanID = Ethernet.VLAN_UNTAGGED;
-        }
-        this.etherType = ethType;
-    }
-
-    public byte[] getDestinationMACAddress() {
-        return destinationMACAddress;
-    }
-
-    public byte[] getSourceMACAddress() {
-        return sourceMACAddress;
-    }
-
-    public byte getPriorityCode() {
-        return priorityCode;
-    }
-
-    public short getVlanID() {
-        return vlanID;
-    }
-
-    public short getEtherType() {
-        return etherType;
-    }
-
-    public boolean getPad() {
-        return pad;
-    }
-
-    public byte[] getPayload() {
-        return payload;
-    }
-
-    public Ethernet setDestinationMACAddress(byte[] destinationMACAddress) {
-        this.destinationMACAddress = destinationMACAddress;
-        return this;
-    }
-
-    public Ethernet setSourceMACAddress(byte[] sourceMACAddress) {
-        this.sourceMACAddress = sourceMACAddress;
-        return this;
-    }
-
-    public Ethernet setPriorityCode(byte priorityCode) {
-        this.priorityCode = priorityCode;
-        return this;
-    }
-
-    public Ethernet setVlanID(short vlanID) {
-        this.vlanID = vlanID;
-        return this;
-    }
-
-    public Ethernet setPad(boolean pad) {
-        this.pad = pad;
-        return this;
-    }
-
-    public Ethernet setEtherType(final short etherType) {
-        this.etherType = etherType;
-        return this;
-    }
-
-    public boolean setPayload(final byte[] payload) {
-        if(payload != null) {
-            this.payload = payload; 
-            return true;
-        }
-        return false;
-    }
-
-    public Ethernet setFcs(boolean fcs) {
-        this.fcs = fcs;
+    @Override
+    public Packet putChild(byte[] data) {
+        this.data = data;
         return this;
     }
 	
+	@Override
+	public Packet getChild() {
+		if (etherType == EtherType.ARP) {
+			return ARP.wrap(data);
+		}
+		return null;
+	}
 	
-
-    public byte[] toByteArray() {
-        int length = 14 + (vlanID == (short) 0xffff ? 0 : 4)
-                + (payload == null ? 0 : payload.length)
-                + (fcs == false ? 0 : 4);
-        if (pad && length < 60) {
-            length = 60;
-        }
-        final byte[] data = new byte[length];
-        final ByteBuffer bb = ByteBuffer.wrap(data);
-        bb.put(destinationMACAddress);
-        bb.put(sourceMACAddress);
-        if (vlanID != VLAN_UNTAGGED) {
-            bb.putShort(Ethernet.TYPE_VLAN);
-            bb.putShort((short) (priorityCode << 13 | vlanID & 0xffff));
-        }
-        bb.putShort(etherType);
-        if (payload != null) {
-            bb.put(payload);
-        }
-        if (pad) {
-            Arrays.fill(data, bb.position(), data.length, (byte) 0x00);
-        }
-        if (fcs) {
-            CRC32 crc32 = new CRC32();
-            crc32.update(data);
-            bb.putInt((int)crc32.getValue());
-        }
-        return data;
-    }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder()
+				.append("[")
+				.append("Destination: " + destinationMacAddress)
+				.append(", Source: " + sourceMacAddress);
+		if (vlanIdentifier != 0xffff) {
+			sb.append(", Tag Control Information (Priority Code Point: " + priorityCodePoint)
+					.append(", Canonical Format Indicator: " + canonicalFormatIndicator)
+					.append(", Vlan Identifier: " + vlanIdentifier)
+					.append(")");
+		}
+		return sb.append(", Ethernet Type: " + ((etherType == null) ? "UNKNOWN" : etherType))
+				.append("]").toString();
+	}
 	
 }

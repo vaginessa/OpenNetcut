@@ -1,10 +1,25 @@
 package com.ardikars.opennetcut.view;
 
+import com.ardikars.jxnet.Inet4Address;
+import com.ardikars.jxnet.MacAddress;
+import com.ardikars.jxnet.Pcap;
+import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.util.AddrUtils;
+import com.ardikars.opennetcut.app.LoggerHandler;
+import com.ardikars.opennetcut.app.NetworkScanner;
+import com.ardikars.opennetcut.app.NetworkSpoofer;
 import com.ardikars.opennetcut.app.Utils;
+import com.ardikars.opennetcut.packet.Packet;
+import com.ardikars.opennetcut.packet.PacketHandler;
+import com.ardikars.opennetcut.packet.protocol.network.ARP;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("deprecation")
@@ -13,24 +28,120 @@ public class MainWindow extends javax.swing.JFrame {
     public static MainWindow main_windows = new MainWindow();
     
     private String source;
+    private Pcap pcap;
+    private int snaplen;
+    private int promisc;
+    private int toMs;
+       
+    private Inet4Address currentIpAddr;
+    private MacAddress currentHwAddr;
+    private Inet4Address netaddr;
+    private Inet4Address netmask;
     
-    private DefaultTableModel scanTable;
-    private DefaultTableModel targetTable;
+    private DefaultTableModel DtmScanTable;
+    private DefaultTableModel DtmTargetTable;
+    
+    private LoggerHandler<Integer, String> logHandler = new LoggerHandler<Integer, String>() {
+        @Override
+        public void log(Integer res, String integer) {
+            if (res != -1)
+                _progressBar.setValue(res+1);
+        }
+    };
+    
+    private Map<String, MacAddress> target = new HashMap<String, MacAddress>();
 
     private MainWindow() {
         initComponents();
-        source = Utils.getDeviceName();
-        scanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
-        targetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
-        ScanTable.setModel(scanTable);
-        TargetTable.setModel(targetTable);
-        ScanTable.getColumnModel().getColumn(0).setMaxWidth(100);
-        ScanTable.getColumnModel().getColumn(1).setMaxWidth(100);
-        TargetTable.getColumnModel().getColumn(1).setMaxWidth(100);
-        _txt_NICName.setText(source);
-        _txtHwAddr.setText(AddrUtils.getHardwareAddress(source).toString());
-    }    
-        
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
+        DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
+        TblScan.setModel(DtmScanTable);
+        TblScan.getColumnModel().getColumn(0).setMaxWidth(100);
+        TblScan.getColumnModel().getColumn(1).setMaxWidth(100);
+        TblTarget.setModel(DtmTargetTable);
+        TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
+        setLocationRelativeTo(null);
+    }  
+
+    public void initMyComponents() {
+        TxtNicName.setText(source);
+        TxtHwAddr.setText(currentHwAddr.toString());
+        TxtIpAddr.setText(currentIpAddr.toString());
+        TxtGwAddr.setText(AddrUtils.getGatewayAddress(source).toString());
+    }
+    
+    public void setSource(String source) {
+        this.source = source;
+    }
+    
+    public String getSource() {
+        return source;
+    }
+
+    public void setPcap(Pcap pcap) {
+        this.pcap = pcap;
+    }
+
+    public Pcap getPcap() {
+        return pcap;
+    }
+
+    public void setSnaplen(int snaplen) {
+        this.snaplen = snaplen;
+    }
+
+    public int getSnaplen() {
+        return snaplen;
+    }
+
+    public void setPromisc(int promisc) {
+        this.promisc = promisc;
+    }
+
+    public int getPromisc() {
+        return promisc;
+    }
+
+    public void setToMs(int toMs) {
+        this.toMs = toMs;
+    }
+
+    public int getToMs() {
+        return toMs;
+    }
+
+    public void setCurrentIpAddr(Inet4Address currentIpAddr) {
+        this.currentIpAddr = currentIpAddr;
+    }
+
+    public Inet4Address getCurrentIpAddr() {
+        return currentIpAddr;
+    }
+
+    public void setCurrentHwAddr(MacAddress currentHwAddr) {
+        this.currentHwAddr = currentHwAddr;
+    }
+
+    public MacAddress getCurrentHwAddr() {
+        return currentHwAddr;
+    }
+
+    public void setNetaddr(Inet4Address netaddr) {
+        this.netaddr = netaddr;
+    }
+
+    public Inet4Address getNetaddr() {
+        return netaddr;
+    }
+
+    public void setNetmask(Inet4Address netmask) {
+        this.netmask = netmask;
+    }
+
+    public Inet4Address getNetmask() {
+        return netmask;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,14 +153,14 @@ public class MainWindow extends javax.swing.JFrame {
 
         _TargetPanel = new javax.swing.JPanel();
         _TargetSP = new javax.swing.JScrollPane();
-        TargetTable = new javax.swing.JTable();
+        TblTarget = new javax.swing.JTable();
         _btnCut = new javax.swing.JButton();
         _btnMITM = new javax.swing.JButton();
         _btnMoveToLeft = new javax.swing.JButton();
         _btnAddTarget = new javax.swing.JButton();
         ScanPanel = new javax.swing.JPanel();
         _ScanSP = new javax.swing.JScrollPane();
-        ScanTable = new javax.swing.JTable();
+        TblScan = new javax.swing.JTable();
         _btnScan = new javax.swing.JButton();
         _cbScanBy = new javax.swing.JComboBox();
         _lblFindBy = new javax.swing.JLabel();
@@ -58,8 +169,8 @@ public class MainWindow extends javax.swing.JFrame {
         _btnMoveToRight = new javax.swing.JButton();
         _lblNICName = new javax.swing.JLabel();
         _lblHwAddr = new javax.swing.JLabel();
-        _txt_NICName = new javax.swing.JTextField();
-        _txtHwAddr = new javax.swing.JTextField();
+        TxtNicName = new javax.swing.JTextField();
+        TxtHwAddr = new javax.swing.JTextField();
         _LogsSP = new javax.swing.JScrollPane();
         _txt_logs = new javax.swing.JTextArea();
         _LogoPanel = new javax.swing.JPanel();
@@ -77,6 +188,11 @@ public class MainWindow extends javax.swing.JFrame {
         _WifiIcon = new javax.swing.JLabel();
         _filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
         _HelpIcon = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        TxtIpAddr = new javax.swing.JTextField();
+        TxtGwAddr = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         _MenuBar = new javax.swing.JMenuBar();
         _FileMenu = new javax.swing.JMenu();
         _OpenMenu = new javax.swing.JMenuItem();
@@ -106,7 +222,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         _TargetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Attack ]"));
 
-        TargetTable.setModel(new javax.swing.table.DefaultTableModel(
+        TblTarget.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -117,7 +233,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             }
         ));
-        _TargetSP.setViewportView(TargetTable);
+        _TargetSP.setViewportView(TblTarget);
 
         _btnCut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/edit-cut.png"))); // NOI18N
         _btnCut.setText("Cut");
@@ -179,13 +295,13 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(_btnMoveToLeft)
                     .addComponent(_btnAddTarget))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(_TargetSP, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addComponent(_TargetSP, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         ScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Network Client ]"));
 
-        ScanTable.setModel(new javax.swing.table.DefaultTableModel(
+        TblScan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -193,12 +309,12 @@ public class MainWindow extends javax.swing.JFrame {
 
             }
         ));
-        ScanTable.addComponentListener(new java.awt.event.ComponentAdapter() {
+        TblScan.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
-                ScanTableComponentResized(evt);
+                TblScanComponentResized(evt);
             }
         });
-        _ScanSP.setViewportView(ScanTable);
+        _ScanSP.setViewportView(TblScan);
 
         _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png"))); // NOI18N
         _btnScan.addActionListener(new java.awt.event.ActionListener() {
@@ -208,6 +324,11 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         _cbScanBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auto", "IP Address" }));
+        _cbScanBy.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                _cbScanByItemStateChanged(evt);
+            }
+        });
         _cbScanBy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _cbScanByActionPerformed(evt);
@@ -236,9 +357,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         _lblHwAddr.setText("Hardware Address");
 
-        _txt_NICName.setEditable(false);
+        TxtNicName.setEditable(false);
 
-        _txtHwAddr.setEditable(false);
+        TxtHwAddr.setEditable(false);
 
         javax.swing.GroupLayout ScanPanelLayout = new javax.swing.GroupLayout(ScanPanel);
         ScanPanel.setLayout(ScanPanelLayout);
@@ -258,7 +379,7 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addComponent(_cbScanBy, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(_txtInputFind, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
-                            .addComponent(_txt_NICName))
+                            .addComponent(TxtNicName))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(ScanPanelLayout.createSequentialGroup()
@@ -270,7 +391,7 @@ public class MainWindow extends javax.swing.JFrame {
                             .addGroup(ScanPanelLayout.createSequentialGroup()
                                 .addComponent(_lblHwAddr)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(_txtHwAddr)))))
+                                .addComponent(TxtHwAddr)))))
                 .addContainerGap())
         );
         ScanPanelLayout.setVerticalGroup(
@@ -280,8 +401,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(_lblNICName)
                     .addComponent(_lblHwAddr)
-                    .addComponent(_txt_NICName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(_txtHwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TxtNicName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtHwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(ScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(_btnScan)
@@ -291,7 +412,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(_btnScanAddToTarget)
                     .addComponent(_btnMoveToRight))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(_ScanSP, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(_ScanSP, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -301,10 +422,11 @@ public class MainWindow extends javax.swing.JFrame {
         _LogsSP.setViewportView(_txt_logs);
 
         _lblLogo.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
-        _lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        _lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         _lblLogo.setText(" [ OpenNetcut ] ");
 
         _lblJxnet.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
+        _lblJxnet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         _lblJxnet.setText("Powered by Jxnet");
 
         javax.swing.GroupLayout _LogoPanelLayout = new javax.swing.GroupLayout(_LogoPanel);
@@ -313,23 +435,21 @@ public class MainWindow extends javax.swing.JFrame {
             _LogoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(_LogoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(_lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, _LogoPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(_lblJxnet)
-                .addGap(167, 167, 167))
+                .addGroup(_LogoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(_lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(_lblJxnet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         _LogoPanelLayout.setVerticalGroup(
             _LogoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(_LogoPanelLayout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(_lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(_lblJxnet)
                 .addGap(6, 6, 6))
         );
 
-        _progressBar.setMaximum(255);
         _progressBar.setString("");
         _progressBar.setStringPainted(true);
 
@@ -355,6 +475,45 @@ public class MainWindow extends javax.swing.JFrame {
 
         _HelpIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/help-browser.png"))); // NOI18N
         _Toolbar.add(_HelpIcon);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Network Information"));
+
+        TxtIpAddr.setEditable(false);
+
+        jLabel1.setText("IP Address");
+
+        jLabel2.setText("Gateway");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TxtIpAddr)
+                    .addComponent(TxtGwAddr))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(TxtIpAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TxtGwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         _FileMenu.setText("File");
 
@@ -453,14 +612,15 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(_LogsSP)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(_progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(_LogoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(_TargetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(_LogoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(_progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(_TargetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addComponent(_Toolbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -468,14 +628,16 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(_Toolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(_LogoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(_LogoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(_TargetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(_LogsSP, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(_LogsSP, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(_progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -485,24 +647,77 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanActionPerformed
+        
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
+        
+        PacketHandler handler = new PacketHandler() {
+            @Override
+            public void nextPacket(int no, PcapPktHdr pktHdr, Packet packet) {
+                ARP arp = null;
+                if (packet instanceof ARP) {
+                    arp = (ARP) packet;
+                    if (arp.getOpCode() == ARP.OperationCode.REPLY) {
+                        DtmScanTable.addRow(new Object[] {
+                            Integer.toString(no),
+                            false,
+                            arp.getSenderProtocolAddress().toString().toUpperCase(),
+                            arp.getSenderHardwareAddress().toString().toUpperCase()
+                        });
+                        System.out.println(arp);
+                        TblScan.setModel(DtmScanTable);
+                        TblScan.getColumnModel().getColumn(0).setMaxWidth(100);
+                        TblScan.getColumnModel().getColumn(1).setMaxWidth(100);
+                    }
+                }
+            }
+        };
+        NetworkScanner scanner;
+        switch (_cbScanBy.getSelectedIndex()) {
+            case 0:
+                scanner = new NetworkScanner(handler, logHandler);
+                scanner.start();
+                break;
+            case 1:
+                Inet4Address ip = Inet4Address.valueOf(_txtInputFind.getText());
+                scanner = new NetworkScanner(handler, ip, logHandler);
+                scanner.start();
+                break;
+            default:
+                return;
+        }
     }//GEN-LAST:event__btnScanActionPerformed
 
     private void _NICMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__NICMenuActionPerformed
         try {
-            new NIC(source, 1500, 1, 1500).setVisible(true);
+            new NIC(logHandler).setVisible(true);
         } catch (JxnetException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event__NICMenuActionPerformed
 
-    private void ScanTableComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ScanTableComponentResized
-    }//GEN-LAST:event_ScanTableComponentResized
+    private void TblScanComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_TblScanComponentResized
+    }//GEN-LAST:event_TblScanComponentResized
 
     private void _cbScanByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__cbScanByActionPerformed
     }//GEN-LAST:event__cbScanByActionPerformed
 
     private void _btnMoveToRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMoveToRightActionPerformed
-       
+        DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
+        target.clear();
+        for (int i=0; i<TblScan.getRowCount(); i++) {
+            if (TblScan.getValueAt(i, 1).equals(Boolean.TRUE)) {
+                target.put(TblScan.getValueAt(i, 2).toString(),
+                        MacAddress.valueOf(TblScan.getValueAt(i, 3).toString()));
+            }
+        }
+        for (Map.Entry<String, MacAddress> entry : target.entrySet()) {
+            DtmTargetTable.addRow(new Object[] {
+                entry.getKey().toString(), false
+            });
+        }
+        TblTarget.setModel(DtmTargetTable);
+        TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
+        _btnMoveToRight.setEnabled(false);
     }//GEN-LAST:event__btnMoveToRightActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -514,13 +729,52 @@ public class MainWindow extends javax.swing.JFrame {
     private void _btnMoveToLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMoveToLeftActionPerformed
     }//GEN-LAST:event__btnMoveToLeftActionPerformed
 
+    private boolean addOp = true;
     private void _btnScanAddToTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanAddToTargetActionPerformed
+        if (addOp) {
+            for (int i=0; i<TblScan.getRowCount(); i++) {
+                TblScan.setValueAt(Boolean.TRUE, i, 1);
+            }
+            addOp = false;
+            _btnScanAddToTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-out.png")));
+        } else {
+            for (int i=0; i<TblScan.getRowCount(); i++) {
+                TblScan.setValueAt(Boolean.FALSE, i, 1);
+            }
+            addOp = true;
+            _btnScanAddToTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-in.png")));
+        }
     }//GEN-LAST:event__btnScanAddToTargetActionPerformed
 
     private void _btnAddTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnAddTargetActionPerformed
     }//GEN-LAST:event__btnAddTargetActionPerformed
 
+    private List<NetworkSpoofer> nss = new ArrayList<NetworkSpoofer>();
+    
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnCutActionPerformed
+        if (_btnCut.getText().equals("Cut")) {
+            nss.clear();
+            for (int i=0; i<TblTarget.getRowCount(); i++) {
+                if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
+                    MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
+                    nss.add(new NetworkSpoofer(
+                            victimMac,
+                            Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
+                            MacAddress.valueOf("de:ad:be:ef:c0:fe"), 
+                            Inet4Address.valueOf("192.168.1.254"),
+                            1800, logHandler));
+                }
+            }
+            for (NetworkSpoofer ns : nss) {
+                ns.start();
+            }
+            _btnCut.setText("Stop");
+        } else {
+            for (NetworkSpoofer ns : nss) {
+                ns.stopThread();
+            }
+            _btnCut.setText("Cut");
+        }
     }//GEN-LAST:event__btnCutActionPerformed
 
     private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMITMActionPerformed
@@ -541,10 +795,24 @@ public class MainWindow extends javax.swing.JFrame {
     private void _UpdateMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__UpdateMenuActionPerformed
     }//GEN-LAST:event__UpdateMenuActionPerformed
 
+    private void _cbScanByItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event__cbScanByItemStateChanged
+        if (_cbScanBy.getSelectedIndex() == 0) {
+            _txtInputFind.setEditable(false);
+            _txtInputFind.setText("");
+        } else {
+            _txtInputFind.setEditable(true);
+            _txtInputFind.setText("");
+        }
+    }//GEN-LAST:event__cbScanByItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ScanPanel;
-    private javax.swing.JTable ScanTable;
-    private javax.swing.JTable TargetTable;
+    private javax.swing.JTable TblScan;
+    private javax.swing.JTable TblTarget;
+    private javax.swing.JTextField TxtGwAddr;
+    private javax.swing.JTextField TxtHwAddr;
+    private javax.swing.JTextField TxtIpAddr;
+    private javax.swing.JTextField TxtNicName;
     private javax.swing.JMenuItem _AboutMenu;
     private javax.swing.JCheckBoxMenuItem _DNSSpoofPluginMenu;
     private javax.swing.JMenu _EditMenu;
@@ -589,10 +857,12 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel _lblLogo;
     private javax.swing.JLabel _lblNICName;
     private javax.swing.JProgressBar _progressBar;
-    private javax.swing.JTextField _txtHwAddr;
     private javax.swing.JTextField _txtInputFind;
-    private javax.swing.JTextField _txt_NICName;
     private javax.swing.JTextArea _txt_logs;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
 
 }

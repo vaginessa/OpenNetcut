@@ -1,11 +1,12 @@
 package com.ardikars.opennetcut.view;
 
-import com.ardikars.jxnet.Jxnet;
+import static com.ardikars.jxnet.Jxnet.*;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.PcapAddr;
 import com.ardikars.jxnet.PcapIf;
 import com.ardikars.jxnet.SockAddr;
 import com.ardikars.jxnet.exception.JxnetException;
+import com.ardikars.opennetcut.app.LoggerHandler;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -16,14 +17,17 @@ public class NIC extends javax.swing.JFrame {
     private int snaplen, promisc, to_ms;
     private StringBuilder errbuf = new StringBuilder();
     
-    public NIC(String source, int snaplen, int promisc, int to_ms) throws JxnetException {
+    private LoggerHandler logHandler;
+    
+    public NIC(LoggerHandler logHandler) throws JxnetException {
         initComponents();
         setLocationRelativeTo(null);
-        this.source = source;
-        this.snaplen = snaplen;
-        this.promisc = promisc;
-        this.to_ms = to_ms;
-        lbl_dev_name.setText(source);
+        this.source = MainWindow.main_windows.getSource();
+        this.snaplen = MainWindow.main_windows.getSnaplen();
+        this.promisc = MainWindow.main_windows.getPromisc();
+        this.to_ms = MainWindow.main_windows.getToMs();
+        lbl_dev_name.setText(this.source);
+        this.logHandler = logHandler;
         DefaultTableModel dtm = new DefaultTableModel(null, new String[] {
                 "Name", "IPv4 Address", "IPv6 Address", "MAC Address", "Description"
                 }) {
@@ -31,7 +35,7 @@ public class NIC extends javax.swing.JFrame {
         };
         
         List<PcapIf> alldevsp = new ArrayList<PcapIf>();
-        if(Jxnet.pcapFindAllDevs(alldevsp, errbuf) != 0) {
+        if(PcapFindAllDevs(alldevsp, errbuf) != 0) {
             throw new JxnetException(errbuf.toString());
         }
         String[] list = new String[5];

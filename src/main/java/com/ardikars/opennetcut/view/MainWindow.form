@@ -169,16 +169,18 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="_LogsSP" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="ScanPanel" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="_TargetPanel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="_LogoPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
                   <Component id="_progressBar" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="ScanPanel" max="32767" attributes="0"/>
+                          <Component id="_LogoPanel" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jPanel1" max="32767" attributes="0"/>
+                          <Component id="_TargetPanel" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -189,15 +191,18 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <Component id="_Toolbar" min="-2" pref="25" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="_LogoPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jPanel1" min="-2" pref="101" max="-2" attributes="0"/>
+                  <Component id="_LogoPanel" max="32767" attributes="0"/>
+              </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="_TargetPanel" max="32767" attributes="0"/>
                   <Component id="ScanPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="_LogsSP" min="-2" pref="64" max="-2" attributes="0"/>
+              <Component id="_LogsSP" min="-2" pref="73" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="_progressBar" min="-2" pref="8" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -252,7 +257,7 @@
                       <Component id="_btnAddTarget" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="_TargetSP" pref="220" max="32767" attributes="0"/>
+                  <Component id="_TargetSP" pref="68" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -266,7 +271,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="TargetTable">
+            <Component class="javax.swing.JTable" name="TblTarget">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="0" rowCount="4"/>
@@ -353,7 +358,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="_txtInputFind" pref="79" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="_txt_NICName" max="32767" attributes="0"/>
+                              <Component id="TxtNicName" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -367,7 +372,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="_lblHwAddr" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="_txtHwAddr" max="32767" attributes="0"/>
+                                  <Component id="TxtHwAddr" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -383,8 +388,8 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="_lblNICName" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="_lblHwAddr" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="_txt_NICName" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="_txtHwAddr" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="TxtNicName" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="TxtHwAddr" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -396,7 +401,7 @@
                       <Component id="_btnMoveToRight" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="_ScanSP" pref="0" max="32767" attributes="0"/>
+                  <Component id="_ScanSP" pref="69" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -410,7 +415,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="ScanTable">
+            <Component class="javax.swing.JTable" name="TblScan">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="0" rowCount="0"/>
@@ -423,7 +428,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="ScanTableComponentResized"/>
+                <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="TblScanComponentResized"/>
               </Events>
             </Component>
           </SubComponents>
@@ -448,6 +453,7 @@
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="_cbScanByItemStateChanged"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_cbScanByActionPerformed"/>
           </Events>
         </Component>
@@ -491,12 +497,12 @@
             <Property name="text" type="java.lang.String" value="Hardware Address"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="_txt_NICName">
+        <Component class="javax.swing.JTextField" name="TxtNicName">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="_txtHwAddr">
+        <Component class="javax.swing.JTextField" name="TxtHwAddr">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
           </Properties>
@@ -526,19 +532,18 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="_lblLogo" pref="451" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="_lblJxnet" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="167" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="_lblLogo" max="32767" attributes="0"/>
+                      <Component id="_lblJxnet" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace pref="22" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="_lblLogo" min="-2" pref="52" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="_lblJxnet" min="-2" max="-2" attributes="0"/>
@@ -553,7 +558,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial Black" size="48" style="1"/>
             </Property>
-            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value=" [ OpenNetcut ] "/>
           </Properties>
         </Component>
@@ -562,6 +567,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="12" style="3"/>
             </Property>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Powered by Jxnet"/>
           </Properties>
         </Component>
@@ -569,7 +575,6 @@
     </Container>
     <Component class="javax.swing.JProgressBar" name="_progressBar">
       <Properties>
-        <Property name="maximum" type="int" value="255"/>
         <Property name="string" type="java.lang.String" value=""/>
         <Property name="stringPainted" type="boolean" value="true"/>
       </Properties>
@@ -695,6 +700,74 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/32x32/help-browser.png"/>
             </Property>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Network Information"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jLabel2" max="32767" attributes="0"/>
+                      <Component id="jLabel1" pref="110" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="TxtIpAddr" max="32767" attributes="0"/>
+                      <Component id="TxtGwAddr" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="TxtIpAddr" min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Component id="jLabel1" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="TxtGwAddr" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" pref="26" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JTextField" name="TxtIpAddr">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="TxtGwAddr">
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="IP Address"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Gateway"/>
           </Properties>
         </Component>
       </SubComponents>
