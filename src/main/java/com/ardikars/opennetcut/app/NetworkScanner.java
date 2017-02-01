@@ -59,7 +59,8 @@ public class NetworkScanner extends Thread {
     
     @Override
     public void run() {
-        logHandler.log(-1, "Started.");
+        if (logHandler != null)
+            logHandler.log(-1, "Started.");
         ethernet.setDestinationMacAddress(MacAddress.BROADCAST)
                 .setSourceMacAddress(currentHwAddr)
                 .setEtherType(Ethernet.EtherType.ARP)
@@ -83,8 +84,8 @@ public class NetworkScanner extends Thread {
                 break;
             default:
         }
-        
-        logHandler.log(-1, "Finised.");
+        if (logHandler != null)
+            logHandler.log(-1, "Finised.");
     }
     
     private void scanAll() {
@@ -94,7 +95,6 @@ public class NetworkScanner extends Thread {
         int no=1;
         int ipsSize = ips.size();
         for(int i=0; i<ipsSize; i++) {
-            logHandler.log((i * 100)/ipsSize, "");
             arp.setTargetProtocolAddress(ips.get(i));
             ethernet.putChild(arp.toBytes());
             buffer = ethernet.toBuffer();
@@ -103,9 +103,7 @@ public class NetworkScanner extends Thread {
                 break;
             } else {
                 ByteBuffer capBuf = Jxnet.PcapNext(pcap, pktHdr);
-                if (capBuf == null) {
-                    continue;
-                } else {
+                if (capBuf != null) {
                     bytes = new byte[capBuf.capacity()];
                     capBuf.get(bytes);
                     if (capBuf != null && pktHdr != null) {
@@ -121,6 +119,8 @@ public class NetworkScanner extends Thread {
                     }
                 }
             }
+            if (logHandler != null)
+                logHandler.log((i * 100)/ipsSize, "");
         }
     }
     
@@ -129,7 +129,6 @@ public class NetworkScanner extends Thread {
         ByteBuffer buffer = null;
         byte[] bytes = null;
         int no=1;
-        logHandler.log(100, "");
         arp.setTargetProtocolAddress(ip);
         ethernet.putChild(arp.toBytes());
         buffer = ethernet.toBuffer();
@@ -156,6 +155,8 @@ public class NetworkScanner extends Thread {
                 }
             }
         }
+        if (logHandler != null)
+            logHandler.log(100, "");
     }
     
 }

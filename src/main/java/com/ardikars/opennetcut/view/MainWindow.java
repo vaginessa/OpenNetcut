@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 @SuppressWarnings("deprecation")
 public class MainWindow extends javax.swing.JFrame {   
@@ -38,6 +39,9 @@ public class MainWindow extends javax.swing.JFrame {
     private Inet4Address netaddr;
     private Inet4Address netmask;
     
+    public Inet4Address gwIpAddr;
+    public MacAddress gwMacAddr;
+        
     private DefaultTableModel DtmScanTable;
     private DefaultTableModel DtmTargetTable;
     
@@ -67,7 +71,7 @@ public class MainWindow extends javax.swing.JFrame {
         TxtNicName.setText(source);
         TxtHwAddr.setText(currentHwAddr.toString());
         TxtIpAddr.setText(currentIpAddr.toString());
-        TxtGwAddr.setText(AddrUtils.getGatewayAddress(source).toString());
+        TxtGwAddr.setText(gwIpAddr.toString());
     }
     
     public void setSource(String source) {
@@ -156,7 +160,7 @@ public class MainWindow extends javax.swing.JFrame {
         TblTarget = new javax.swing.JTable();
         _btnCut = new javax.swing.JButton();
         _btnMITM = new javax.swing.JButton();
-        _btnMoveToLeft = new javax.swing.JButton();
+        _btnDeleteTarget = new javax.swing.JButton();
         _btnAddTarget = new javax.swing.JButton();
         ScanPanel = new javax.swing.JPanel();
         _ScanSP = new javax.swing.JScrollPane();
@@ -251,10 +255,10 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        _btnMoveToLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/go-next-rtl.png"))); // NOI18N
-        _btnMoveToLeft.addActionListener(new java.awt.event.ActionListener() {
+        _btnDeleteTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/window-close.png"))); // NOI18N
+        _btnDeleteTarget.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _btnMoveToLeftActionPerformed(evt);
+                _btnDeleteTargetActionPerformed(evt);
             }
         });
 
@@ -276,7 +280,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(_TargetPanelLayout.createSequentialGroup()
                         .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(_btnCut, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(_btnMoveToLeft, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                            .addComponent(_btnDeleteTarget, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(_btnMITM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -292,10 +296,10 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(_btnMITM))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(_TargetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(_btnMoveToLeft)
+                    .addComponent(_btnDeleteTarget)
                     .addComponent(_btnAddTarget))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(_TargetSP, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+                .addComponent(_TargetSP, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -412,7 +416,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(_btnScanAddToTarget)
                     .addComponent(_btnMoveToRight))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(_ScanSP, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                .addComponent(_ScanSP, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -663,7 +667,6 @@ public class MainWindow extends javax.swing.JFrame {
                             arp.getSenderProtocolAddress().toString().toUpperCase(),
                             arp.getSenderHardwareAddress().toString().toUpperCase()
                         });
-                        System.out.println(arp);
                         TblScan.setModel(DtmScanTable);
                         TblScan.getColumnModel().getColumn(0).setMaxWidth(100);
                         TblScan.getColumnModel().getColumn(1).setMaxWidth(100);
@@ -702,12 +705,21 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__cbScanByActionPerformed
 
     private void _btnMoveToRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMoveToRightActionPerformed
+        int rowCount = TblScan.getRowCount();
+        if (rowCount < 1) {
+            return;
+        }
         DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
         target.clear();
-        for (int i=0; i<TblScan.getRowCount(); i++) {
-            if (TblScan.getValueAt(i, 1).equals(Boolean.TRUE)) {
-                target.put(TblScan.getValueAt(i, 2).toString(),
-                        MacAddress.valueOf(TblScan.getValueAt(i, 3).toString()));
+        for (int i=0; i<rowCount; i++) {
+            if (TblScan.getValueAt(i, 1).equals(Boolean.TRUE) && 
+                    !TblScan.getValueAt(i, 2).toString().equals(TxtGwAddr.getText())) {
+                if (target.containsKey(TblScan.getValueAt(i, 2).toString())) {
+                    continue;
+                } else {
+                    target.put(TblScan.getValueAt(i, 2).toString(),
+                            MacAddress.valueOf(TblScan.getValueAt(i, 3).toString()));
+                }
             }
         }
         for (Map.Entry<String, MacAddress> entry : target.entrySet()) {
@@ -717,7 +729,6 @@ public class MainWindow extends javax.swing.JFrame {
         }
         TblTarget.setModel(DtmTargetTable);
         TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
-        _btnMoveToRight.setEnabled(false);
     }//GEN-LAST:event__btnMoveToRightActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -726,27 +737,57 @@ public class MainWindow extends javax.swing.JFrame {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
     }//GEN-LAST:event_formWindowClosed
 
-    private void _btnMoveToLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMoveToLeftActionPerformed
-    }//GEN-LAST:event__btnMoveToLeftActionPerformed
+    private void _btnDeleteTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnDeleteTargetActionPerformed
+        DefaultTableModel model = (DefaultTableModel) TblTarget.getModel();
+        for (int i=0; i<model.getRowCount(); i++) {
+            if (model.getValueAt(i, 1).equals(Boolean.TRUE)) {
+                model.removeRow(i);
+            }
+        }
+        TblTarget.setModel(DtmTargetTable);
+        TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
+    }//GEN-LAST:event__btnDeleteTargetActionPerformed
 
-    private boolean addOp = true;
+    private boolean addOpScan = true;
     private void _btnScanAddToTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanAddToTargetActionPerformed
-        if (addOp) {
-            for (int i=0; i<TblScan.getRowCount(); i++) {
+        int rowCount = TblScan.getRowCount();
+        if (rowCount < 1) {
+            return;
+        }
+        if (addOpScan) {
+            for (int i=0; i<rowCount; i++) {
                 TblScan.setValueAt(Boolean.TRUE, i, 1);
             }
-            addOp = false;
+            addOpScan = false;
             _btnScanAddToTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-out.png")));
         } else {
-            for (int i=0; i<TblScan.getRowCount(); i++) {
+            for (int i=0; i<rowCount; i++) {
                 TblScan.setValueAt(Boolean.FALSE, i, 1);
             }
-            addOp = true;
+            addOpScan = true;
             _btnScanAddToTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-in.png")));
         }
     }//GEN-LAST:event__btnScanAddToTargetActionPerformed
 
+    private boolean addOpTarget = true;
     private void _btnAddTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnAddTargetActionPerformed
+        int rowCount = TblTarget.getRowCount();
+        if (rowCount < 1) {
+            return;
+        }
+        if (addOpTarget) {
+            for (int i=0; i<rowCount; i++) {
+                TblTarget.setValueAt(Boolean.TRUE, i, 1);
+            }
+            addOpTarget = false;
+            _btnAddTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-out.png")));
+        } else {
+            for (int i=0; i<rowCount; i++) {
+                TblTarget.setValueAt(Boolean.FALSE, i, 1);
+            }
+            addOpTarget = true;
+            _btnAddTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/zoom-in.png")));
+        }
     }//GEN-LAST:event__btnAddTargetActionPerformed
 
     private List<NetworkSpoofer> nss = new ArrayList<NetworkSpoofer>();
@@ -760,8 +801,8 @@ public class MainWindow extends javax.swing.JFrame {
                     nss.add(new NetworkSpoofer(
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
-                            MacAddress.valueOf("de:ad:be:ef:c0:fe"), 
-                            Inet4Address.valueOf("192.168.1.254"),
+                            Utils.randomMacAddress(), 
+                            Inet4Address.valueOf(TxtGwAddr.getText()),
                             1800, logHandler));
                 }
             }
@@ -777,7 +818,40 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event__btnCutActionPerformed
 
+    private List<NetworkSpoofer> nssMITM = new ArrayList<NetworkSpoofer>();
     private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnMITMActionPerformed
+        if (_btnMITM.getText().equals("MITM")) {
+            nssMITM.clear();
+            for (int i=0; i<TblTarget.getRowCount(); i++) {
+                if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
+                    MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
+                    //GW
+                    nssMITM.add(new NetworkSpoofer(
+                            gwMacAddr,
+                            gwIpAddr, 
+                            currentHwAddr, 
+                            Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
+                            1800, logHandler));
+                    //Vic
+                    nssMITM.add(new NetworkSpoofer(
+                            victimMac,
+                            Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
+                            currentHwAddr, 
+                            gwIpAddr,
+                            1800, logHandler));
+                }
+            }
+            for (NetworkSpoofer ns : nssMITM) {
+                ns.start();
+            }
+            _btnMITM.setText("Stop");
+        } else {
+            for (NetworkSpoofer ns : nssMITM) {
+                ns.stopThread();
+            }
+            _btnMITM.setText("MITM");
+        }
+        
     }//GEN-LAST:event__btnMITMActionPerformed
 
     private void _SaveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__SaveMenuActionPerformed
@@ -840,8 +914,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel _WifiIcon;
     private javax.swing.JButton _btnAddTarget;
     private javax.swing.JButton _btnCut;
+    private javax.swing.JButton _btnDeleteTarget;
     private javax.swing.JButton _btnMITM;
-    private javax.swing.JButton _btnMoveToLeft;
     private javax.swing.JButton _btnMoveToRight;
     private javax.swing.JButton _btnScan;
     private javax.swing.JButton _btnScanAddToTarget;

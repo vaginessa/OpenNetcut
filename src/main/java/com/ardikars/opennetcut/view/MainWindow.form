@@ -230,7 +230,7 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="_btnCut" pref="120" max="32767" attributes="0"/>
-                              <Component id="_btnMoveToLeft" pref="120" max="32767" attributes="0"/>
+                              <Component id="_btnDeleteTarget" pref="120" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -253,11 +253,11 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="_btnMoveToLeft" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="_btnDeleteTarget" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="_btnAddTarget" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="_TargetSP" pref="68" max="32767" attributes="0"/>
+                  <Component id="_TargetSP" pref="90" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -308,14 +308,14 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnMITMActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="_btnMoveToLeft">
+        <Component class="javax.swing.JButton" name="_btnDeleteTarget">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/go-next-rtl.png"/>
+              <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/window-close.png"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnMoveToLeftActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="_btnDeleteTargetActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="_btnAddTarget">
@@ -401,7 +401,7 @@
                       <Component id="_btnMoveToRight" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="_ScanSP" pref="69" max="32767" attributes="0"/>
+                  <Component id="_ScanSP" pref="91" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

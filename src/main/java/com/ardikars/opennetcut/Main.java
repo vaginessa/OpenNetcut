@@ -4,11 +4,17 @@ import com.ardikars.jxnet.BpfProgram;
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.Jxnet;
 import static com.ardikars.jxnet.Jxnet.PcapOpenLive;
+import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.Pcap;
+import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.jxnet.util.Loader;
+import com.ardikars.opennetcut.app.NetworkScanner;
 import com.ardikars.opennetcut.app.Utils;
+import com.ardikars.opennetcut.packet.Packet;
+import com.ardikars.opennetcut.packet.PacketHandler;
+import com.ardikars.opennetcut.packet.protocol.network.ARP;
 import com.ardikars.opennetcut.view.MainWindow;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -16,8 +22,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Main {
-    
-    
     
     public static void main(String[] args) throws JxnetException {
         run();
@@ -71,7 +75,13 @@ public class Main {
         MainWindow.main_windows.setCurrentHwAddr(AddrUtils.getHardwareAddress(source));
         MainWindow.main_windows.setNetaddr(netaddr);
         MainWindow.main_windows.setNetmask(netmask);
-
+        MainWindow.main_windows.gwIpAddr = AddrUtils.getGatewayAddress(source);
+        MainWindow.main_windows.gwMacAddr = Utils.getMacAddrFromArp(
+                MainWindow.main_windows.getPcap(), 
+                MainWindow.main_windows.getCurrentIpAddr(),
+                MainWindow.main_windows.getCurrentHwAddr(),
+                MainWindow.main_windows.gwIpAddr);
+        System.out.println(MainWindow.main_windows.gwMacAddr);
         MainWindow.main_windows.initMyComponents();
         MainWindow.main_windows.setVisible(true);
     }
