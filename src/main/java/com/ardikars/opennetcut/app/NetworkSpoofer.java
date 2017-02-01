@@ -69,7 +69,7 @@ public class NetworkSpoofer extends Thread {
             ByteBuffer buffer = ethernet.toBuffer();
             if (Jxnet.PcapSendPacket(pcap, buffer, buffer.capacity()) != 0) {
                 if (logHandler != null) {
-                    logHandler.log(-1, "[ WARNING ] :: Failed to send arp packet.");
+                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
                 }
                 stop = true;
             }

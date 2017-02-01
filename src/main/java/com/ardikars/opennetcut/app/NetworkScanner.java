@@ -17,6 +17,8 @@ import org.apache.commons.net.util.SubnetUtils;
 @SuppressWarnings("unchecked")
 public class NetworkScanner extends Thread {
     
+    private volatile boolean stop = false;
+    
     private final PacketHandler handler;
     private final LoggerHandler logHandler;
     private final Pcap pcap;
@@ -59,7 +61,7 @@ public class NetworkScanner extends Thread {
     @Override
     public void run() {
         if (logHandler != null)
-            logHandler.log(-1, "[ INFO ] :: Start scanning.");
+            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Start scanning.");
         ethernet.setDestinationMacAddress(MacAddress.BROADCAST)
                 .setSourceMacAddress(currentHwAddr)
                 .setEtherType(Ethernet.EtherType.ARP)
@@ -83,8 +85,6 @@ public class NetworkScanner extends Thread {
                 break;
             default:
         }
-        if (logHandler != null)
-            logHandler.log(-1, "[ INFO ] :: Scanning finised.");
     }
     
     private void scanAll() {
@@ -94,12 +94,15 @@ public class NetworkScanner extends Thread {
         int no=1;
         int ipsSize = ips.size();
         for(int i=0; i<ipsSize; i++) {
+            if (stop) {
+                return;
+            }
             arp.setTargetProtocolAddress(ips.get(i));
             ethernet.putChild(arp.toBytes());
             buffer = ethernet.toBuffer();
             if (Jxnet.PcapSendPacket(pcap, buffer, buffer.capacity()) != 0) {
                 if (logHandler != null) {
-                    logHandler.log(-1, "[ WARNING ] :: Failed to send arp packet.");
+                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
                 }
                 break;
             } else {
@@ -121,11 +124,16 @@ public class NetworkScanner extends Thread {
                 }
             }
             if (logHandler != null)
-                logHandler.log((i * 100)/ipsSize, "");
+                logHandler.log(LoggerStatus.PROGRESS, Integer.toString((i * 100)/ipsSize));
         }
+        if (logHandler != null)
+            logHandler.log(LoggerStatus.SCAN, "[ INFO ] :: Scanning finised.");
     }
     
     private void scanByIp() {
+        if (stop) {
+            return;
+        }
         PcapPktHdr pktHdr = new PcapPktHdr();
         ByteBuffer buffer = null;
         byte[] bytes = null;
@@ -135,7 +143,7 @@ public class NetworkScanner extends Thread {
         buffer = ethernet.toBuffer();
         if (Jxnet.PcapSendPacket(pcap, buffer, buffer.capacity()) != 0) {
             if (logHandler != null) {
-                logHandler.log(-1, "[ WARNING ] :: Failed to send arp packet.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
             }
             return;
         } else {
@@ -159,7 +167,15 @@ public class NetworkScanner extends Thread {
             }
         }
         if (logHandler != null)
-            logHandler.log(100, "");
+            logHandler.log(LoggerStatus.PROGRESS, "100");
+        if (logHandler != null)
+            logHandler.log(LoggerStatus.SCAN, "[ INFO ] :: Scanning finised.");
+    }
+    
+    public void stopThread() {
+        this.stop = true;
+        if (logHandler != null)
+            logHandler.log(LoggerStatus.SCAN, "[ INFO ] :: Scanning finised.");
     }
     
 }

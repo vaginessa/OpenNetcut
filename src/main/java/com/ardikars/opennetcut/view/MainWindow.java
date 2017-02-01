@@ -7,6 +7,7 @@ import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.opennetcut.app.LoggerHandler;
+import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.NetworkScanner;
 import com.ardikars.opennetcut.app.NetworkSpoofer;
 import com.ardikars.opennetcut.app.Utils;
@@ -45,15 +46,25 @@ public class MainWindow extends javax.swing.JFrame {
     private DefaultTableModel DtmScanTable;
     private DefaultTableModel DtmTargetTable;
     
-    private LoggerHandler<Integer, String> logHandler = new LoggerHandler<Integer, String>() {
+    private LoggerHandler<LoggerStatus, String> logHandler = new LoggerHandler<LoggerStatus, String>() {
         @Override
-        public void log(Integer res, String message) {
-            if (res >= 0) {
-                _progressBar.setValue(res+1);
-            } else {
-                _txt_logs.append(message);
+        public void log(LoggerStatus status, String message) {
+            switch (status) {
+                case PROGRESS:
+                    _progressBar.setValue(Integer.parseInt(message));
+                    break;
+                case COMMON:
+                    _txt_logs.append(message);
+                    break;
+                case SCAN:
+                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
+                    break;
+                default:
+                    return;
+                    
             }
         }
+        
     };
     
     private Map<String, MacAddress> target = new HashMap<String, MacAddress>();
@@ -149,7 +160,7 @@ public class MainWindow extends javax.swing.JFrame {
         return netmask;
     }
 
-    public LoggerHandler<Integer, String> getLogHandler() {
+    public LoggerHandler<LoggerStatus, String> getLogHandler() {
         return logHandler;
     }
     
@@ -658,10 +669,11 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean scanOp = true;
+    private NetworkScanner scanner = null;
     private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanActionPerformed
         
         DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
-        
         PacketHandler handler = new PacketHandler() {
             @Override
             public void nextPacket(int no, PcapPktHdr pktHdr, Packet packet) {
@@ -682,19 +694,29 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
         };
-        NetworkScanner scanner;
-        switch (_cbScanBy.getSelectedIndex()) {
-            case 0:
-                scanner = new NetworkScanner(handler, logHandler);
-                scanner.start();
-                break;
-            case 1:
-                Inet4Address ip = Inet4Address.valueOf(_txtInputFind.getText());
-                scanner = new NetworkScanner(handler, ip, logHandler);
-                scanner.start();
-                break;
-            default:
-                return;
+        if (scanOp) {
+            scanner = null;
+            switch (_cbScanBy.getSelectedIndex()) {
+                case 0:
+                    scanner = new NetworkScanner(handler, logHandler);
+                    scanner.start();
+                    scanOp = false;
+                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
+                    break;
+                case 1:
+                    Inet4Address ip = Inet4Address.valueOf(_txtInputFind.getText());
+                    scanner = new NetworkScanner(handler, ip, logHandler);
+                    scanner.start();
+                    scanOp = false;
+                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
+                    break;
+                default:
+                    return;
+            } 
+        } else {
+            scanner.stopThread();
+            scanOp = true;
+            _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
         }
     }//GEN-LAST:event__btnScanActionPerformed
 
@@ -803,6 +825,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnCutActionPerformed
         if (_btnCut.getText().equals("Cut")) {
             nss.clear();
+            
             for (int i=0; i<TblTarget.getRowCount(); i++) {
                 if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
                     MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
@@ -817,11 +840,15 @@ public class MainWindow extends javax.swing.JFrame {
             for (NetworkSpoofer ns : nss) {
                 ns.start();
             }
+            statusTargetButton(false);
+            _btnMITM.setEnabled(false);
             _btnCut.setText("Stop");
         } else {
             for (NetworkSpoofer ns : nss) {
                 ns.stopThread();
             }
+            statusTargetButton(true);
+            _btnMITM.setEnabled(true);
             _btnCut.setText("Cut");
         }
     }//GEN-LAST:event__btnCutActionPerformed
@@ -852,11 +879,15 @@ public class MainWindow extends javax.swing.JFrame {
             for (NetworkSpoofer ns : nssMITM) {
                 ns.start();
             }
+            statusTargetButton(false);
+            _btnCut.setEnabled(false);
             _btnMITM.setText("Stop");
         } else {
             for (NetworkSpoofer ns : nssMITM) {
                 ns.stopThread();
             }
+            statusTargetButton(true);
+            _btnCut.setEnabled(true);
             _btnMITM.setText("MITM");
         }
         
@@ -887,6 +918,10 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event__cbScanByItemStateChanged
 
+    private void statusTargetButton(boolean status) {
+        _btnAddTarget.setEnabled(status);
+        _btnDeleteTarget.setEnabled(status);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ScanPanel;
     private javax.swing.JTable TblScan;

@@ -156,7 +156,7 @@ public class Utils {
         
         if (Jxnet.PcapLookupNet(source, netaddr, netmask, errbuf) < 0) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: " + errbuf.toString());
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
         }
                 
         MainWindow.main_windows.setSource(source);
@@ -169,34 +169,34 @@ public class Utils {
                 MainWindow.main_windows.getToMs(), errbuf);
         if (pcap == null) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: " + errbuf.toString());
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
         }
         
         MainWindow.main_windows.setPcap(pcap);
         
         if (Jxnet.PcapDatalink(pcap) != 1) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: " + source + " is not Ethernet link type.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + source + " is not Ethernet link type.");
         }
         BpfProgram bp = new BpfProgram();
         if (Jxnet.PcapCompile(pcap, bp, "arp", 1, netmask.toInt()) !=0 ) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: Failed to compile bpf.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile bpf.");
         }
         if (Jxnet.PcapSetFilter(pcap, bp) != 0) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: Failed to compile arp filter.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile arp filter.");
         } 
         
         Inet4Address currentIpAddr = Utils.getIpAddr(source);
         if (currentIpAddr == null) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: Failed get current IP Address.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current IP Address.");
         }
         MacAddress currentMacAddr = AddrUtils.getHardwareAddress(source);
         if (currentMacAddr == null) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: Failed get current Mac Address.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Mac Address.");
         }
         
         MainWindow.main_windows.setCurrentIpAddr(currentIpAddr);
@@ -207,7 +207,7 @@ public class Utils {
         Inet4Address gwIpAddress = AddrUtils.getGatewayAddress(source);
         if (gwIpAddress == null) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: Failed get current Gateway IP Address.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway IP Address.");
         }
 
         MainWindow.main_windows.gwIpAddr = gwIpAddress;
@@ -219,7 +219,7 @@ public class Utils {
                 MainWindow.main_windows.gwIpAddr);
         if (gwMacAddr == null) {
             if (logHandler != null) 
-                logHandler.log(-1, "[ WARNING ] :: Failed get current Gateway Mac Address.");
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
         }
         MainWindow.main_windows.gwMacAddr = gwMacAddr;
         MainWindow.main_windows.initMyComponents();
