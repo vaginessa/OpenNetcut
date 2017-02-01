@@ -47,9 +47,12 @@ public class MainWindow extends javax.swing.JFrame {
     
     private LoggerHandler<Integer, String> logHandler = new LoggerHandler<Integer, String>() {
         @Override
-        public void log(Integer res, String integer) {
-            if (res != -1)
+        public void log(Integer res, String message) {
+            if (res >= 0) {
                 _progressBar.setValue(res+1);
+            } else {
+                _txt_logs.append(message);
+            }
         }
     };
     
@@ -145,6 +148,11 @@ public class MainWindow extends javax.swing.JFrame {
     public Inet4Address getNetmask() {
         return netmask;
     }
+
+    public LoggerHandler<Integer, String> getLogHandler() {
+        return logHandler;
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.

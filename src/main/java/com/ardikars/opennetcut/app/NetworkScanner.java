@@ -12,7 +12,6 @@ import com.ardikars.opennetcut.view.MainWindow;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import org.apache.commons.net.util.SubnetUtils;
 
 @SuppressWarnings("unchecked")
@@ -60,7 +59,7 @@ public class NetworkScanner extends Thread {
     @Override
     public void run() {
         if (logHandler != null)
-            logHandler.log(-1, "Started.");
+            logHandler.log(-1, "[ INFO ] :: Start scanning.");
         ethernet.setDestinationMacAddress(MacAddress.BROADCAST)
                 .setSourceMacAddress(currentHwAddr)
                 .setEtherType(Ethernet.EtherType.ARP)
@@ -85,7 +84,7 @@ public class NetworkScanner extends Thread {
             default:
         }
         if (logHandler != null)
-            logHandler.log(-1, "Finised.");
+            logHandler.log(-1, "[ INFO ] :: Scanning finised.");
     }
     
     private void scanAll() {
@@ -99,7 +98,9 @@ public class NetworkScanner extends Thread {
             ethernet.putChild(arp.toBytes());
             buffer = ethernet.toBuffer();
             if (Jxnet.PcapSendPacket(pcap, buffer, buffer.capacity()) != 0) {
-                JOptionPane.showConfirmDialog(null, "Failed to send arp packet.");
+                if (logHandler != null) {
+                    logHandler.log(-1, "[ WARNING ] :: Failed to send arp packet.");
+                }
                 break;
             } else {
                 ByteBuffer capBuf = Jxnet.PcapNext(pcap, pktHdr);
@@ -133,7 +134,9 @@ public class NetworkScanner extends Thread {
         ethernet.putChild(arp.toBytes());
         buffer = ethernet.toBuffer();
         if (Jxnet.PcapSendPacket(pcap, buffer, buffer.capacity()) != 0) {
-            JOptionPane.showConfirmDialog(null, "Failed to send arp packet.");
+            if (logHandler != null) {
+                logHandler.log(-1, "[ WARNING ] :: Failed to send arp packet.");
+            }
             return;
         } else {
             ByteBuffer capBuf = Jxnet.PcapNext(pcap, pktHdr);

@@ -1,5 +1,6 @@
 package com.ardikars.opennetcut.app;
 
+import com.ardikars.jxnet.BpfProgram;
 import static com.ardikars.jxnet.Jxnet.*;
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.InetAddress;
@@ -11,8 +12,10 @@ import com.ardikars.jxnet.PcapIf;
 import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.SockAddr;
 import com.ardikars.jxnet.exception.JxnetException;
+import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
 import com.ardikars.opennetcut.packet.protocol.network.ARP;
+import com.ardikars.opennetcut.view.MainWindow;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.net.util.SubnetUtils;
 
+@SuppressWarnings("unchecked")
 public class Utils {
     
     public static String getDeviceName() {
@@ -137,4 +141,87 @@ public class Utils {
         };
     }
     
+    
+    public static void initialize(String s, int snaplen, int promisc, int to_ms,
+            LoggerHandler logHandler) throws JxnetException {
+
+        String source = (s == null) ? getDeviceName() : s;
+        
+        System.out.println(source);
+        
+        StringBuilder errbuf = new StringBuilder();
+        
+        Inet4Address netaddr = Inet4Address.valueOf(0);
+        Inet4Address netmask = Inet4Address.valueOf(0);
+        
+        if (Jxnet.PcapLookupNet(source, netaddr, netmask, errbuf) < 0) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: " + errbuf.toString());
+        }
+                
+        MainWindow.main_windows.setSource(source);
+        MainWindow.main_windows.setSnaplen(1500);
+        MainWindow.main_windows.setPromisc(1);
+        MainWindow.main_windows.setToMs(150);
+        Pcap pcap = PcapOpenLive(MainWindow.main_windows.getSource(), 
+                MainWindow.main_windows.getSnaplen(),
+                MainWindow.main_windows.getPromisc(),
+                MainWindow.main_windows.getToMs(), errbuf);
+        if (pcap == null) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: " + errbuf.toString());
+        }
+        
+        MainWindow.main_windows.setPcap(pcap);
+        
+        if (Jxnet.PcapDatalink(pcap) != 1) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: " + source + " is not Ethernet link type.");
+        }
+        BpfProgram bp = new BpfProgram();
+        if (Jxnet.PcapCompile(pcap, bp, "arp", 1, netmask.toInt()) !=0 ) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: Failed to compile bpf.");
+        }
+        if (Jxnet.PcapSetFilter(pcap, bp) != 0) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: Failed to compile arp filter.");
+        } 
+        
+        Inet4Address currentIpAddr = Utils.getIpAddr(source);
+        if (currentIpAddr == null) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: Failed get current IP Address.");
+        }
+        MacAddress currentMacAddr = AddrUtils.getHardwareAddress(source);
+        if (currentMacAddr == null) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: Failed get current Mac Address.");
+        }
+        
+        MainWindow.main_windows.setCurrentIpAddr(currentIpAddr);
+        MainWindow.main_windows.setCurrentHwAddr(currentMacAddr);
+        MainWindow.main_windows.setNetaddr(netaddr);
+        MainWindow.main_windows.setNetmask(netmask);
+        
+        Inet4Address gwIpAddress = AddrUtils.getGatewayAddress(source);
+        if (gwIpAddress == null) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: Failed get current Gateway IP Address.");
+        }
+
+        MainWindow.main_windows.gwIpAddr = gwIpAddress;
+
+        MacAddress gwMacAddr = Utils.getMacAddrFromArp(
+                MainWindow.main_windows.getPcap(), 
+                MainWindow.main_windows.getCurrentIpAddr(),
+                MainWindow.main_windows.getCurrentHwAddr(),
+                MainWindow.main_windows.gwIpAddr);
+        if (gwMacAddr == null) {
+            if (logHandler != null) 
+                logHandler.log(-1, "[ WARNING ] :: Failed get current Gateway Mac Address.");
+        }
+        MainWindow.main_windows.gwMacAddr = gwMacAddr;
+        MainWindow.main_windows.initMyComponents();
+    }
 }
