@@ -5,7 +5,6 @@ import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.Pcap;
 import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.exception.JxnetException;
-import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.opennetcut.app.LoggerHandler;
 import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.NetworkScanner;
@@ -20,9 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import org.apache.commons.validator.routines.InetAddressValidator;
 
 @SuppressWarnings("deprecation")
 public class MainWindow extends javax.swing.JFrame {   
@@ -46,26 +44,29 @@ public class MainWindow extends javax.swing.JFrame {
     private DefaultTableModel DtmScanTable;
     private DefaultTableModel DtmTargetTable;
     
-    private LoggerHandler<LoggerStatus, String> logHandler = new LoggerHandler<LoggerStatus, String>() {
-        @Override
-        public void log(LoggerStatus status, String message) {
-            switch (status) {
-                case PROGRESS:
-                    _progressBar.setValue(Integer.parseInt(message));
-                    break;
-                case COMMON:
-                    _txt_logs.append(message);
-                    break;
-                case SCAN:
-                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
-                    break;
-                default:
-                    return;
-                    
-            }
-        }
-        
-    };
+    
+    private final LoggerHandler<LoggerStatus, String> logHandler;
+    
+//    private final LoggerHandler<LoggerStatus, String> logHandler = new LoggerHandler<LoggerStatus, String>() {
+//        @Override
+//        public void log(LoggerStatus status, String message) {
+//            switch (status) {
+//                case PROGRESS:
+//                    _progressBar.setValue(Integer.parseInt(message));
+//                    break;
+//                case COMMON:
+//                    _txt_logs.append(message);
+//                    break;
+//                case SCAN:
+//                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
+//                    break;
+//                default:
+//                    return;
+//                    
+//            }
+//        }
+//        
+//    };
     
     private Map<String, MacAddress> target = new HashMap<String, MacAddress>();
 
@@ -79,6 +80,23 @@ public class MainWindow extends javax.swing.JFrame {
         TblTarget.setModel(DtmTargetTable);
         TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
         setLocationRelativeTo(null);
+        
+        this.logHandler = (LoggerStatus status, String message) -> {
+            switch (status) {
+                case PROGRESS:
+                    _progressBar.setValue(Integer.parseInt(message));
+                    break;
+                case COMMON:
+                    _txt_logs.append(message);
+                    break;
+                case SCAN:
+                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
+                    break;
+                default:
+                    return;
+
+            }
+        };
     }  
 
     public void initMyComponents() {
@@ -674,23 +692,20 @@ public class MainWindow extends javax.swing.JFrame {
     private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanActionPerformed
         
         DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
-        PacketHandler handler = new PacketHandler() {
-            @Override
-            public void nextPacket(int no, PcapPktHdr pktHdr, Packet packet) {
-                ARP arp = null;
-                if (packet instanceof ARP) {
-                    arp = (ARP) packet;
-                    if (arp.getOpCode() == ARP.OperationCode.REPLY) {
-                        DtmScanTable.addRow(new Object[] {
-                            Integer.toString(no),
-                            false,
-                            arp.getSenderProtocolAddress().toString().toUpperCase(),
-                            arp.getSenderHardwareAddress().toString().toUpperCase()
-                        });
-                        TblScan.setModel(DtmScanTable);
-                        TblScan.getColumnModel().getColumn(0).setMaxWidth(100);
-                        TblScan.getColumnModel().getColumn(1).setMaxWidth(100);
-                    }
+        PacketHandler handler = (int no, PcapPktHdr pktHdr, Packet packet) -> {
+            ARP arp = null;
+            if (packet instanceof ARP) {
+                arp = (ARP) packet;
+                if (arp.getOpCode() == ARP.OperationCode.REPLY) {
+                    DtmScanTable.addRow(new Object[] {
+                        Integer.toString(no),
+                        false,
+                        arp.getSenderProtocolAddress().toString().toUpperCase(),
+                        arp.getSenderHardwareAddress().toString().toUpperCase()
+                    });
+                    TblScan.setModel(DtmScanTable);
+                    TblScan.getColumnModel().getColumn(0).setMaxWidth(100);
+                    TblScan.getColumnModel().getColumn(1).setMaxWidth(100);
                 }
             }
         };
@@ -825,7 +840,12 @@ public class MainWindow extends javax.swing.JFrame {
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnCutActionPerformed
         if (_btnCut.getText().equals("Cut")) {
             nss.clear();
-            
+            String gw = TxtGwAddr.getText();
+            InetAddressValidator iav = InetAddressValidator.getInstance();
+            if (!iav.isValidInet4Address(gw)) {
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
+                return;
+            }
             for (int i=0; i<TblTarget.getRowCount(); i++) {
                 if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
                     MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
@@ -833,7 +853,7 @@ public class MainWindow extends javax.swing.JFrame {
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             Utils.randomMacAddress(), 
-                            Inet4Address.valueOf(TxtGwAddr.getText()),
+                            Inet4Address.valueOf(gw),
                             1800, logHandler));
                 }
             }
