@@ -4,6 +4,7 @@ import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.Jxnet;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.Pcap;
+import com.ardikars.jxnet.PcapDumper;
 import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.opennetcut.packet.PacketHandler;
 import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
@@ -22,6 +23,7 @@ public class NetworkScanner extends Thread {
     private final PacketHandler handler;
     private final LoggerHandler logHandler;
     private final Pcap pcap;
+    private final PcapDumper dumper;
     private final List<Inet4Address> ips = new ArrayList<Inet4Address>();
     private final MacAddress currentHwAddr;
     private final Inet4Address currentIpAddr;
@@ -43,8 +45,15 @@ public class NetworkScanner extends Thread {
         this.currentIpAddr = MainWindow.main_windows.getCurrentIpAddr();
         this.currentHwAddr = MainWindow.main_windows.getCurrentHwAddr();
         this.pcap = MainWindow.main_windows.getPcap();
+        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
+        this.dumper = Jxnet.PcapDumpOpen(pcap, MainWindow.main_windows.pcapTmpFileName);
         this.handler = handler;
         this.logHandler = logHandler;
+        if (this.dumper == null) {
+            if (logHandler != null) {
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(pcap));
+            }
+        }
         this.index = 0;
     }
     
@@ -52,8 +61,15 @@ public class NetworkScanner extends Thread {
         this.currentIpAddr = MainWindow.main_windows.getCurrentIpAddr();
         this.currentHwAddr = MainWindow.main_windows.getCurrentHwAddr();
         this.pcap = MainWindow.main_windows.getPcap();
+        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
+        this.dumper = Jxnet.PcapDumpOpen(pcap, MainWindow.main_windows.pcapTmpFileName);
         this.handler = handler;
         this.logHandler = logHandler;
+        if (this.dumper == null) {
+            if (logHandler != null) {
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(pcap));
+            }
+        }
         this.ip = ip;
         this.index = 1;
     }
@@ -113,6 +129,7 @@ public class NetworkScanner extends Thread {
                         if (capEth.getChild() instanceof ARP) {
                             capArp = (ARP) capEth.getChild();
                             if (capArp.getOpCode() == ARP.OperationCode.REPLY) {
+                                Jxnet.PcapDump(dumper, pktHdr, capBuf);
                                 handler.nextPacket(no, pktHdr, capArp);
                                 no++;
                             }
@@ -122,6 +139,10 @@ public class NetworkScanner extends Thread {
             }
             if (stop) {
                 logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+                if (!dumper.isClosed()) {
+                    Jxnet.PcapDumpClose(dumper);
+                    logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+                }
                 return;
             }
             if (logHandler != null)
@@ -129,7 +150,10 @@ public class NetworkScanner extends Thread {
         }
         if (logHandler != null) {
             logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
-            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+            if (!dumper.isClosed()) {
+                Jxnet.PcapDumpClose(dumper);
+                logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+            }
         }
     }
     
@@ -160,6 +184,7 @@ public class NetworkScanner extends Thread {
                     if (capEth.getChild() instanceof ARP) {
                         capArp = (ARP) capEth.getChild();
                         if (capArp.getOpCode() == ARP.OperationCode.REPLY) {
+                            Jxnet.PcapDump(dumper, pktHdr, capBuf);
                             handler.nextPacket(no, pktHdr, capArp);
                             no++;
                         }
@@ -169,15 +194,15 @@ public class NetworkScanner extends Thread {
         }
         if (logHandler != null) {
             logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
-            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+            if (!dumper.isClosed()) {
+                Jxnet.PcapDumpClose(dumper);
+                logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+            }
         }
     }
     
     public void stopThread() {
         this.stop = true;
-        if (logHandler != null) {
-            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
-        }
     }
     
 }

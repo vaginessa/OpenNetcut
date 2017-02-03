@@ -15,12 +15,18 @@ import com.ardikars.opennetcut.app.Utils;
 import com.ardikars.opennetcut.packet.Packet;
 import com.ardikars.opennetcut.packet.PacketHandler;
 import com.ardikars.opennetcut.packet.protocol.network.ARP;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
@@ -46,6 +52,7 @@ public class MainWindow extends javax.swing.JFrame {
     private DefaultTableModel DtmScanTable;
     private DefaultTableModel DtmTargetTable;
     
+    public static String pcapTmpFileName = null;
     
     private final LoggerHandler<LoggerStatus, String> logHandler;
     
@@ -164,7 +171,7 @@ public class MainWindow extends javax.swing.JFrame {
     public LoggerHandler<LoggerStatus, String> getLogHandler() {
         return logHandler;
     }
-    
+   
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -229,6 +236,7 @@ public class MainWindow extends javax.swing.JFrame {
         _SSLSniffPluginMenu = new javax.swing.JCheckBoxMenuItem();
         _NDPSupport = new javax.swing.JCheckBoxMenuItem();
         _HelpMenu = new javax.swing.JMenu();
+        _UpdateMenu1 = new javax.swing.JMenuItem();
         _UpdateMenu = new javax.swing.JMenuItem();
         _AboutMenu = new javax.swing.JMenuItem();
 
@@ -604,9 +612,17 @@ public class MainWindow extends javax.swing.JFrame {
 
         _HelpMenu.setText("Help");
 
-        _UpdateMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        _UpdateMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
+        _UpdateMenu1.setText("Check For Update");
+        _UpdateMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _UpdateMenu1ActionPerformed(evt);
+            }
+        });
+        _HelpMenu.add(_UpdateMenu1);
+
         _UpdateMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
-        _UpdateMenu.setText("Check For Update");
+        _UpdateMenu.setText("Update OUI");
         _UpdateMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _UpdateMenuActionPerformed(evt);
@@ -721,6 +737,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void _NICMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__NICMenuActionPerformed
         try {
+            MainWindow.main_windows.setEnabled(false);
             new NIC(logHandler).setVisible(true);
         } catch (JxnetException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -760,7 +777,12 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__btnMoveToRightActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Jxnet.PcapClose(pcap);
+        if (pcap == null || pcap.isClosed()) {
+            System.exit(0);
+        } else {
+            Jxnet.PcapClose(pcap);
+            System.exit(0);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -903,18 +925,74 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__btnMITMActionPerformed
 
     private void _SaveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__SaveMenuActionPerformed
+        if (pcapTmpFileName == null) {
+            return;
+        }
+        JFileChooser fileChooser = new JFileChooser();
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            try {
+                String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!fileName.endsWith(".pcap") || !fileName.endsWith(".pcapng")) {
+                    fileName = fileName.concat(".pcap");
+                }
+                Utils.copyFileUsingFileChannels(new File(pcapTmpFileName), new File(fileName));
+            } catch (IOException ex) {
+                if (logHandler != null) 
+                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+                return;
+            }
+        }
+        pcapTmpFileName = null;
     }//GEN-LAST:event__SaveMenuActionPerformed
 
     private void _OpenMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__OpenMenuActionPerformed
+        
+        JFileChooser fileChooser = new JFileChooser();
+        String fileName = null;
+        
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            fileName = fileChooser.getSelectedFile().getAbsolutePath();
+            if (fileName == null) return;
+        } else {
+            return;
+        }
+        
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
+        
+        PacketHandler handler = (int no, PcapPktHdr pktHdr, Packet packet) -> {
+            ARP arp = null;
+            if (packet instanceof ARP) {
+                arp = (ARP) packet;
+                if (arp.getOpCode() == ARP.OperationCode.REPLY) {
+                    DtmScanTable.addRow(new Object[] {
+                        Integer.toString(no),
+                        false,
+                        arp.getSenderProtocolAddress().toString().toUpperCase(),
+                        arp.getSenderHardwareAddress().toString().toUpperCase(),
+                        OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
+                    });
+                }
+            }
+        };
+        Utils.openPcapFile(handler, logHandler, fileName);
+        setScanTableModel(DtmScanTable);
+        
     }//GEN-LAST:event__OpenMenuActionPerformed
     
     private void _ExitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__ExitMenuActionPerformed
+        if (pcap == null || pcap.isClosed()) {
+            System.exit(0);
+        } else {
+            Jxnet.PcapClose(pcap);
+            System.exit(0);
+        }
     }//GEN-LAST:event__ExitMenuActionPerformed
 
     private void _AboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__AboutMenuActionPerformed
     }//GEN-LAST:event__AboutMenuActionPerformed
 
     private void _UpdateMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__UpdateMenuActionPerformed
+        OUI.update();
     }//GEN-LAST:event__UpdateMenuActionPerformed
 
     private void _cbScanByItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event__cbScanByItemStateChanged
@@ -926,6 +1004,10 @@ public class MainWindow extends javax.swing.JFrame {
             _txtInputFind.setText("");
         }
     }//GEN-LAST:event__cbScanByItemStateChanged
+
+    private void _UpdateMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__UpdateMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event__UpdateMenu1ActionPerformed
 
     private void statusTargetButton(boolean status) {
         _btnAddTarget.setEnabled(status);
@@ -983,6 +1065,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane _TargetSP;
     private javax.swing.JToolBar _Toolbar;
     private javax.swing.JMenuItem _UpdateMenu;
+    private javax.swing.JMenuItem _UpdateMenu1;
     private javax.swing.JLabel _WifiIcon;
     private javax.swing.JButton _btnAddTarget;
     private javax.swing.JButton _btnCut;

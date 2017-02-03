@@ -7,10 +7,13 @@ import com.ardikars.jxnet.PcapIf;
 import com.ardikars.jxnet.SockAddr;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.opennetcut.app.LoggerHandler;
+import com.ardikars.opennetcut.app.LoggerStatus;
+import com.ardikars.opennetcut.app.Utils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
+@SuppressWarnings("unchecked")
 public class NIC extends javax.swing.JFrame {
 
     private String source;
@@ -26,37 +29,14 @@ public class NIC extends javax.swing.JFrame {
         this.snaplen = MainWindow.main_windows.getSnaplen();
         this.promisc = MainWindow.main_windows.getPromisc();
         this.to_ms = MainWindow.main_windows.getToMs();
-        lbl_dev_name.setText(this.source);
-        this.logHandler = logHandler;
-        DefaultTableModel dtm = new DefaultTableModel(null, new String[] {
-                "Name", "IPv4 Address", "IPv6 Address", "MAC Address", "Description"
-                }) {
-            
-        };
         
-        List<PcapIf> alldevsp = new ArrayList<PcapIf>();
-        if(PcapFindAllDevs(alldevsp, errbuf) != 0) {
-            throw new JxnetException(errbuf.toString());
-        }
-        String[] list = new String[5];
-        for(PcapIf devs : alldevsp) {
-            list[0] = devs.getName();
-            for(PcapAddr dev : devs.getAddresses()) {
-                if(dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET) {
-                    list[1] = dev.getAddr().toString();
-                }
-                if(dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET6) {
-                    list[2] = dev.getAddr().toString().toUpperCase();
-                }
-            }
-            MacAddress macAddr = devs.getHardwareAddress();
-            list[3] = (macAddr == null ? "" : macAddr.toString());
-            list[4] = devs.getDescription();
-            if(macAddr != null) {
-                dtm.addRow(list);
-            }
-        }
-        NICTable.setModel(dtm);
+        lbl_dev_name.setText(this.source);
+        SpinnerBufferSize.setValue(this.to_ms);
+        SliderSnaplen.setValue(this.snaplen);
+        lbl_snaplen.setText(String.valueOf(this.snaplen));
+        cb_promisc.setSelected((promisc == 1) ? true : false);
+        this.logHandler = logHandler;
+        refresh();
     }
     
     @SuppressWarnings("unchecked")
@@ -99,6 +79,11 @@ public class NIC extends javax.swing.JFrame {
 
             }
         ));
+        NICTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                NICTableMouseClicked(evt);
+            }
+        });
         NICSP.setViewportView(NICTable);
 
         javax.swing.GroupLayout NICPanelLayout = new javax.swing.GroupLayout(NICPanel);
@@ -126,24 +111,25 @@ public class NIC extends javax.swing.JFrame {
 
         jLabel3.setText("Name");
 
+        SpinnerBufferSize.setModel(new javax.swing.SpinnerNumberModel(300, 0, 1800, 1));
         SpinnerBufferSize.setValue(25);
 
-        SliderSnaplen.setMaximum(65353);
-        SliderSnaplen.setValue(65353);
+        SliderSnaplen.setMaximum(65535);
+        SliderSnaplen.setValue(300);
         SliderSnaplen.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 SliderSnaplenStateChanged(evt);
             }
         });
 
-        btn_ok.setText("OK");
+        btn_ok.setText("Apply");
         btn_ok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_okActionPerformed(evt);
             }
         });
 
-        btn_cancel.setText("Cancel");
+        btn_cancel.setText("Close");
         btn_cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cancelActionPerformed(evt);
@@ -151,7 +137,7 @@ public class NIC extends javax.swing.JFrame {
         });
 
         lbl_snaplen.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbl_snaplen.setText("65353");
+        lbl_snaplen.setText("65535");
 
         lbl_dev_name.setText("-");
 
@@ -247,20 +233,89 @@ public class NIC extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SliderSnaplenStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SliderSnaplenStateChanged
+        lbl_snaplen.setText(String.valueOf(SliderSnaplen.getValue()));
     }//GEN-LAST:event_SliderSnaplenStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        MainWindow.main_windows.setEnabled(true);
+        dispose();
     }//GEN-LAST:event_formWindowClosing
 
     private void btn_refresh_devicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refresh_devicesActionPerformed
+        refresh();
     }//GEN-LAST:event_btn_refresh_devicesActionPerformed
 
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
+        this.dispose();
+        MainWindow.main_windows.setEnabled(true);
     }//GEN-LAST:event_btn_cancelActionPerformed
 
     private void btn_okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_okActionPerformed
+        StringBuilder errbuf = new StringBuilder();
+        String device = lbl_dev_name.getText();
+        int newSnaplen = Integer.valueOf(lbl_snaplen.getText());
+        int newPromisc = (cb_promisc.isSelected() ? 1 : 0);
+        int newToMs = Integer.valueOf(SpinnerBufferSize.getValue().toString());
+        try {
+            Utils.initialize(device, newSnaplen, newPromisc, newToMs, logHandler);
+        } catch (JxnetException ex) {
+            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.toString());
+        }
     }//GEN-LAST:event_btn_okActionPerformed
 
+    private void NICTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NICTableMouseClicked
+        int selectedRow = NICTable.getSelectedRow();
+        lbl_dev_name.setText(NICTable.getValueAt(selectedRow, 1).toString());
+    }//GEN-LAST:event_NICTableMouseClicked
+
+    private void refresh() {
+        DefaultTableModel dtm = new DefaultTableModel(null, new String[] {
+                "No", "Name", "IPv4 Address", "IPv6 Address", "MAC Address", "Description"
+                }) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+            
+        };
+        
+        List<PcapIf> alldevsp = new ArrayList<PcapIf>();
+        if(PcapFindAllDevs(alldevsp, errbuf) != 0) {
+            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
+        }
+        String[] list = new String[6];
+        int no = 1;
+        for(PcapIf devs : alldevsp) {
+            list[0] = String.valueOf(no);
+            list[1] = devs.getName();
+            for(PcapAddr dev : devs.getAddresses()) {
+                if(dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET) {
+                    list[2] = dev.getAddr().toString();
+                }
+                if(dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET6) {
+                    list[3] = dev.getAddr().toString().toUpperCase();
+                }
+            }
+            MacAddress macAddr = devs.getHardwareAddress();
+            list[4] = (macAddr == null ? "" : macAddr.toString());
+            list[5] = devs.getDescription();
+            if(macAddr != null) {
+                dtm.addRow(list);
+                no++;
+            }
+        }
+        NICTable.setModel(dtm);
+        NICTable.getColumnModel().getColumn(0).setMaxWidth(50);
+        NICTable.getColumnModel().getColumn(0).setMinWidth(50);
+        NICTable.getColumnModel().getColumn(2).setMaxWidth(125);
+        NICTable.getColumnModel().getColumn(2).setMinWidth(125);
+        NICTable.getColumnModel().getColumn(3).setMaxWidth(200);
+        NICTable.getColumnModel().getColumn(3).setMinWidth(200);
+        NICTable.getColumnModel().getColumn(4).setMaxWidth(150);
+        NICTable.getColumnModel().getColumn(4).setMinWidth(150);
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel NICPanel;
     private javax.swing.JScrollPane NICSP;

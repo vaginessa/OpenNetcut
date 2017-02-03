@@ -36,8 +36,11 @@ task fatJar(type: Jar) {
     with jar
 }
 
+artifacts {
+    archives fatJar
+}
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.10'
     compile files('libs/Jxnet-1.1.0-SNAPSHOT.jar')
     compile 'commons-net:commons-net:2.0'
     compile 'commons-validator:commons-validator:1.4.0'

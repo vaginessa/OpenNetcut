@@ -3,26 +3,34 @@ package com.ardikars.opennetcut.app;
 import com.ardikars.jxnet.BpfProgram;
 import static com.ardikars.jxnet.Jxnet.*;
 import com.ardikars.jxnet.Inet4Address;
-import com.ardikars.jxnet.InetAddress;
 import com.ardikars.jxnet.Jxnet;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.Pcap;
 import com.ardikars.jxnet.PcapAddr;
+import com.ardikars.jxnet.PcapHandler;
 import com.ardikars.jxnet.PcapIf;
 import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.SockAddr;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.util.AddrUtils;
+import com.ardikars.opennetcut.packet.PacketHandler;
 import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
 import com.ardikars.opennetcut.packet.protocol.network.ARP;
 import com.ardikars.opennetcut.view.MainWindow;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.apache.commons.net.util.SubnetUtils;
 
 @SuppressWarnings("unchecked")
 public class Utils {
@@ -147,8 +155,6 @@ public class Utils {
 
         String source = (s == null) ? getDeviceName() : s;
         
-        System.out.println(source);
-        
         StringBuilder errbuf = new StringBuilder();
         
         Inet4Address netaddr = Inet4Address.valueOf(0);
@@ -157,12 +163,21 @@ public class Utils {
         if (Jxnet.PcapLookupNet(source, netaddr, netmask, errbuf) < 0) {
             if (logHandler != null) 
                 logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
+            return;
         }
-                
+        
+        if (netaddr.toInt() == Inet4Address.valueOf("127.0.0.1").toInt() ||
+                netmask.toInt() == Inet4Address.valueOf("255.0.0.0").toInt()) {
+            if (logHandler != null)
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + source + " is loopback interface.");
+            return;
+        }
+
         MainWindow.main_windows.setSource(source);
         MainWindow.main_windows.setSnaplen(1500);
         MainWindow.main_windows.setPromisc(1);
         MainWindow.main_windows.setToMs(150);
+        
         Pcap pcap = PcapOpenLive(MainWindow.main_windows.getSource(), 
                 MainWindow.main_windows.getSnaplen(),
                 MainWindow.main_windows.getPromisc(),
@@ -170,23 +185,30 @@ public class Utils {
         if (pcap == null) {
             if (logHandler != null) 
                 logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
+            return;
         }
-        
-        MainWindow.main_windows.setPcap(pcap);
         
         if (Jxnet.PcapDatalink(pcap) != 1) {
             if (logHandler != null) 
                 logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + source + " is not Ethernet link type.");
+            PcapClose(pcap);
+            return;
         }
         BpfProgram bp = new BpfProgram();
         if (Jxnet.PcapCompile(pcap, bp, "arp", 1, netmask.toInt()) !=0 ) {
             if (logHandler != null) 
                 logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile bpf.");
+            PcapClose(pcap);
+            return;
         }
         if (Jxnet.PcapSetFilter(pcap, bp) != 0) {
             if (logHandler != null) 
                 logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile arp filter.");
-        } 
+            PcapClose(pcap);
+            return;
+        }
+        
+        MainWindow.main_windows.setPcap(pcap);
         
         Inet4Address currentIpAddr = Utils.getIpAddr(source);
         if (currentIpAddr == null) {
@@ -223,5 +245,59 @@ public class Utils {
         }
         MainWindow.main_windows.gwMacAddr = gwMacAddr;
         MainWindow.main_windows.initMyComponents();
+        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
+    }
+    
+    public static String getPcapTmpFileName() {
+        String fileName = MessageFormat.format("{0}.{1}", UUID.randomUUID(), new String("pcap").trim());
+        return Paths.get(System.getProperty("java.io.tmpdir"), fileName).toString();
+    }
+    
+    public static void copyFileUsingFileChannels(File source, File dest)
+	            throws IOException {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            inputChannel = new FileInputStream(source).getChannel();
+            outputChannel = new FileOutputStream(dest).getChannel();
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+        } finally {
+            inputChannel.close();
+            outputChannel.close();
+        }
+    }
+    
+    public static void openPcapFile(PacketHandler handler, LoggerHandler logHandler, String path) {
+        StringBuilder errbuf = new StringBuilder();
+        Pcap pcap = PcapOpenOffline(path, errbuf);
+        if (pcap == null) {
+            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
+            return;
+        }
+        PcapHandler<PacketHandler> pcapHandler = (PacketHandler t, PcapPktHdr pktHdr, ByteBuffer capBuf) -> {
+            int no = 1;
+            byte[] bytes;
+            if (capBuf != null) {
+                bytes = new byte[capBuf.capacity()];
+                capBuf.get(bytes);
+                if (capBuf != null && pktHdr != null) {
+                    Ethernet capEth = Ethernet.wrap(bytes);
+                    ARP capArp = null;
+                    if (capEth.getChild() instanceof ARP) {
+                        capArp = (ARP) capEth.getChild();
+                        if (capArp.getOpCode() == ARP.OperationCode.REPLY) {
+                            handler.nextPacket(no, pktHdr, capArp);
+                            no++;
+                        }
+                    }
+                }
+            }
+        };
+        PcapLoop(pcap, -1, pcapHandler, handler);
+        PcapClose(pcap);
+    }
+    
+    public static void main(String... args) {
+        System.out.println(getPcapTmpFileName());
     }
 }
