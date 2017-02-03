@@ -94,9 +94,6 @@ public class NetworkScanner extends Thread {
         int no=1;
         int ipsSize = ips.size();
         for(int i=0; i<ipsSize; i++) {
-            if (stop) {
-                return;
-            }
             arp.setTargetProtocolAddress(ips.get(i));
             ethernet.putChild(arp.toBytes());
             buffer = ethernet.toBuffer();
@@ -123,11 +120,17 @@ public class NetworkScanner extends Thread {
                     }
                 }
             }
+            if (stop) {
+                logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+                return;
+            }
             if (logHandler != null)
                 logHandler.log(LoggerStatus.PROGRESS, Integer.toString((i * 100)/ipsSize));
         }
-        if (logHandler != null)
-            logHandler.log(LoggerStatus.SCAN, "[ INFO ] :: Scanning finised.");
+        if (logHandler != null) {
+            logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+        }
     }
     
     private void scanByIp() {
@@ -148,9 +151,7 @@ public class NetworkScanner extends Thread {
             return;
         } else {
             ByteBuffer capBuf = Jxnet.PcapNext(pcap, pktHdr);
-            if (capBuf == null) {
-                return;
-            } else {
+            if (capBuf != null) {
                 bytes = new byte[capBuf.capacity()];
                 capBuf.get(bytes);
                 if (capBuf != null && pktHdr != null) {
@@ -166,16 +167,17 @@ public class NetworkScanner extends Thread {
                 }
             }
         }
-        if (logHandler != null)
-            logHandler.log(LoggerStatus.PROGRESS, "100");
-        if (logHandler != null)
-            logHandler.log(LoggerStatus.SCAN, "[ INFO ] :: Scanning finised.");
+        if (logHandler != null) {
+            logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+        }
     }
     
     public void stopThread() {
         this.stop = true;
-        if (logHandler != null)
-            logHandler.log(LoggerStatus.SCAN, "[ INFO ] :: Scanning finised.");
+        if (logHandler != null) {
+            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+        }
     }
     
 }

@@ -46,7 +46,7 @@ public class NIC extends javax.swing.JFrame {
                     list[1] = dev.getAddr().toString();
                 }
                 if(dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET6) {
-                    list[2] = dev.getAddr().toString();
+                    list[2] = dev.getAddr().toString().toUpperCase();
                 }
             }
             MacAddress macAddr = devs.getHardwareAddress();

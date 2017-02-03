@@ -1,6 +1,7 @@
 package com.ardikars.opennetcut.view;
 
 import com.ardikars.jxnet.Inet4Address;
+import com.ardikars.jxnet.Jxnet;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.Pcap;
 import com.ardikars.jxnet.PcapPktHdr;
@@ -9,6 +10,7 @@ import com.ardikars.opennetcut.app.LoggerHandler;
 import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.NetworkScanner;
 import com.ardikars.opennetcut.app.NetworkSpoofer;
+import com.ardikars.opennetcut.app.OUI;
 import com.ardikars.opennetcut.app.Utils;
 import com.ardikars.opennetcut.packet.Packet;
 import com.ardikars.opennetcut.packet.PacketHandler;
@@ -47,51 +49,32 @@ public class MainWindow extends javax.swing.JFrame {
     
     private final LoggerHandler<LoggerStatus, String> logHandler;
     
-//    private final LoggerHandler<LoggerStatus, String> logHandler = new LoggerHandler<LoggerStatus, String>() {
-//        @Override
-//        public void log(LoggerStatus status, String message) {
-//            switch (status) {
-//                case PROGRESS:
-//                    _progressBar.setValue(Integer.parseInt(message));
-//                    break;
-//                case COMMON:
-//                    _txt_logs.append(message);
-//                    break;
-//                case SCAN:
-//                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
-//                    break;
-//                default:
-//                    return;
-//                    
-//            }
-//        }
-//        
-//    };
-    
     private Map<String, MacAddress> target = new HashMap<String, MacAddress>();
 
     private MainWindow() {
         initComponents();
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
         DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
-        TblScan.setModel(DtmScanTable);
-        TblScan.getColumnModel().getColumn(0).setMaxWidth(100);
-        TblScan.getColumnModel().getColumn(1).setMaxWidth(100);
-        TblTarget.setModel(DtmTargetTable);
-        TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
+        setScanTableModel(DtmScanTable);
+        setTargetTableModel(DtmTargetTable);
         setLocationRelativeTo(null);
         
         this.logHandler = (LoggerStatus status, String message) -> {
             switch (status) {
                 case PROGRESS:
-                    _progressBar.setValue(Integer.parseInt(message));
+                    int value = Integer.parseInt(message);
+                    _progressBar.setValue(value);
+                    if (value == _progressBar.getMaximum()) {
+                        scanOp = true;
+                        _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
+                    }
                     break;
                 case COMMON:
-                    _txt_logs.append(message);
+                    _txt_logs.append(message+"\n");
                     break;
-                case SCAN:
-                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
-                    break;
+//                case SCAN:
+//                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
+//                    break;
                 default:
                     return;
 
@@ -691,7 +674,8 @@ public class MainWindow extends javax.swing.JFrame {
     private NetworkScanner scanner = null;
     private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__btnScanActionPerformed
         
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
+        
         PacketHandler handler = (int no, PcapPktHdr pktHdr, Packet packet) -> {
             ARP arp = null;
             if (packet instanceof ARP) {
@@ -701,15 +685,15 @@ public class MainWindow extends javax.swing.JFrame {
                         Integer.toString(no),
                         false,
                         arp.getSenderProtocolAddress().toString().toUpperCase(),
-                        arp.getSenderHardwareAddress().toString().toUpperCase()
+                        arp.getSenderHardwareAddress().toString().toUpperCase(),
+                        OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
                     });
-                    TblScan.setModel(DtmScanTable);
-                    TblScan.getColumnModel().getColumn(0).setMaxWidth(100);
-                    TblScan.getColumnModel().getColumn(1).setMaxWidth(100);
+                    setScanTableModel(DtmScanTable);
                 }
             }
         };
         if (scanOp) {
+            setScanTableModel(DtmScanTable);
             scanner = null;
             switch (_cbScanBy.getSelectedIndex()) {
                 case 0:
@@ -722,8 +706,8 @@ public class MainWindow extends javax.swing.JFrame {
                     Inet4Address ip = Inet4Address.valueOf(_txtInputFind.getText());
                     scanner = new NetworkScanner(handler, ip, logHandler);
                     scanner.start();
-                    scanOp = false;
-                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
+                    scanOp = true;
+                    //_btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
                     break;
                 default:
                     return;
@@ -772,11 +756,11 @@ public class MainWindow extends javax.swing.JFrame {
                 entry.getKey().toString(), false
             });
         }
-        TblTarget.setModel(DtmTargetTable);
-        TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
+        setTargetTableModel(DtmTargetTable);
     }//GEN-LAST:event__btnMoveToRightActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Jxnet.PcapClose(pcap);
     }//GEN-LAST:event_formWindowClosing
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -789,8 +773,7 @@ public class MainWindow extends javax.swing.JFrame {
                 model.removeRow(i);
             }
         }
-        TblTarget.setModel(DtmTargetTable);
-        TblTarget.getColumnModel().getColumn(1).setMaxWidth(100);
+        setTargetTableModel(model);
     }//GEN-LAST:event__btnDeleteTargetActionPerformed
 
     private boolean addOpScan = true;
@@ -854,6 +837,12 @@ public class MainWindow extends javax.swing.JFrame {
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             Utils.randomMacAddress(), 
                             Inet4Address.valueOf(gw),
+                            1800, logHandler));
+                    nss.add(new NetworkSpoofer(
+                            gwMacAddr,
+                            Inet4Address.valueOf(gw), 
+                            Utils.randomMacAddress(), 
+                            Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
                             1800, logHandler));
                 }
             }
@@ -941,7 +930,27 @@ public class MainWindow extends javax.swing.JFrame {
     private void statusTargetButton(boolean status) {
         _btnAddTarget.setEnabled(status);
         _btnDeleteTarget.setEnabled(status);
+        _btnMoveToRight.setEnabled(status);
     }
+    
+    private void setScanTableModel(DefaultTableModel model) {
+        TblScan.setModel(model);
+        TblScan.getColumnModel().getColumn(0).setMaxWidth(50);
+        TblScan.getColumnModel().getColumn(0).setMinWidth(50);
+        TblScan.getColumnModel().getColumn(1).setMaxWidth(50);
+        TblScan.getColumnModel().getColumn(1).setMinWidth(50);
+        TblScan.getColumnModel().getColumn(2).setMaxWidth(200);
+        TblScan.getColumnModel().getColumn(2).setMinWidth(125);
+        TblScan.getColumnModel().getColumn(3).setMaxWidth(150);
+        TblScan.getColumnModel().getColumn(3).setMinWidth(150);    
+    }
+    
+    private void setTargetTableModel(DefaultTableModel model) {
+        TblTarget.setModel(model);
+        TblTarget.getColumnModel().getColumn(1).setMaxWidth(50);
+        TblTarget.getColumnModel().getColumn(1).setMinWidth(50);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ScanPanel;
     private javax.swing.JTable TblScan;

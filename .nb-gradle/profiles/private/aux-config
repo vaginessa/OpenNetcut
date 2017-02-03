@@ -5,17 +5,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
       <group>
-        <file>file:/root/NetBeansProjects/OpenNetcut/src/main/java/com/ardikars/opennetcut/app/Utils.java</file>
-        <file>file:/root/NetBeansProjects/OpenNetcut/src/main/java/com/ardikars/opennetcut/app/NetworkSpoofer.java</file>
         <file>file:/root/NetBeansProjects/OpenNetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java</file>
-        <file>file:/root/NetBeansProjects/OpenNetcut/src/main/java/com/ardikars/opennetcut/app/NetworkScanner.java</file>
-        <file>file:/root/NetBeansProjects/OpenNetcut/src/main/java/com/ardikars/opennetcut/view/NIC.java</file>
       </group>
     </open-files>
     <editor-bookmarks lastBookmarkId="0" xmlns="http://www.netbeans.org/ns/editor-bookmarks/2"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
       <group>
         <file>file:/root/NetBeansProjects/OpenNetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java</file>
+        <file>file:/root/NetBeansProjects/OpenNetcut/src/main/java/com/ardikars/opennetcut/app/NetworkScanner.java</file>
       </group>
     </open-files>
   </auxiliary>

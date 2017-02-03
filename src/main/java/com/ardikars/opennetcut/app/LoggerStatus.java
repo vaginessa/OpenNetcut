@@ -4,7 +4,7 @@ public enum LoggerStatus {
     
     COMMON(0),
     PROGRESS(1),
-    SCAN(2)
+    //SCAN(2)
     ;
 
     private int status;
