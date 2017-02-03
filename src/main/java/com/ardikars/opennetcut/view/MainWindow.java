@@ -992,7 +992,8 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__AboutMenuActionPerformed
 
     private void _UpdateMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__UpdateMenuActionPerformed
-        OUI.update();
+        Thread oui = new Thread(new OUI(logHandler));
+        oui.start();
     }//GEN-LAST:event__UpdateMenuActionPerformed
 
     private void _cbScanByItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event__cbScanByItemStateChanged

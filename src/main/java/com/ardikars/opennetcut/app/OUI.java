@@ -10,12 +10,17 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unchecked")
+public class OUI implements Runnable {
 
-public class OUI {
+    private LoggerHandler logHandler;
+    
+    public OUI(LoggerHandler logHandler) {
+        this.logHandler = logHandler;
+    }
+    
     
     public static String searchVendor(String MacAddr) {
         MacAddr = MacAddr.trim().substring(0, 8).toUpperCase();
@@ -30,18 +35,21 @@ public class OUI {
         return vendorName[vendorName.length-1].trim();
     }
     
-    public static void update() {
+    @Override
+    public void run() {
+        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Download OUI.");
         URL website = null;
         try {
             website = new URL("https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=manuf;hb=HEAD");
         } catch (MalformedURLException ex) {
-            Logger.getLogger(OUI.class.getName()).log(Level.SEVERE, null, ex);
+            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
         }
         try (InputStream in = website.openStream()) {
             Files.copy(in, Paths.get("oui.txt"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            Logger.getLogger(OUI.class.getName()).log(Level.SEVERE, null, ex);
+            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
         }
+        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: UOI Update finished.");
     }
     
 }
