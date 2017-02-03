@@ -23,7 +23,6 @@ public class NetworkScanner extends Thread {
     private final PacketHandler handler;
     private final LoggerHandler logHandler;
     private final Pcap pcap;
-    private final PcapDumper dumper;
     private final List<Inet4Address> ips = new ArrayList<Inet4Address>();
     private final MacAddress currentHwAddr;
     private final Inet4Address currentIpAddr;
@@ -45,15 +44,8 @@ public class NetworkScanner extends Thread {
         this.currentIpAddr = MainWindow.main_windows.getCurrentIpAddr();
         this.currentHwAddr = MainWindow.main_windows.getCurrentHwAddr();
         this.pcap = MainWindow.main_windows.getPcap();
-        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
-        this.dumper = Jxnet.PcapDumpOpen(pcap, MainWindow.main_windows.pcapTmpFileName);
         this.handler = handler;
         this.logHandler = logHandler;
-        if (this.dumper == null) {
-            if (logHandler != null) {
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(pcap));
-            }
-        }
         this.index = 0;
     }
     
@@ -61,15 +53,8 @@ public class NetworkScanner extends Thread {
         this.currentIpAddr = MainWindow.main_windows.getCurrentIpAddr();
         this.currentHwAddr = MainWindow.main_windows.getCurrentHwAddr();
         this.pcap = MainWindow.main_windows.getPcap();
-        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
-        this.dumper = Jxnet.PcapDumpOpen(pcap, MainWindow.main_windows.pcapTmpFileName);
         this.handler = handler;
         this.logHandler = logHandler;
-        if (this.dumper == null) {
-            if (logHandler != null) {
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(pcap));
-            }
-        }
         this.ip = ip;
         this.index = 1;
     }
@@ -104,6 +89,14 @@ public class NetworkScanner extends Thread {
     }
     
     private void scanAll() {
+        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
+        PcapDumper dumper;
+        dumper = Jxnet.PcapDumpOpen(pcap, MainWindow.main_windows.pcapTmpFileName);
+        if (dumper == null) {
+            if (logHandler != null) {
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(pcap));
+            }
+        }
         PcapPktHdr pktHdr = new PcapPktHdr();
         ByteBuffer buffer = null;
         byte[] bytes = null;
@@ -158,8 +151,13 @@ public class NetworkScanner extends Thread {
     }
     
     private void scanByIp() {
-        if (stop) {
-            return;
+        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
+        PcapDumper dumper;
+        dumper = Jxnet.PcapDumpOpen(pcap, MainWindow.main_windows.pcapTmpFileName);
+        if (dumper == null) {
+            if (logHandler != null) {
+                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(pcap));
+            }
         }
         PcapPktHdr pktHdr = new PcapPktHdr();
         ByteBuffer buffer = null;
@@ -176,6 +174,14 @@ public class NetworkScanner extends Thread {
         } else {
             ByteBuffer capBuf = Jxnet.PcapNext(pcap, pktHdr);
             if (capBuf != null) {
+                if (stop) {
+                    logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+                    if (!dumper.isClosed()) {
+                        Jxnet.PcapDumpClose(dumper);
+                        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+                    }
+                    return;
+                }
                 bytes = new byte[capBuf.capacity()];
                 capBuf.get(bytes);
                 if (capBuf != null && pktHdr != null) {
