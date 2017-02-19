@@ -732,6 +732,12 @@ public class MainWindow extends javax.swing.JFrame {
             scanner.stopThread();
             scanOp = true;
             _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException ex) {
+                if (logHandler != null)
+                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+            }
         }
     }//GEN-LAST:event__btnScanActionPerformed
 
