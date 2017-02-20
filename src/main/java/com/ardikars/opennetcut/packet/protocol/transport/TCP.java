@@ -177,7 +177,9 @@ public class TCP extends Packet {
 
 	@Override
 	public Packet putChild(byte[] data) {
-		return null;
+		TCP tcp = this;
+		tcp.data = data;
+		return tcp;
 	}
 
 	@Override

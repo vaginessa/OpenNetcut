@@ -13,14 +13,18 @@ import com.ardikars.jxnet.Pcap;
 import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.PcapStat;
 import java.nio.ByteBuffer;
+
+import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
+import com.ardikars.opennetcut.packet.protocol.network.ICMP;
+import com.ardikars.opennetcut.packet.protocol.network.IPv4;
 import org.apache.commons.net.ntp.TimeStamp;
 
 public class Test {
     public static void main(String[] args) {
         StringBuilder errbuf = new StringBuilder();
-        Pcap pcap = Jxnet.PcapOpenLive("wlan0", 65535, 1, 3600, errbuf);
+        Pcap pcap = Jxnet.PcapOpenLive("eth0", 65535, 1, 3600, errbuf);
         BpfProgram fp = new BpfProgram();
-        if(Jxnet.PcapCompile(pcap, fp, "ip", 1, 0xfffffff) != 0) {
+        if(Jxnet.PcapCompile(pcap, fp, "icmp", 1, 0xfffffff) != 0) {
             System.err.println("Failed to compile bpf");
             Jxnet.PcapClose(pcap);
             return;
@@ -34,6 +38,16 @@ public class Test {
         PcapPktHdr hdr = new PcapPktHdr();
         ByteBuffer buf = null;
         while ((buf = PcapNext(pcap, hdr)) != null) {
+            byte[] data = new byte[buf.capacity()];
+            buf.get(data);
+            Ethernet ethernet = Ethernet.wrap(data);
+            if (ethernet.getChild() instanceof IPv4) {
+                IPv4 ipv4 = (IPv4) ethernet.getChild();
+                if (ipv4.getChild() instanceof ICMP) {
+                    ICMP icmp =  (ICMP)ipv4.getChild();
+                    System.out.println(icmp);
+                }
+            }
         }
         PcapStats(pcap, stat);
         System.out.println(stat.getPsRecv());
@@ -42,6 +56,6 @@ public class Test {
         System.out.println(buf);
         System.out.println("==");
         System.out.println("FINISHED");
-            Jxnet.PcapClose(pcap);
+        Jxnet.PcapClose(pcap);
     }
 }

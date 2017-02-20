@@ -241,15 +241,18 @@ public class IPv4 extends IP {
 
 	@Override
 	public Packet getChild() {
-		if (protocol == Protocol.TCP) {
-			return TCP.wrap(data);
+		switch (protocol) {
+			case ICMP: return ICMP.wrap(this.data);
+			case TCP: return TCP.wrap(this.data);
 		}
 		return null;
 	}
 
 	@Override
 	public Packet putChild(byte[] data) {
-		return null;
+		IPv4 ipv4 = this;
+		ipv4.data = data;
+		return ipv4;
 	}
 
 	@Override

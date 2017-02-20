@@ -11,6 +11,7 @@ package com.ardikars.opennetcut.packet.protocol.datalink;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.opennetcut.packet.Packet;
 import com.ardikars.opennetcut.packet.protocol.lan.ARP;
+import com.ardikars.opennetcut.packet.protocol.network.IPv4;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -22,7 +23,8 @@ public class Ethernet extends Packet {
 	 */
 	public enum EtherType {
 		ARP((short) 0x0806, "ARP"),
-		VLAN((short) 0x8100, "VLAN");
+		VLAN((short) 0x8100, "VLAN"),
+		IPv4((short) 0x0800, "IPv4");
 		
 		private short type;
 		private String description;
@@ -215,8 +217,9 @@ public class Ethernet extends Packet {
 	
 	@Override
 	public Packet getChild() {
-		if (etherType == EtherType.ARP) {
-			return ARP.wrap(data);
+		switch (etherType) {
+			case ARP: return ARP.wrap(this.data);
+			case IPv4: return IPv4.wrap(this.data);
 		}
 		return null;
 	}
