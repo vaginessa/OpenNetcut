@@ -5,7 +5,7 @@ import com.ardikars.jxnet.Jxnet;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.Pcap;
 import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.network.ARP;
+import com.ardikars.opennetcut.packet.protocol.lan.ARP;
 import com.ardikars.opennetcut.view.MainWindow;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;

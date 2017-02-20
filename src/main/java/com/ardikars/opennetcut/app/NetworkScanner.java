@@ -7,7 +7,7 @@ import com.ardikars.jxnet.PcapDumper;
 import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.opennetcut.packet.PacketHandler;
 import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.network.ARP;
+import com.ardikars.opennetcut.packet.protocol.lan.ARP;
 import com.ardikars.opennetcut.view.MainWindow;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

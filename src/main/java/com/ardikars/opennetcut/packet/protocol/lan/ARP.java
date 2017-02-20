@@ -1,4 +1,4 @@
-package com.ardikars.opennetcut.packet.protocol.network;
+package com.ardikars.opennetcut.packet.protocol.lan;
 
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.MacAddress;

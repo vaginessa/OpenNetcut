@@ -10,11 +10,10 @@ package com.ardikars.opennetcut.packet.protocol.datalink;
 
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.opennetcut.packet.Packet;
-import com.ardikars.opennetcut.packet.protocol.network.ARP;
+import com.ardikars.opennetcut.packet.protocol.lan.ARP;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import javax.swing.JOptionPane;
 
 public class Ethernet extends Packet {
 	

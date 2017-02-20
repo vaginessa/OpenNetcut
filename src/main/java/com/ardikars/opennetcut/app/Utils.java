@@ -15,7 +15,7 @@ import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.opennetcut.packet.PacketHandler;
 import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.network.ARP;
+import com.ardikars.opennetcut.packet.protocol.lan.ARP;
 import com.ardikars.opennetcut.view.MainWindow;
 import java.io.File;
 import java.io.FileInputStream;

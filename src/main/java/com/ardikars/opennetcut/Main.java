@@ -19,16 +19,5 @@ public class Main {
         Utils.initialize(null, 1500, 1, 300, MainWindow.main_windows.getLogHandler());
         MainWindow.main_windows.setVisible(true);
     }
-    
-    static {
-        try {
-            Loader.loadLibrary();
-        } catch (UnsatisfiedLinkError ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
 }
