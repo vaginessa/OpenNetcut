@@ -1,38 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d4590534-ecb1-43a2-9acd-e6c6e411fc00" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_gson_gson_2_8_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_guava_21_0.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/NetworkSpoofer0.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/OpenNetcut_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/OpenNetcut_main.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/OpenNetcut_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/OpenNetcut_test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/ann/NeuralNetwork.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/ann/NeuralNetwork.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/ann/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/ann/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/Main.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/IDS.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/IDS.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/LoggerHandler.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/LoggerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/LoggerStatus.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/LoggerStatus.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/NetworkScanner.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/NetworkScanner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/NetworkSpoofer.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/NetworkSpoofer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/OUI.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/OUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/Utils.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/app/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/Packet.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/Packet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/PacketHandler.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/PacketHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/datalink/Ethernet.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/datalink/Ethernet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/lan/ARP.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/lan/ARP.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/network/ICMP.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/network/ICMP.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/network/IP.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/network/IP.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/network/IPv4.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/network/IPv4.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/transport/TCP.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/packet/protocol/transport/TCP.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/view/About.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/view/About.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/view/MainWindow.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/view/MainWindow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/view/NIC.java" afterPath="$PROJECT_DIR$/src/main/java/com/ardikars/opennetcut/view/NIC.java" />
-    </list>
+    <list default="true" id="d4590534-ecb1-43a2-9acd-e6c6e411fc00" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
