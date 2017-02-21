@@ -48,3 +48,4 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'junit:junit:3.8.1'
 }
+

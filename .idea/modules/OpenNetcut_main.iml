@@ -20,6 +20,8 @@
     </orderEntry>
     <orderEntry type="library" name="Gradle: commons-net:commons-net:2.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-validator:commons-validator:1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:21.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.0" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Gradle: commons-beanutils:commons-beanutils:1.8.3" level="project" />
     <orderEntry type="library" name="Gradle: commons-digester:commons-digester:1.8" level="project" />
