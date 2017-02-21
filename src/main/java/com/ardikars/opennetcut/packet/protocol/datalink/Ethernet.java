@@ -217,11 +217,12 @@ public class Ethernet extends Packet {
 	
 	@Override
 	public Packet getChild() {
+		if (etherType == null) return null;
 		switch (etherType) {
 			case ARP: return ARP.wrap(this.data);
 			case IPv4: return IPv4.wrap(this.data);
+			default: return null;
 		}
-		return null;
 	}
 	
 	@Override
@@ -230,7 +231,7 @@ public class Ethernet extends Packet {
 				.append("[")
 				.append("Destination: " + destinationMacAddress)
 				.append(", Source: " + sourceMacAddress);
-		if (vlanIdentifier != 0xffff) {
+		if (vlanIdentifier != (short) 0xffff) {
 			sb.append(", Tag Control Information (Priority Code Point: " + priorityCodePoint)
 					.append(", Canonical Format Indicator: " + canonicalFormatIndicator)
 					.append(", Vlan Identifier: " + vlanIdentifier)

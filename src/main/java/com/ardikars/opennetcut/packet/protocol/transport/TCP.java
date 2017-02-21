@@ -193,7 +193,7 @@ public class TCP extends Packet {
 				.append(", Data offset: " + dataOffset)
 				.append(", Flags: " + flags)
 				.append(", Windows size: " + windowSize)
-				.append(", Checksum: " + checksum)
+				.append(", Checksum: " + (checksum & 0xffff))
 				.append(", Urgent pointer: " + urgentPointer)
 				.append(", Options: " + options)
 				.append("]").toString();

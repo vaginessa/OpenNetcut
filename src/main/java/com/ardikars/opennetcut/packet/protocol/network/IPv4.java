@@ -54,112 +54,126 @@ public class IPv4 extends IP {
 		return headerLength;
 	}
 	
-	public void setHeaderLength(byte headerLength) {
+	public IPv4 setHeaderLength(byte headerLength) {
 		this.headerLength = headerLength;
+		return this;
 	}
 	
 	public byte getDiffServ() {
 		return diffServ;
 	}
 	
-	public void setDiffServ(byte diffServ) {
+	public IPv4 setDiffServ(byte diffServ) {
 		this.diffServ = diffServ;
+		return this;
 	}
 	
 	public byte getExpCon() {
 		return expCon;
 	}
 	
-	public void setExpCon(byte expCon) {
+	public IPv4 setExpCon(byte expCon) {
 		this.expCon = expCon;
+		return this;
 	}
 	
 	public short getTotalLength() {
 		return totalLength;
 	}
 	
-	public void setTotalLength(short totalLength) {
+	public IPv4 setTotalLength(short totalLength) {
 		this.totalLength = totalLength;
+		return this;
 	}
 	
 	public short getIdentification() {
 		return identification;
 	}
 	
-	public void setIdentification(short identification) {
+	public IPv4 setIdentification(short identification) {
 		this.identification = identification;
+		return this;
 	}
 	
 	public byte getFlags() {
 		return flags;
 	}
 	
-	public void setFlags(byte flags) {
+	public IPv4 setFlags(byte flags) {
 		this.flags = flags;
+		return this;
 	}
 	
 	public short getFragmentOffset() {
 		return fragmentOffset;
 	}
 	
-	public void setFragmentOffset(short fragmentOffset) {
+	public IPv4 setFragmentOffset(short fragmentOffset) {
 		this.fragmentOffset = fragmentOffset;
+		return this;
 	}
 	
 	public byte getTtl() {
 		return ttl;
 	}
 	
-	public void setTtl(byte ttl) {
+	public IPv4 setTtl(byte ttl) {
 		this.ttl = ttl;
+		return this;
 	}
 	
 	public Protocol getProtocol() {
 		return protocol;
 	}
 	
-	public void setProtocol(Protocol protocol) {
+	public IPv4 setProtocol(Protocol protocol) {
 		this.protocol = protocol;
+		return this;
 	}
 	
 	public short getChecksum() {
 		return checksum;
 	}
 	
-	public void setChecksum(short checksum) {
+	public IPv4 setChecksum(short checksum) {
 		this.checksum = checksum;
+		return this;
 	}
 	
 	public Inet4Address getSourceAddress() {
 		return sourceAddress;
 	}
 	
-	public void setSourceAddress(Inet4Address sourceAddress) {
+	public IPv4 setSourceAddress(Inet4Address sourceAddress) {
 		this.sourceAddress = sourceAddress;
+		return this;
 	}
 	
 	public Inet4Address getDestinationAddress() {
 		return destinationAddress;
 	}
 	
-	public void setDestinationAddress(Inet4Address destinationAddress) {
+	public IPv4 setDestinationAddress(Inet4Address destinationAddress) {
 		this.destinationAddress = destinationAddress;
+		return this;
 	}
 	
 	public byte[] getOptions() {
 		return options;
 	}
 	
-	public void setOptions(byte[] options) {
+	public IPv4 setOptions(byte[] options) {
 		this.options = options;
+		return this;
 	}
 	
 	public byte[] getData() {
 		return data;
 	}
 	
-	public void setData(byte[] data) {
+	public IPv4 setData(byte[] data) {
 		this.data = data;
+		return this;
 	}
 	
 	public static IPv4 wrap(byte[] bytes) {
@@ -241,11 +255,12 @@ public class IPv4 extends IP {
 
 	@Override
 	public Packet getChild() {
+		if (protocol == null) return null;
 		switch (protocol) {
 			case ICMP: return ICMP.wrap(this.data);
 			case TCP: return TCP.wrap(this.data);
+			default: return null;
 		}
-		return null;
 	}
 
 	@Override
@@ -264,12 +279,12 @@ public class IPv4 extends IP {
 				.append(", Differentiated Services Code Point: " + diffServ)
 				.append(", Explicit Congestion Notification: " + expCon)
 				.append(", Total Length: " + totalLength)
-				.append(", Identification: " + identification)
+				.append(", Identification: " + (identification & 0xffff))
 				.append(", Flags: " + flags)
 				.append(", Fragment Offset: " + fragmentOffset)
 				.append(", Time To Live: " + ttl)
 				.append(", Protocol: " + protocol)
-				.append(", Header Checksum: " + checksum)
+				.append(", Header Checksum: " + (checksum & 0xffff))
 				.append(", Source Address: " + sourceAddress)
 				.append(", Destination Address: " + destinationAddress)
 				.append(", Options: " + options)

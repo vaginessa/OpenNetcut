@@ -296,7 +296,16 @@ public class Utils {
         PcapLoop(pcap, -1, pcapHandler, handler);
         PcapClose(pcap);
     }
-    
+
+
+    public static byte BYTE(int b) {
+        return (byte)(b & 0xff);
+    }
+
+    public static short SHORT(int s) {
+        return (short)(s & 0xffff);
+    }
+
     public static void main(String... args) {
         System.out.println(getPcapTmpFileName());
     }

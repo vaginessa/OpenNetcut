@@ -7,7 +7,6 @@ import java.util.Map;
 public class NeuralNetwork {
 
     private Logger logger = null;
-    private ChartHandler chartHandler = null;
     
     private int maximumEpoch;
     private double minimalError;
@@ -145,7 +144,7 @@ public class NeuralNetwork {
         } else {
             System.out.println("\n[ Result ] :: " + "Epoch = " + (i) + ", SSE = " + error);
             Utils.printWeights(this.hiddenLayer, this.outputLayer);
-            Utils.writeWeigth("weight.json", hiddenLayer, outputLayer);
+            //Utils.writeWeigth("weight.json", hiddenLayer, outputLayer);
         }
         return this;
     }

@@ -66,6 +66,22 @@ public class ICMP extends Packet {
         bb.put(this.type);
         bb.put(this.code);
         bb.putShort(this.checksum);
+        if (this.data != null)
+            bb.put(this.data);
+        if (this.checksum == 0) {
+            bb.rewind();
+            int accumulation = 0;
+            for (int i=0; i<length/2; i++) {
+                accumulation += 0xffff & bb.getShort();
+            }
+            if (length % 2 > 0) {
+                accumulation += (bb.get() & 0xff) << 8;
+            }
+            accumulation = (accumulation >> 16 & 0xffff)
+                    + (accumulation & 0xffff);
+            this.checksum = (short) (~accumulation & 0xffff);
+            bb.putShort(2, this.checksum);
+        }
         return data;
     }
 
