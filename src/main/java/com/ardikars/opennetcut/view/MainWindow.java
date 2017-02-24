@@ -17,12 +17,8 @@
 
 package com.ardikars.opennetcut.view;
 
-import com.ardikars.jxnet.Inet4Address;
-import com.ardikars.jxnet.Jxnet;
-import com.ardikars.jxnet.MacAddress;
-import com.ardikars.jxnet.Pcap;
-import com.ardikars.jxnet.PcapPktHdr;
-import com.ardikars.jxnet.exception.JxnetException;
+import com.ardikars.jxnet.*;
+import com.ardikars.jxnet.exception.*;
 import com.ardikars.opennetcut.app.LoggerHandler;
 import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.NetworkScanner;
@@ -42,7 +38,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
-import org.apache.commons.validator.routines.InetAddressValidator;
 
 @SuppressWarnings("deprecation")
 public class MainWindow extends javax.swing.JFrame {   
@@ -866,8 +861,7 @@ public class MainWindow extends javax.swing.JFrame {
         if (_btnCut.getText().equals("Cut")) {
             nss.clear();
             String gw = TxtGwAddr.getText();
-            InetAddressValidator iav = InetAddressValidator.getInstance();
-            if (!iav.isValidInet4Address(gw)) {
+            if(!InetAddress.isValidAddress(gw)) {
                 logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
                 return;
             }

@@ -23,6 +23,7 @@ if (!hasProperty('mainClass')) {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 task fatJar(type: Jar) {
@@ -41,9 +42,8 @@ artifacts {
 }
 
 dependencies {
-    compile files('libs/Jxnet-1.1.0-SNAPSHOT.jar')
+    compile 'com.github.ardikars.Jxnet:jxnet-all:1.1.0-SNAPSHOT-1'
     compile 'commons-net:commons-net:2.0'
-    compile 'commons-validator:commons-validator:1.4.0'
     compile 'com.google.guava:guava:21.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'junit:junit:3.8.1'

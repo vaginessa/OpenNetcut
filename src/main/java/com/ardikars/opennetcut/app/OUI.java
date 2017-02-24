@@ -48,7 +48,7 @@ public class OUI implements Runnable {
             return res;
         }
         String[] vendorName = res.split("#");
-        return vendorName[vendorName.length-1].trim();
+        return (vendorName[vendorName.length-1] == null) ? "" : vendorName[vendorName.length-1].trim();
     }
     
     @Override
