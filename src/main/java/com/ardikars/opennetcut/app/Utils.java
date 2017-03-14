@@ -17,22 +17,20 @@
 
 package com.ardikars.opennetcut.app;
 
-import com.ardikars.jxnet.BpfProgram;
+import com.ardikars.jxnet.*;
+
 import static com.ardikars.jxnet.Jxnet.*;
-import com.ardikars.jxnet.Inet4Address;
-import com.ardikars.jxnet.Jxnet;
-import com.ardikars.jxnet.MacAddress;
-import com.ardikars.jxnet.Pcap;
-import com.ardikars.jxnet.PcapAddr;
-import com.ardikars.jxnet.PcapHandler;
-import com.ardikars.jxnet.PcapIf;
-import com.ardikars.jxnet.PcapPktHdr;
-import com.ardikars.jxnet.SockAddr;
+
 import com.ardikars.jxnet.exception.JxnetException;
+import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.util.AddrUtils;
-import com.ardikars.opennetcut.packet.PacketHandler;
-import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.lan.ARP;
+import com.ardikars.jxnet.util.FormatUtils;
+import com.ardikars.jxnet.Static;
+import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
+import com.ardikars.jxnet.packet.PacketHandler;
+import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
+import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
 import com.ardikars.opennetcut.view.MainWindow;
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,20 +49,10 @@ import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("unchecked")
 public class Utils {
-    
-    public static String getDeviceName() {
-        StringBuilder errbuf = new StringBuilder();
-        String device;
-        if((device = PcapLookupDev(errbuf)) == null) {
-            return errbuf.toString();
-        }
-        return device;
-    }
-    
-    public static Inet4Address getIpAddr(String source) throws JxnetException {
-        StringBuilder errbuf = new StringBuilder();
+
+    public static Inet4Address getCurrentInet4Address(String source) throws JxnetException {
         List<PcapIf> pcapIf = new ArrayList<>();
-        if (PcapFindAllDevs(pcapIf, errbuf) != 0) {
+        if (PcapFindAllDevs(pcapIf, StaticField.ERRBUF) != 0) {
             throw new JxnetException("Failed to get Ip Address from " + source);
         }
         for (PcapIf If : pcapIf) {
@@ -80,33 +68,46 @@ public class Utils {
         return null;
     }
     
-    public static MacAddress getMacAddrFromArp(Pcap pcap, Inet4Address currentIpAdd,
-            MacAddress currentMacAddr, Inet4Address gwIpAddr) {
-        Ethernet ethernet = new Ethernet().setDestinationMacAddress(MacAddress.BROADCAST)
+    public static MacAddress getMacAddrFromArp() {
+
+        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(StaticField.CURRENT_MAC_ADDRESS, OperationCode.ARP_REQUEST,
+                StaticField.CURRENT_MAC_ADDRESS, StaticField.CURRENT_INET4ADDRESS,
+                MacAddress.ZERO, StaticField.GATEWAY_INET4ADDRESS);
+
+        /*Ethernet ethernet = new Ethernet().setDestinationMacAddress(MacAddress.BROADCAST)
                 .setSourceMacAddress(currentMacAddr)
-                .setEtherType(Ethernet.EtherType.ARP)
+                .setEtherType(EtherType.ARP)
                 .setPadding(true);
                 
-        ARP arp = new ARP().setHardwareType(ARP.HW_TYPE_ETHERNET)
-                .setProtocolType(ARP.PROTO_TYPE_IP)
+        ARP arp = new ARP().setHardwareType(DatalinkType.EN10MB)
+                .setProtocolType(EtherType.IPV4)
                 .setHardwareAddressLength((byte) 6)
                 .setProtocolAddressLength((byte) 4)
-                .setOpCode(ARP.OperationCode.REQUEST)
+                .setOpCode(OperationCode.ARP_REQUEST)
                 .setSenderHardwareAddress(currentMacAddr)
                 .setSenderProtocolAddress(currentIpAdd)
                 .setTargetHardwareAddress(MacAddress.ZERO)
                 .setTargetProtocolAddress(gwIpAddr);
-        ethernet.putChild(arp.toBytes());
-        ByteBuffer buffer = ethernet.toBuffer();
+        ethernet.setPacket(arp); */
+        ByteBuffer buffer = FormatUtils.toDirectBuffer(ethernet.getBytes());
         PcapPktHdr pktHdr = new PcapPktHdr();
         byte[] bytes;
-        if (Jxnet.PcapSendPacket(pcap, buffer, buffer.capacity()) != 0) {
-            JOptionPane.showConfirmDialog(null, "Failed to send arp packet.");
-            return null;
-        } else {
+        for (int i=0; i<3; i++) {
+            if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
+                JOptionPane.showConfirmDialog(null, "Failed to send arp packet.");
+                return null;
+            }
+            List<Packet> packets = Static.next(StaticField.PCAP, pktHdr);
+            ARP arp = (ARP) Packet.parsePacket(packets, ARP.class);
+            if (arp.getOpCode() == OperationCode.ARP_REPLY &&
+                    arp.getSenderProtocolAddress().equals(StaticField.GATEWAY_INET4ADDRESS)) {
+                return arp.getSenderHardwareAddress();
+            }
+        }
+        /*else {
             ByteBuffer capBuf = null;
             while (capBuf == null) {
-                capBuf = Jxnet.PcapNext(pcap, pktHdr);
+                capBuf = PcapNext(pcap, pktHdr);
                 if (capBuf == null) {
                     continue;
                 } else {
@@ -114,18 +115,18 @@ public class Utils {
                     capBuf.get(bytes);
 
                     if (capBuf != null && pktHdr != null) {
-                        Ethernet capEth = Ethernet.wrap(bytes);
+                        Ethernet capEth = Ethernet.newInstance(bytes);
                         ARP capArp = null;
-                        if (capEth.getChild() instanceof ARP) {
-                            capArp = (ARP) capEth.getChild();
-                            if (capArp.getOpCode() == ARP.OperationCode.REPLY) {
+                        if (capEth.getPacket() instanceof ARP) {
+                            capArp = (ARP) capEth.getPacket();
+                            if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
                                 return capArp.getSenderHardwareAddress();
                             }
                         }
                     }
                 }
             }
-        }
+        }*/
         return null;
     }
     
@@ -165,104 +166,93 @@ public class Utils {
             
         };
     }
-    
-    
-    public static void initialize(String s, int snaplen, int promisc, int to_ms,
-            LoggerHandler logHandler) throws JxnetException {
 
-        String source = (s == null) ? getDeviceName() : s;
-        
-        StringBuilder errbuf = new StringBuilder();
-        
-        Inet4Address netaddr = Inet4Address.valueOf(0);
-        Inet4Address netmask = Inet4Address.valueOf(0);
-        
-        if (Jxnet.PcapLookupNet(source, netaddr, netmask, errbuf) < 0) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
-            return;
+    public static void compile(String filter) {
+        if (PcapCompile(StaticField.PCAP, StaticField.BPF_PROGRAM, filter,
+                StaticField.OPTIMIZE, StaticField.CURRENT_NETMASK_ADDRESS.toInt()) != 0) {
+            if (StaticField.LOGGER != null)
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile bpf.");
         }
-        
-        if (netaddr.toInt() == Inet4Address.valueOf("127.0.0.1").toInt() ||
-                netmask.toInt() == Inet4Address.valueOf("255.0.0.0").toInt()) {
-            if (logHandler != null)
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + source + " is loopback interface.");
-            return;
-        }
+    }
 
-        MainWindow.main_windows.setSource(source);
-        MainWindow.main_windows.setSnaplen(1500);
-        MainWindow.main_windows.setPromisc(1);
-        MainWindow.main_windows.setToMs(150);
-        
-        Pcap pcap = PcapOpenLive(MainWindow.main_windows.getSource(), 
-                MainWindow.main_windows.getSnaplen(),
-                MainWindow.main_windows.getPromisc(),
-                MainWindow.main_windows.getToMs(), errbuf);
-        if (pcap == null) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
-            return;
+    public static void filter() {
+        if (PcapSetFilter(StaticField.PCAP, StaticField.BPF_PROGRAM) != 0) {
+            if (StaticField.LOGGER != null)
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile filter.");
         }
-        
-        if (Jxnet.PcapDatalink(pcap) != 1) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + source + " is not Ethernet link type.");
-            PcapClose(pcap);
-            return;
-        }
-        BpfProgram bp = new BpfProgram();
-        if (Jxnet.PcapCompile(pcap, bp, "arp", 1, netmask.toInt()) !=0 ) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile bpf.");
-            PcapClose(pcap);
-            return;
-        }
-        if (Jxnet.PcapSetFilter(pcap, bp) != 0) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile arp filter.");
-            PcapClose(pcap);
-            return;
-        }
-        
-        MainWindow.main_windows.setPcap(pcap);
-        
-        Inet4Address currentIpAddr = Utils.getIpAddr(source);
-        if (currentIpAddr == null) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current IP Address.");
-        }
-        MacAddress currentMacAddr = AddrUtils.getHardwareAddress(source);
-        if (currentMacAddr == null) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Mac Address.");
-        }
-        
-        MainWindow.main_windows.setCurrentIpAddr(currentIpAddr);
-        MainWindow.main_windows.setCurrentHwAddr(currentMacAddr);
-        MainWindow.main_windows.setNetaddr(netaddr);
-        MainWindow.main_windows.setNetmask(netmask);
-        
-        Inet4Address gwIpAddress = AddrUtils.getGatewayAddress(source);
-        if (gwIpAddress == null) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway IP Address.");
+    }
+
+    public static void initialize(String s, int snaplen, int promisc, int to_ms, String filter) throws JxnetException {
+
+        StaticField.SOURCE = (s == null) ? AddrUtils.LookupDev(StaticField.ERRBUF) : s;
+        StaticField.SNAPLEN = snaplen;
+        StaticField.PROMISC = promisc;
+        StaticField.TIMEOUT = to_ms;
+
+        if (PcapLookupNet(StaticField.SOURCE, StaticField.CURRENT_NETWORK_ADDRESS,
+                StaticField.CURRENT_NETMASK_ADDRESS, StaticField.ERRBUF) < 0) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
+            }
         }
 
-        MainWindow.main_windows.gwIpAddr = gwIpAddress;
-
-        MacAddress gwMacAddr = Utils.getMacAddrFromArp(
-                MainWindow.main_windows.getPcap(), 
-                MainWindow.main_windows.getCurrentIpAddr(),
-                MainWindow.main_windows.getCurrentHwAddr(),
-                MainWindow.main_windows.gwIpAddr);
-        if (gwMacAddr == null) {
-            if (logHandler != null) 
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
+        StaticField.PCAP = PcapOpenLive(StaticField.SOURCE,
+                StaticField.SNAPLEN,
+                StaticField.PROMISC,
+                StaticField.TIMEOUT, StaticField.ERRBUF);
+        if (StaticField.PCAP == null) {
+            if (StaticField.LOGGER != null)
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
         }
-        MainWindow.main_windows.gwMacAddr = gwMacAddr;
-        MainWindow.main_windows.initMyComponents();
-        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
+
+        if ((short) PcapDataLink(StaticField.PCAP) != DataLinkType.EN10MB.getValue()) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
+            }
+            PcapClose(StaticField.PCAP);
+        } else {
+            StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
+        }
+
+        StaticField.CURRENT_INET4ADDRESS = Utils.getCurrentInet4Address(StaticField.SOURCE);
+        if (StaticField.CURRENT_INET4ADDRESS == null) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current IP Address.");
+            }
+        }
+
+        StaticField.CURRENT_MAC_ADDRESS = AddrUtils.getHardwareAddress(StaticField.SOURCE);
+        if (StaticField.CURRENT_MAC_ADDRESS == null) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Mac Address.");
+            }
+        }
+
+        StaticField.GATEWAY_INET4ADDRESS = AddrUtils.getGatewayAddress(StaticField.SOURCE);
+        if (StaticField.GATEWAY_INET4ADDRESS == null) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway IP Address.");
+            }
+        }
+
+        if (StaticField.CURRENT_INET4ADDRESS.equals(Inet4Address.valueOf("127.0.0.1")) ||
+                StaticField.CURRENT_INET4ADDRESS.equals(Inet4Address.valueOf("255.0.0.0"))) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is loopback interface.");
+            }
+        }
+
+        /*StaticField.GATEWAY_MAC_ADDRESS = Utils.getMacAddrFromArp();
+        if (StaticField.GATEWAY_MAC_ADDRESS == null) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
+            }
+        }*/
+
+        compile(filter);
+        filter();
+
+        //StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
     }
     
     public static String getPcapTmpFileName() {
@@ -291,26 +281,7 @@ public class Utils {
             logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
             return;
         }
-        PcapHandler<PacketHandler> pcapHandler = (PacketHandler t, PcapPktHdr pktHdr, ByteBuffer capBuf) -> {
-            int no = 1;
-            byte[] bytes;
-            if (capBuf != null) {
-                bytes = new byte[capBuf.capacity()];
-                capBuf.get(bytes);
-                if (capBuf != null && pktHdr != null) {
-                    Ethernet capEth = Ethernet.wrap(bytes);
-                    ARP capArp = null;
-                    if (capEth.getChild() instanceof ARP) {
-                        capArp = (ARP) capEth.getChild();
-                        if (capArp.getOpCode() == ARP.OperationCode.REPLY) {
-                            handler.nextPacket(no, pktHdr, capArp);
-                            no++;
-                        }
-                    }
-                }
-            }
-        };
-        PcapLoop(pcap, -1, pcapHandler, handler);
+        Static.loop(pcap, -1, handler, null);
         PcapClose(pcap);
     }
 

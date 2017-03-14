@@ -1,0 +1,45 @@
+ Arrays.asList(
+                    new Code((byte) 0, "Net Unreachable"),
+                    new Code((byte) 1, "Host Unreachable"),
+                    new Code((byte) 2, "Protocol Unreachable"),
+                    new Code((byte) 3, "Port Unreachable"),
+                    new Code((byte) 4, "Fragmentation Needed and Don't Fragment was Set"),
+                    new Code((byte) 5, "Source Route Failed"),
+                    new Code((byte) 6, "Destination Network Unknown"),
+                    new Code((byte) 7, "Destination Host Unknown"),
+                    new Code((byte) 8, "Source Host Isolated"),
+                    new Code((byte) 9, "Communication with Destination Network is Administratively Prohibited"),
+                    new Code((byte) 10, "Communication with Destination Host is Administratively Prohibited"),
+                    new Code((byte) 11, "Destination Network Unreachable for Type of Service"),
+                    new Code((byte) 12, "Destination Host Unreachable for Type of Service"),
+                    new Code((byte) 13, "Communication Administratively Prohibited"),
+                    new Code((byte) 14, "Host Produce Violation"),
+                    new Code((byte) 15, "Precedence cutoff effect")
+            ));
+            
+Arrays.asList(
+                    new Code((byte) 0, "Redirect Datagram for the Network (or subnet)"),
+                    new Code((byte) 0, "Redirect Datagram for the Host"),
+                    new Code((byte) 0, "Redirect Datagram for the Type of Service and Netowrk"),
+                    new Code((byte) 0, "Redirect Datagram for the Type of Service and Host")
+            ));
+            
+Arrays.asList(
+                    new Code((byte) 0, "Time to Live exceeded in Transit"),
+                    new Code((byte) 1, "Fragment Reassembly Time Exceeded")
+            ));
+            
+
+Arrays.asList(
+                    new Code((byte) 0, "Pointer indicates the error"),
+                    new Code((byte) 1, "Missing Required Option"),
+                    new Code((byte) 2, "Bad Length")
+            ));
+            
+
+Arrays.asList(
+                    new Code((byte) 0, "Reserved"),
+                    new Code((byte) 1, "Unknown security parameteres index"),
+                    new Code((byte) 2, "Valid security parameters, but authentication failed"),
+                    new Code((byte) 3, "Valid security parameters, but decryption failed")
+            ));

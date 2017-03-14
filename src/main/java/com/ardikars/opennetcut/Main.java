@@ -20,6 +20,7 @@ package com.ardikars.opennetcut;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.util.Loader;
 import com.ardikars.opennetcut.app.LoggerHandler;
+import com.ardikars.opennetcut.app.StaticField;
 import com.ardikars.opennetcut.app.Utils;
 import com.ardikars.opennetcut.view.MainWindow;
 import java.io.IOException;
@@ -33,7 +34,6 @@ public class Main {
     }
     
     private static void run() throws JxnetException {
-        Utils.initialize(null, 1500, 1, 300, MainWindow.main_windows.getLogHandler());
         MainWindow.main_windows.setVisible(true);
     }
 

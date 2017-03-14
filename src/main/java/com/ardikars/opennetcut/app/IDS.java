@@ -18,110 +18,118 @@
 package com.ardikars.opennetcut.app;
 
 import com.ardikars.jxnet.*;
-import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.lan.ARP;
-import com.ardikars.opennetcut.view.MainWindow;
-import com.google.common.base.Stopwatch;
+import com.ardikars.jxnet.packet.Packet;
+import com.ardikars.jxnet.packet.PacketHandler;
+import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
+import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
+import com.ardikars.jxnet.packet.protocol.network.icmp.ICMP;
+import com.ardikars.jxnet.packet.protocol.network.icmp.Type;
+import com.ardikars.jxnet.packet.protocol.network.ip.IPv4;
+import com.ardikars.jxnet.util.FormatUtils;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import static com.ardikars.jxnet.Jxnet.*;
 
 public class IDS extends Thread {
 
-    private volatile boolean stop = false;
-
     @Override
     public void run() {
-        StringBuilder errbuf = new StringBuilder();
 
-        String source = MainWindow.main_windows.getSource();
-        int snaplen = MainWindow.main_windows.getSnaplen();
-        int promisc = MainWindow.main_windows.getPromisc();
-        int to_ms = MainWindow.main_windows.getToMs();
+        PacketHandler<String> packetHandler = (arg, pktHdr, packets) -> {
 
-        Inet4Address address = MainWindow.main_windows.getNetaddr();
-        Inet4Address netmask = MainWindow.main_windows.getNetmask();
+            Ethernet ethernet = (Ethernet) Packet.parsePacket(packets, Ethernet.class);
+            ARP arp = (ARP) Packet.parsePacket(packets, ARP.class);
 
-        Pcap pcap;
-        if ((pcap = PcapOpenLive(source, snaplen, promisc, to_ms, errbuf)) == null) {
-            System.err.println(errbuf.toString());
-        }
-        BpfProgram fp = new BpfProgram();
-        if(PcapCompile(pcap, fp, "arp", 1, netmask.toInt()) != 0) {
-            System.err.println("Failed to compile bpf");
-            PcapClose(pcap);
-            return;
-        }
-        if(PcapSetFilter(pcap, fp) != 0) {
-            System.err.println("Failed to set filter");
-            PcapClose(pcap);
-            return;
-        }
+            MacAddress ethDst = ethernet.getDestinationMacAddress();
+            MacAddress ethSrc = ethernet.getSourceMacAddress();
 
-        ByteBuffer byteBuffer = null;
-        PcapPktHdr pcapPktHdr = new PcapPktHdr();
-        Stopwatch stopwatch = Stopwatch.createUnstarted();
-        boolean loop = true;
-        while(loop) {
-            if ((byteBuffer = PcapNext(pcap, pcapPktHdr)) != null) {
-                Ethernet ethernet = getEthernet(getBytes(byteBuffer));
-                ARP arp = getArp(ethernet);
-                if (ethernet != null && arp != null) {
-                    if (arp.getOpCode() == ARP.OperationCode.REPLY) {
-                        MacAddress ethDst = ethernet.getDestinationMacAddress();
-                        MacAddress ethSrc = ethernet.getSourceMacAddress();
-                        MacAddress sha = arp.getSenderHardwareAddress();
-                        MacAddress tha = arp.getTargetHardwareAddress();
-                        Inet4Address spa = arp.getSenderProtocolAddress();
-                        Inet4Address tpa = arp.getTargetProtocolAddress();
+            MacAddress sha = null;
+            MacAddress tha = null;
+            Inet4Address spa = null;
+            Inet4Address tpa = null;
 
-                        if (ethSrc.toString().equals(sha.toString())) {
+            double UNPADDED_ETHERNET_FRAME = 0;
+            double SAME_SOURCE_MAC_ADDRESS = 0;
+            double UNKNOWN_OUI = 0;
+            double ENABLED_IP_ROUTING = 0;
 
-                        }
-                        if (ethDst.toString().equals(tha.toString())) {
+            if (arp != null) {
+                sha = arp.getSenderHardwareAddress();
+                tha = arp.getTargetHardwareAddress();
+                spa = arp.getSenderProtocolAddress();
+                tpa = arp.getTargetProtocolAddress();
 
-                        }
-                        if (OUI.searchVendor(sha.toString()) != null) {
-                            if (sha.toString().equals(MacAddress.ZERO) ||
-                                    sha.toString().equals(MacAddress.BROADCAST)) {
+                if (arp.getOpCode() != OperationCode.ARP_REPLY ||
+                        !ethDst.equals(StaticField.CURRENT_MAC_ADDRESS) ||
+                        tpa.equals(StaticField.CURRENT_MAC_ADDRESS)) {
+                    return;
+                }
+                System.out.println(ethernet);
+                System.out.println(arp);
+                // Check
+                ENABLED_IP_ROUTING = (ethernet.getPadding() != true ? 1 : 0);
+                if (!ethSrc.equals(sha)) {
+                    SAME_SOURCE_MAC_ADDRESS = 1;
+                }
+                if (OUI.searchVendor(arp.getSenderHardwareAddress().toString()).equals("")) {
+                    UNKNOWN_OUI = 1;
 
-                            } else {
+                }
+                if (StaticField.CACHE.get(spa) == null) {
+                    StaticField.CACHE.put(spa, sha);
+                } else if (!StaticField.CACHE.get(spa).equals(sha)) {
+                    // send ICMP trap
+                    Ethernet icmpTrap = (Ethernet) PacketBuilder.
+                            icmpBuilder(ethSrc,
+                                    Type.ECHO_REPLY, (byte) 0x0, spa,
+                                    StaticField.CURRENT_INET4ADDRESS,
+                                    new byte[] {});
+                    ByteBuffer buffer = FormatUtils.toDirectBuffer(icmpTrap.getBytes());
+                    PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity());
 
+                    PcapPktHdr hdr = new PcapPktHdr();
+                    List<Packet> pkts = Static.next(StaticField.PCAP, hdr);
+                    IPv4 ipv4 = (IPv4) Packet.parsePacket(pkts, IPv4.class);
+                    if (ipv4.getDestinationAddress() != null &&
+                            ipv4.getDestinationAddress().equals(StaticField.CURRENT_INET4ADDRESS)) {
+                        if (ipv4.getPacket() instanceof ICMP) {
+                            ICMP icmp = (ICMP) ipv4.getPacket();
+                            if (icmp.getType().equals(Type.ECHO_REPLY) && icmp.getCode() == (byte) 0x0) {
+                                ENABLED_IP_ROUTING = 1;
                             }
-                        } else {
-
                         }
-
                     }
                 }
+                System.out.println("UNPADDED_ETHERNET_FRAME: " + UNPADDED_ETHERNET_FRAME);
+                System.out.println("SAME_SOURCE_MAC_ADDRESS: " + SAME_SOURCE_MAC_ADDRESS);
+                System.out.println("UNKNOWN_OUI: " + UNKNOWN_OUI);
+                System.out.println("ENABLED_IP_ROUTING: " + ENABLED_IP_ROUTING);
             }
-            if (stop) {
-                PcapClose(pcap);
-                loop = stop;
-            }
-        }
+        };
+
+        Static.loop(StaticField.PCAP, -1, packetHandler, null);
 
     }
 
     public void stopThread() {
-        stop = true;
+        PcapBreakLoop(StaticField.PCAP);
     }
 
-    private byte[] getBytes(ByteBuffer buffer) {
-        byte[] bytes = new byte[buffer.capacity()];
-        buffer.get(bytes);
-        return bytes;
-    }
+}
 
-    private Ethernet getEthernet(byte[] bytes) {
-        return Ethernet.wrap(bytes);
-    }
-
-    public ARP getArp(Ethernet ethernet) {
-        if (ethernet.getChild() instanceof ARP) {
-            return ((ARP) ethernet.getChild());
+class Main {
+    public static void main(String[] args) {
+        Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT, "arp or icmp");
+        IDS ids = new IDS();
+        ids.start();
+        try {
+            Thread.sleep(3600*30);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        return null;
+        ids.stopThread();
     }
 }

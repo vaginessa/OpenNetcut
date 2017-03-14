@@ -1,26 +1,21 @@
 import com.ardikars.jxnet.*;
-import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.network.ICMP;
-import com.ardikars.opennetcut.packet.protocol.network.IP;
-import com.ardikars.opennetcut.packet.protocol.network.IPv4;
-import com.ardikars.opennetcut.packet.protocol.transport.TCP;
-import static com.ardikars.opennetcut.app.Utils.BYTE;
-import static com.ardikars.opennetcut.app.Utils.SHORT;
+import com.ardikars.jxnet.util.AddrUtils;
+import com.ardikars.jxnet.Static;
+import com.ardikars.jxnet.packet.Packet;
+import com.ardikars.jxnet.packet.protocol.network.icmp.ICMP;
 
-import java.nio.ByteBuffer;
-
-import static com.ardikars.jxnet.Jxnet.PcapLoop;
-import static com.ardikars.jxnet.Jxnet.PcapStats;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PacketTest {
 
     public static void main(String[] args) {
-        sendICMP();
+        loopTest();
     }
 
-    public static void caputer() {
+    /*public static void caputer() {
         StringBuilder errbuf = new StringBuilder();
-        Pcap pcap = Jxnet.PcapOpenLive("eth0", 65535, 1, 3600, errbuf);
+        Pcap pcap = Jxnet.PcapOpenLive("eth0", 65535, 1, 3600, errbuf);*/
         /*BpfProgram fp = new BpfProgram();
         if(Jxnet.PcapCompile(pcap, fp, "icmp", 1, 0xfffffff) != 0) {
             System.err.println("Failed to compile bpf");
@@ -32,7 +27,7 @@ public class PacketTest {
             Jxnet.PcapClose(pcap);
             return;
         }*/
-        PcapStat stat = new PcapStat();
+/*        PcapStat stat = new PcapStat();
         PcapPktHdr hdr = new PcapPktHdr();
 
         PcapHandler<String> callback = (String s, PcapPktHdr pcapPktHdr, ByteBuffer byteBuffer) -> {
@@ -40,15 +35,15 @@ public class PacketTest {
             byte[] data = new byte[byteBuffer.capacity()];
             byteBuffer.get(data);
             Ethernet ethernet = Ethernet.wrap(data);
-            if (ethernet != null && ethernet.getChild() instanceof IPv4) {
-                IPv4 iPv4 = (IPv4) ethernet.getChild();
-                if (iPv4 != null && iPv4.getChild() instanceof ICMP) {
-                    ICMP icmp = (ICMP) iPv4.getChild();
+            if (ethernet != null && ethernet.getPacket() instanceof IPv4) {
+                IPv4 iPv4 = (IPv4) ethernet.getPacket();
+                if (iPv4 != null && iPv4.getPacket() instanceof ICMP) {
+                    ICMP icmp = (ICMP) iPv4.getPacket();
                     System.out.println(ethernet);
                     System.out.println(iPv4);
                     System.out.println(icmp);
-                } else if (iPv4 != null && iPv4.getChild() instanceof TCP) {
-                    TCP tcp = (TCP) iPv4.getChild();
+                } else if (iPv4 != null && iPv4.getPacket() instanceof TCP) {
+                    TCP tcp = (TCP) iPv4.getPacket();
                     System.out.println(ethernet);
                     System.out.println(iPv4);
                     System.out.println(tcp);
@@ -66,9 +61,9 @@ public class PacketTest {
         System.out.println("FINISHED");
         Jxnet.PcapClose(pcap);
     }
+*/
 
-
-
+/*
     public static void sendICMP() {
         Ethernet ethernet = new Ethernet()
                 .setDestinationMacAddress(MacAddress.valueOf("14:cc:20:cc:b9:ec"))
@@ -91,8 +86,8 @@ public class PacketTest {
                 .setCode(BYTE(0))
                 ;
 
-        ipv4.putChild(icmp.toBytes());
-        ethernet.putChild(ipv4.toBytes());
+        ipv4.putPayload(icmp.toBytes());
+        ethernet.putPayload(ipv4.toBytes());
         byte[] buffer = ethernet.toBytes();
         ByteBuffer buf = ByteBuffer.allocateDirect(buffer.length);
         buf.put(buffer);
@@ -100,5 +95,39 @@ public class PacketTest {
         Pcap pcap = Jxnet.PcapOpenLive("eth0", 65535, 1, 3600, errbuf);
         Jxnet.PcapSendPacket(pcap, buf, buf.capacity());
         Jxnet.PcapClose(pcap);
+    }*/
+
+    private void lookupNet(String source) {
+        StringBuilder errbuf = new StringBuilder();
+        System.out.println(Jxnet.PcapLookupDev(errbuf));
     }
+
+
+    public static void loopTest() {
+        StringBuilder errbuf = new StringBuilder();
+        String source = AddrUtils.LookupDev(errbuf);
+        BpfProgram bpf = new BpfProgram();
+        Pcap pcap = Jxnet.PcapOpenLive(source, 65535, 1, 2000, errbuf);
+        //Jxnet.PcapCompile(pcap, bpf, "icmp", 1, Inet4Address.valueOf("255.255.255.0").toInt());
+        //Jxnet.PcapSetFilter(pcap, bpf);
+        /*PacketHandlerBeta<String> handler = (arg, pktHdr, packets) -> {
+            ICMP icmp = (ICMP) Packet.parsePacket(packets, ICMP.class);
+            System.out.println(icmp);
+        };
+        Static.loop(pcap, 50, handler, null);*/
+        int i = 0;
+        PcapPktHdr hdr = new PcapPktHdr();
+        List<Packet> packets = new ArrayList<Packet>();
+        while (i < 10) {
+            if (Static.nextEx(pcap, packets, hdr) == 0) {
+               //for (Packet p : packets) System.out.print(p.getClass().getName() +":");
+                // ICMP icmp = (ICMP) Packet.parsePacket(packets, ICMP.class);
+                //System.out.println(icmp);
+                System.out.println(i+":");
+            }
+            i++;
+        }
+        Jxnet.PcapClose(pcap);
+    }
+
 }

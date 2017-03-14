@@ -19,15 +19,12 @@ package com.ardikars.opennetcut.view;
 
 import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.exception.*;
-import com.ardikars.opennetcut.app.LoggerHandler;
-import com.ardikars.opennetcut.app.LoggerStatus;
-import com.ardikars.opennetcut.app.NetworkScanner;
-import com.ardikars.opennetcut.app.NetworkSpoofer;
-import com.ardikars.opennetcut.app.OUI;
-import com.ardikars.opennetcut.app.Utils;
-import com.ardikars.opennetcut.packet.Packet;
-import com.ardikars.opennetcut.packet.PacketHandler;
-import com.ardikars.opennetcut.packet.protocol.lan.ARP;
+import com.ardikars.opennetcut.app.*;
+import com.ardikars.jxnet.packet.Packet;
+import com.ardikars.jxnet.packet.PacketHandler;
+import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
+import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,145 +40,48 @@ import javax.swing.table.DefaultTableModel;
 public class MainWindow extends javax.swing.JFrame {   
     
     public static MainWindow main_windows = new MainWindow();
-    
-    private String source;
-    private Pcap pcap;
-    private int snaplen;
-    private int promisc;
-    private int toMs;
-       
-    private Inet4Address currentIpAddr;
-    private MacAddress currentHwAddr;
-    private Inet4Address netaddr;
-    private Inet4Address netmask;
-    
-    public Inet4Address gwIpAddr;
-    public MacAddress gwMacAddr;
-        
+
     private DefaultTableModel DtmScanTable;
     private DefaultTableModel DtmTargetTable;
-    
-    public static String pcapTmpFileName = null;
-    
-    private final LoggerHandler<LoggerStatus, String> logHandler;
-    
+
     private Map<String, MacAddress> target = new HashMap<String, MacAddress>();
 
     private MainWindow() {
         initComponents();
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
-        DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
-        setScanTableModel(DtmScanTable);
-        setTargetTableModel(DtmTargetTable);
-        setLocationRelativeTo(null);
-        
-        this.logHandler = (LoggerStatus status, String message) -> {
+        StaticField.LOGGER = (LoggerStatus status, String message) -> {
             switch (status) {
                 case PROGRESS:
                     int value = Integer.parseInt(message);
-                    _progressBar.setValue(value);
-                    if (value == _progressBar.getMaximum()) {
-                        scanOp = true;
-                        _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
+                    this._progressBar.setValue(value);
+                    if (value == MainWindow.main_windows._progressBar.getMaximum()) {
+                        this.scanOp = true;
+                        this._btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
                     }
                     break;
                 case COMMON:
-                    _txt_logs.append(message+"\n");
+                    this._txt_logs.append(message+"\n");
                     break;
-//                case SCAN:
-//                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
-//                    break;
                 default:
                     return;
 
             }
         };
-    }  
+        Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT, "arp");
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
+        DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
+        setScanTableModel(DtmScanTable);
+        setTargetTableModel(DtmTargetTable);
+        setLocationRelativeTo(null);
+        initMyComponents();
+    }
 
     public void initMyComponents() {
-        TxtNicName.setText(source);
-        TxtHwAddr.setText(currentHwAddr.toString());
-        TxtIpAddr.setText(currentIpAddr.toString());
-        TxtGwAddr.setText(gwIpAddr.toString());
-    }
-    
-    public void setSource(String source) {
-        this.source = source;
-    }
-    
-    public String getSource() {
-        return source;
+        TxtNicName.setText(StaticField.SOURCE);
+        TxtHwAddr.setText(StaticField.CURRENT_MAC_ADDRESS.toString());
+        TxtIpAddr.setText(StaticField.CURRENT_INET4ADDRESS.toString());
+        TxtGwAddr.setText(StaticField.GATEWAY_INET4ADDRESS.toString());
     }
 
-    public void setPcap(Pcap pcap) {
-        this.pcap = pcap;
-    }
-
-    public Pcap getPcap() {
-        return pcap;
-    }
-
-    public void setSnaplen(int snaplen) {
-        this.snaplen = snaplen;
-    }
-
-    public int getSnaplen() {
-        return snaplen;
-    }
-
-    public void setPromisc(int promisc) {
-        this.promisc = promisc;
-    }
-
-    public int getPromisc() {
-        return promisc;
-    }
-
-    public void setToMs(int toMs) {
-        this.toMs = toMs;
-    }
-
-    public int getToMs() {
-        return toMs;
-    }
-
-    public void setCurrentIpAddr(Inet4Address currentIpAddr) {
-        this.currentIpAddr = currentIpAddr;
-    }
-
-    public Inet4Address getCurrentIpAddr() {
-        return currentIpAddr;
-    }
-
-    public void setCurrentHwAddr(MacAddress currentHwAddr) {
-        this.currentHwAddr = currentHwAddr;
-    }
-
-    public MacAddress getCurrentHwAddr() {
-        return currentHwAddr;
-    }
-
-    public void setNetaddr(Inet4Address netaddr) {
-        this.netaddr = netaddr;
-    }
-
-    public Inet4Address getNetaddr() {
-        return netaddr;
-    }
-
-    public void setNetmask(Inet4Address netmask) {
-        this.netmask = netmask;
-    }
-
-    public Inet4Address getNetmask() {
-        return netmask;
-    }
-
-    public LoggerHandler<LoggerStatus, String> getLogHandler() {
-        return logHandler;
-    }
-   
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -701,20 +601,18 @@ public class MainWindow extends javax.swing.JFrame {
         
         DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
         
-        PacketHandler handler = (int no, PcapPktHdr pktHdr, Packet packet) -> {
-            ARP arp = null;
-            if (packet instanceof ARP) {
-                arp = (ARP) packet;
-                if (arp.getOpCode() == ARP.OperationCode.REPLY) {
-                    DtmScanTable.addRow(new Object[] {
-                        Integer.toString(no),
-                        false,
-                        arp.getSenderProtocolAddress().toString().toUpperCase(),
-                        arp.getSenderHardwareAddress().toString().toUpperCase(),
-                        OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
-                    });
-                    setScanTableModel(DtmScanTable);
-                }
+        PacketHandler<Integer> handler = (Integer no, PcapPktHdr pktHdr, List<Packet> packets) -> {
+            ARP arp = (ARP) Packet.parsePacket(packets, ARP.class);
+            if (arp == null) return;
+            if (arp.getOpCode() == OperationCode.ARP_REPLY) {
+                DtmScanTable.addRow(new Object[] {
+                    Integer.toString(no),
+                    false,
+                    arp.getSenderProtocolAddress().toString().toUpperCase(),
+                    arp.getSenderHardwareAddress().toString().toUpperCase(),
+                    OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
+                });
+                setScanTableModel(DtmScanTable);
             }
         };
         if (scanOp) {
@@ -722,14 +620,14 @@ public class MainWindow extends javax.swing.JFrame {
             scanner = null;
             switch (_cbScanBy.getSelectedIndex()) {
                 case 0:
-                    scanner = new NetworkScanner(handler, logHandler);
+                    scanner = new NetworkScanner(handler);
                     scanner.start();
                     scanOp = false;
                     _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
                     break;
                 case 1:
                     Inet4Address ip = Inet4Address.valueOf(_txtInputFind.getText());
-                    scanner = new NetworkScanner(handler, ip, logHandler);
+                    scanner = new NetworkScanner(handler, ip);
                     scanner.start();
                     scanOp = true;
                     //_btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
@@ -744,8 +642,8 @@ public class MainWindow extends javax.swing.JFrame {
             try {
                 Thread.sleep(300);
             } catch (InterruptedException ex) {
-                if (logHandler != null)
-                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+                if (StaticField.LOGGER != null)
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
             }
         }
     }//GEN-LAST:event__btnScanActionPerformed
@@ -753,7 +651,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void _NICMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__NICMenuActionPerformed
         try {
             MainWindow.main_windows.setEnabled(false);
-            new NIC(logHandler).setVisible(true);
+            new NIC().setVisible(true);
         } catch (JxnetException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -792,10 +690,10 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__btnMoveToRightActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if (pcap == null || pcap.isClosed()) {
+        if (StaticField.PCAP == null || StaticField.PCAP.isClosed()) {
             System.exit(0);
         } else {
-            Jxnet.PcapClose(pcap);
+            Jxnet.PcapClose(StaticField.PCAP);
             System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
@@ -862,7 +760,7 @@ public class MainWindow extends javax.swing.JFrame {
             nss.clear();
             String gw = TxtGwAddr.getText();
             if(!InetAddress.isValidAddress(gw)) {
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
                 return;
             }
             for (int i=0; i<TblTarget.getRowCount(); i++) {
@@ -873,13 +771,13 @@ public class MainWindow extends javax.swing.JFrame {
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             Utils.randomMacAddress(), 
                             Inet4Address.valueOf(gw),
-                            1800, logHandler));
+                            1800));
                     nss.add(new NetworkSpoofer(
-                            gwMacAddr,
+                            StaticField.GATEWAY_MAC_ADDRESS,
                             Inet4Address.valueOf(gw), 
                             Utils.randomMacAddress(), 
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
-                            1800, logHandler));
+                            1800));
                 }
             }
             for (NetworkSpoofer ns : nss) {
@@ -907,18 +805,18 @@ public class MainWindow extends javax.swing.JFrame {
                     MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
                     //GW
                     nssMITM.add(new NetworkSpoofer(
-                            gwMacAddr,
-                            gwIpAddr, 
-                            currentHwAddr, 
+                            StaticField.GATEWAY_MAC_ADDRESS,
+                            StaticField.GATEWAY_INET4ADDRESS,
+                            StaticField.CURRENT_MAC_ADDRESS,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
-                            1800, logHandler));
+                            1800));
                     //Vic
                     nssMITM.add(new NetworkSpoofer(
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
-                            currentHwAddr, 
-                            gwIpAddr,
-                            1800, logHandler));
+                            StaticField.CURRENT_MAC_ADDRESS,
+                            StaticField.GATEWAY_INET4ADDRESS,
+                            1800));
                 }
             }
             for (NetworkSpoofer ns : nssMITM) {
@@ -939,7 +837,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__btnMITMActionPerformed
 
     private void _SaveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__SaveMenuActionPerformed
-        if (pcapTmpFileName == null) {
+        if (StaticField.RANDOM_STRING == null) {
             return;
         }
         JFileChooser fileChooser = new JFileChooser();
@@ -949,18 +847,18 @@ public class MainWindow extends javax.swing.JFrame {
                 if (!fileName.endsWith(".pcap") || !fileName.endsWith(".pcapng")) {
                     fileName = fileName.concat(".pcap");
                 }
-                Utils.copyFileUsingFileChannels(new File(pcapTmpFileName), new File(fileName));
+                Utils.copyFileUsingFileChannels(new File(StaticField.RANDOM_STRING), new File(fileName));
             } catch (IOException ex) {
-                if (logHandler != null) 
-                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+                if (StaticField.LOGGER != null)
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
                 return;
             }
         }
-        pcapTmpFileName = null;
+        StaticField.RANDOM_STRING = null;
     }//GEN-LAST:event__SaveMenuActionPerformed
 
     private void _OpenMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__OpenMenuActionPerformed
-        
+        /*
         JFileChooser fileChooser = new JFileChooser();
         String fileName = null;
         
@@ -977,7 +875,7 @@ public class MainWindow extends javax.swing.JFrame {
             ARP arp = null;
             if (packet instanceof ARP) {
                 arp = (ARP) packet;
-                if (arp.getOpCode() == ARP.OperationCode.REPLY) {
+                if (arp.getOpCode() == OperationCode.ARP_REPLY) {
                     DtmScanTable.addRow(new Object[] {
                         Integer.toString(no),
                         false,
@@ -989,15 +887,15 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
         Utils.openPcapFile(handler, logHandler, fileName);
-        setScanTableModel(DtmScanTable);
+        setScanTableModel(DtmScanTable);*/
         
     }//GEN-LAST:event__OpenMenuActionPerformed
     
     private void _ExitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__ExitMenuActionPerformed
-        if (pcap == null || pcap.isClosed()) {
+        if (StaticField.PCAP == null || StaticField.PCAP.isClosed()) {
             System.exit(0);
         } else {
-            Jxnet.PcapClose(pcap);
+            Jxnet.PcapClose(StaticField.PCAP);
             System.exit(0);
         }
     }//GEN-LAST:event__ExitMenuActionPerformed
@@ -1006,7 +904,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__AboutMenuActionPerformed
 
     private void _UpdateMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__UpdateMenuActionPerformed
-        Thread oui = new Thread(new OUI(logHandler));
+        Thread oui = new Thread(new OUI(StaticField.LOGGER));
         oui.start();
     }//GEN-LAST:event__UpdateMenuActionPerformed
 

@@ -17,15 +17,16 @@
 
 package com.ardikars.opennetcut.app;
 
-import com.ardikars.jxnet.Inet4Address;
-import com.ardikars.jxnet.Jxnet;
-import com.ardikars.jxnet.MacAddress;
-import com.ardikars.jxnet.PcapDumper;
-import com.ardikars.jxnet.PcapPktHdr;
-import com.ardikars.opennetcut.packet.PacketHandler;
-import com.ardikars.opennetcut.packet.protocol.datalink.Ethernet;
-import com.ardikars.opennetcut.packet.protocol.lan.ARP;
-import com.ardikars.opennetcut.view.MainWindow;
+import com.ardikars.jxnet.*;
+import static com.ardikars.jxnet.Jxnet.*;
+import com.ardikars.jxnet.util.FormatUtils;
+import com.ardikars.jxnet.Static;
+import com.ardikars.jxnet.packet.Packet;
+import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
+import com.ardikars.jxnet.packet.PacketHandler;
+import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
+import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,57 +38,48 @@ public class NetworkScanner extends Thread {
     private volatile boolean stop = false;
     
     private final PacketHandler handler;
-    private final LoggerHandler logHandler;
     private final List<Inet4Address> ips = new ArrayList<Inet4Address>();
-    private final MacAddress currentHwAddr;
-    private final Inet4Address currentIpAddr;
     
     private Ethernet ethernet = new Ethernet();
     private ARP arp = new ARP();
+
+    private Inet4Address scanIP;
             
     private int index;
-    
-    private Inet4Address ip;
-    
-    public NetworkScanner(PacketHandler handler, LoggerHandler logHandler) {
-        SubnetUtils su = new SubnetUtils(MainWindow.main_windows.getNetaddr().toString(),
-            MainWindow.main_windows.getNetmask().toString());
+
+    public NetworkScanner(PacketHandler handler) {
+        SubnetUtils su = new SubnetUtils(StaticField.CURRENT_NETWORK_ADDRESS.toString(),
+                StaticField.CURRENT_NETMASK_ADDRESS.toString());
         String[] strips = su.getInfo().getAllAddresses();
         for (String ip : strips) {
             ips.add(Inet4Address.valueOf(ip));
         }
-        this.currentIpAddr = MainWindow.main_windows.getCurrentIpAddr();
-        this.currentHwAddr = MainWindow.main_windows.getCurrentHwAddr();
         this.handler = handler;
-        this.logHandler = logHandler;
         this.index = 0;
     }
     
-    public NetworkScanner(PacketHandler handler, Inet4Address ip, LoggerHandler logHandler) {
-        this.currentIpAddr = MainWindow.main_windows.getCurrentIpAddr();
-        this.currentHwAddr = MainWindow.main_windows.getCurrentHwAddr();
+    public NetworkScanner(PacketHandler handler, Inet4Address ip) {
         this.handler = handler;
-        this.logHandler = logHandler;
-        this.ip = ip;
+        this.scanIP = ip;
         this.index = 1;
     }
     
     @Override
     public void run() {
-        if (logHandler != null)
-            logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Start scanning.");
+        if (StaticField.LOGGER != null)
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Start scanning.");
         ethernet.setDestinationMacAddress(MacAddress.BROADCAST)
-                .setSourceMacAddress(currentHwAddr)
-                .setEtherType(Ethernet.EtherType.ARP)
+                .setSourceMacAddress(StaticField.CURRENT_MAC_ADDRESS)
+                .setEtherType(EtherType.ARP)
                 .setPadding(true);
                 
-        arp.setHardwareType(ARP.HW_TYPE_ETHERNET)
-                .setProtocolType(ARP.PROTO_TYPE_IP)
+        arp.setHardwareType(DataLinkType.EN10MB)
+                .setProtocolType(EtherType.IPV4)
                 .setHardwareAddressLength((byte) 6)
                 .setProtocolAddressLength((byte) 4)
-                .setOpCode(ARP.OperationCode.REQUEST)
-                .setSenderHardwareAddress(currentHwAddr)
-                .setSenderProtocolAddress(currentIpAddr)
+                .setOpCode(OperationCode.ARP_REQUEST)
+                .setSenderHardwareAddress(StaticField.CURRENT_MAC_ADDRESS)
+                .setSenderProtocolAddress(StaticField.CURRENT_INET4ADDRESS)
                 .setTargetHardwareAddress(MacAddress.ZERO);
         
         switch (index) {
@@ -102,120 +94,104 @@ public class NetworkScanner extends Thread {
     }
     
     private void scanAll() {
-        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
+        StaticField.RANDOM_STRING = Utils.getPcapTmpFileName();
         PcapDumper dumper;
-        dumper = Jxnet.PcapDumpOpen(MainWindow.main_windows.getPcap(), MainWindow.main_windows.pcapTmpFileName);
+        dumper = Jxnet.PcapDumpOpen(StaticField.PCAP, StaticField.RANDOM_STRING);
         if (dumper == null) {
-            if (logHandler != null) {
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(MainWindow.main_windows.getPcap()));
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(StaticField.PCAP));
             }
         }
         PcapPktHdr pktHdr = new PcapPktHdr();
         ByteBuffer buffer = null;
-        byte[] bytes = null;
+
         int no=1;
         int ipsSize = ips.size();
         for(int i=0; i<ipsSize; i++) {
             arp.setTargetProtocolAddress(ips.get(i));
-            ethernet.putChild(arp.toBytes());
-            buffer = ethernet.toBuffer();
-            if (Jxnet.PcapSendPacket(MainWindow.main_windows.getPcap(), buffer, buffer.capacity()) != 0) {
-                if (logHandler != null) {
-                    logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
+            ethernet.setPacket(arp);
+            buffer = FormatUtils.toDirectBuffer(ethernet.getBytes());
+            if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
+                if (StaticField.LOGGER != null) {
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
                 }
                 break;
             } else {
-                ByteBuffer capBuf = Jxnet.PcapNext(MainWindow.main_windows.getPcap(), pktHdr);
-                if (capBuf != null) {
-                    bytes = new byte[capBuf.capacity()];
-                    capBuf.get(bytes);
-                    if (capBuf != null && pktHdr != null) {
-                        Ethernet capEth = Ethernet.wrap(bytes);
-                        ARP capArp = null;
-                        if (capEth.getChild() instanceof ARP) {
-                            capArp = (ARP) capEth.getChild();
-                            if (capArp.getOpCode() == ARP.OperationCode.REPLY) {
-                                Jxnet.PcapDump(dumper, pktHdr, capBuf);
-                                handler.nextPacket(no, pktHdr, capArp);
-                                no++;
-                            }
-                        }
+                List<Packet> packets = Static.next(StaticField.PCAP, pktHdr);
+                if (packets != null) {
+                    ARP capArp = (ARP) Packet.parsePacket(packets, ARP.class);
+                    if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
+                        Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
+                        this.handler.nextPacket(no, pktHdr, packets);
+                        no++;
                     }
                 }
             }
             if (stop) {
-                logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+                StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
                 if (!dumper.isClosed()) {
                     Jxnet.PcapDumpClose(dumper);
-                    logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
                 }
                 return;
             }
-            if (logHandler != null)
-                logHandler.log(LoggerStatus.PROGRESS, Integer.toString((i * 100)/ipsSize));
+            if (StaticField.LOGGER != null)
+                StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString((i * 100)/ipsSize));
         }
-        if (logHandler != null) {
-            logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+        if (StaticField.LOGGER != null) {
+            StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
             if (!dumper.isClosed()) {
                 Jxnet.PcapDumpClose(dumper);
-                logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
             }
         }
     }
     
     private void scanByIp() {
-        MainWindow.main_windows.pcapTmpFileName = Utils.getPcapTmpFileName();
+        StaticField.RANDOM_STRING = Utils.getPcapTmpFileName();
         PcapDumper dumper;
-        dumper = Jxnet.PcapDumpOpen(MainWindow.main_windows.getPcap(), MainWindow.main_windows.pcapTmpFileName);
+        dumper = Jxnet.PcapDumpOpen(StaticField.PCAP, StaticField.RANDOM_STRING);
         if (dumper == null) {
-            if (logHandler != null) {
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(MainWindow.main_windows.getPcap()));
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + Jxnet.PcapGetErr(StaticField.PCAP));
             }
         }
         PcapPktHdr pktHdr = new PcapPktHdr();
         ByteBuffer buffer = null;
         byte[] bytes = null;
         int no=1;
-        arp.setTargetProtocolAddress(ip);
-        ethernet.putChild(arp.toBytes());
-        buffer = ethernet.toBuffer();
-        if (Jxnet.PcapSendPacket(MainWindow.main_windows.getPcap(), buffer, buffer.capacity()) != 0) {
-            if (logHandler != null) {
-                logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
+        arp.setTargetProtocolAddress(scanIP);
+        ethernet.setPacket(arp);
+        buffer = ByteBuffer.wrap(ethernet.getBytes());
+        if (Jxnet.PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
             }
             return;
         } else {
-            ByteBuffer capBuf = Jxnet.PcapNext(MainWindow.main_windows.getPcap(), pktHdr);
-            if (capBuf != null) {
+            List<Packet> packets = Static.next(StaticField.PCAP, pktHdr);
+            if (packets != null) {
                 if (stop) {
-                    logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+                    StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
                     if (!dumper.isClosed()) {
                         Jxnet.PcapDumpClose(dumper);
-                        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+                        StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
                     }
                     return;
                 }
-                bytes = new byte[capBuf.capacity()];
-                capBuf.get(bytes);
-                if (capBuf != null && pktHdr != null) {
-                    Ethernet capEth = Ethernet.wrap(bytes);
-                    ARP capArp = null;
-                    if (capEth.getChild() instanceof ARP) {
-                        capArp = (ARP) capEth.getChild();
-                        if (capArp.getOpCode() == ARP.OperationCode.REPLY) {
-                            Jxnet.PcapDump(dumper, pktHdr, capBuf);
-                            handler.nextPacket(no, pktHdr, capArp);
-                            no++;
-                        }
-                    }
+                ARP capArp = (ARP) Packet.parsePacket(packets, ARP.class);
+                if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
+                    Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
+                    handler.nextPacket(no, pktHdr, packets);
+                    no++;
                 }
             }
         }
-        if (logHandler != null) {
-            logHandler.log(LoggerStatus.PROGRESS, Integer.toString(100));
+        if (StaticField.LOGGER != null) {
+            StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
             if (!dumper.isClosed()) {
                 Jxnet.PcapDumpClose(dumper);
-                logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
             }
         }
     }

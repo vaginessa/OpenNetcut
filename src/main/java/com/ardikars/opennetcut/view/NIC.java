@@ -18,13 +18,13 @@
 package com.ardikars.opennetcut.view;
 
 import static com.ardikars.jxnet.Jxnet.*;
-import com.ardikars.jxnet.MacAddress;
-import com.ardikars.jxnet.PcapAddr;
-import com.ardikars.jxnet.PcapIf;
-import com.ardikars.jxnet.SockAddr;
+
+import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.exception.JxnetException;
+import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.opennetcut.app.LoggerHandler;
 import com.ardikars.opennetcut.app.LoggerStatus;
+import com.ardikars.opennetcut.app.StaticField;
 import com.ardikars.opennetcut.app.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,26 +33,15 @@ import javax.swing.table.DefaultTableModel;
 @SuppressWarnings("unchecked")
 public class NIC extends javax.swing.JFrame {
 
-    private String source;
-    private int snaplen, promisc, to_ms;
-    private StringBuilder errbuf = new StringBuilder();
-    
-    private LoggerHandler logHandler;
-    
-    public NIC(LoggerHandler logHandler) throws JxnetException {
+    public NIC() throws JxnetException {
         initComponents();
         setLocationRelativeTo(null);
-        this.source = MainWindow.main_windows.getSource();
-        this.snaplen = MainWindow.main_windows.getSnaplen();
-        this.promisc = MainWindow.main_windows.getPromisc();
-        this.to_ms = MainWindow.main_windows.getToMs();
         
-        lbl_dev_name.setText(this.source);
-        SpinnerBufferSize.setValue(this.to_ms);
-        SliderSnaplen.setValue(this.snaplen);
-        lbl_snaplen.setText(String.valueOf(this.snaplen));
-        cb_promisc.setSelected((promisc == 1) ? true : false);
-        this.logHandler = logHandler;
+        lbl_dev_name.setText(StaticField.SOURCE);
+        SpinnerBufferSize.setValue(StaticField.TIMEOUT);
+        SliderSnaplen.setValue(StaticField.SNAPLEN);
+        lbl_snaplen.setText(String.valueOf(StaticField.SNAPLEN));
+        cb_promisc.setSelected((StaticField.PROMISC == 1) ? true : false);
         refresh();
     }
     
@@ -274,9 +263,9 @@ public class NIC extends javax.swing.JFrame {
         int newPromisc = (cb_promisc.isSelected() ? 1 : 0);
         int newToMs = Integer.valueOf(SpinnerBufferSize.getValue().toString());
         try {
-            Utils.initialize(device, newSnaplen, newPromisc, newToMs, logHandler);
+            Utils.initialize(device, newSnaplen, newPromisc, newToMs, "arp");
         } catch (JxnetException ex) {
-            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.toString());
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.toString());
         }
     }//GEN-LAST:event_btn_okActionPerformed
 
@@ -297,8 +286,8 @@ public class NIC extends javax.swing.JFrame {
         };
         
         List<PcapIf> alldevsp = new ArrayList<PcapIf>();
-        if(PcapFindAllDevs(alldevsp, errbuf) != 0) {
-            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
+        if(PcapFindAllDevs(alldevsp, StaticField.ERRBUF) != 0) {
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
         }
         String[] list = new String[6];
         int no = 1;
@@ -313,7 +302,9 @@ public class NIC extends javax.swing.JFrame {
                     list[3] = dev.getAddr().toString().toUpperCase();
                 }
             }
-            MacAddress macAddr = devs.getHardwareAddress();
+            byte[] mac = AddrUtils.GetMACAddress(devs.getName());
+            if (mac == null) continue;
+            MacAddress macAddr = MacAddress.valueOf(mac);
             list[4] = (macAddr == null ? "" : macAddr.toString());
             list[5] = devs.getDescription();
             if(macAddr != null) {
