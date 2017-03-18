@@ -30,6 +30,8 @@ import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.net.util.SubnetUtils;
 
 @SuppressWarnings("unchecked")
@@ -117,13 +119,15 @@ public class NetworkScanner extends Thread {
                 }
                 break;
             } else {
-                List<Packet> packets = Static.next(StaticField.PCAP, pktHdr);
+                Map<Class, Packet> packets = Static.next(StaticField.PCAP, pktHdr);
                 if (packets != null) {
-                    ARP capArp = (ARP) Packet.parsePacket(packets, ARP.class);
-                    if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
-                        Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
-                        this.handler.nextPacket(no, pktHdr, packets);
-                        no++;
+                    ARP capArp = (ARP) packets.get(ARP.class);
+                    if (capArp != null) {
+                        if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
+                            Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
+                            this.handler.nextPacket(no, pktHdr, packets);
+                            no++;
+                        }
                     }
                 }
             }
@@ -169,7 +173,7 @@ public class NetworkScanner extends Thread {
             }
             return;
         } else {
-            List<Packet> packets = Static.next(StaticField.PCAP, pktHdr);
+            Map<Class, Packet> packets = Static.next(StaticField.PCAP, pktHdr);
             if (packets != null) {
                 if (stop) {
                     StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
@@ -179,11 +183,13 @@ public class NetworkScanner extends Thread {
                     }
                     return;
                 }
-                ARP capArp = (ARP) Packet.parsePacket(packets, ARP.class);
-                if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
-                    Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
-                    handler.nextPacket(no, pktHdr, packets);
-                    no++;
+                ARP capArp = (ARP) packets.get(ARP.class);
+                if (capArp != null) {
+                    if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
+                        Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
+                        handler.nextPacket(no, pktHdr, packets);
+                        no++;
+                    }
                 }
             }
         }

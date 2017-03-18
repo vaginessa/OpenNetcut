@@ -5,7 +5,9 @@ import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.packet.protocol.network.icmp.ICMP;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PacketTest {
 
@@ -117,9 +119,9 @@ public class PacketTest {
         Static.loop(pcap, 50, handler, null);*/
         int i = 0;
         PcapPktHdr hdr = new PcapPktHdr();
-        List<Packet> packets = new ArrayList<Packet>();
+        Map<Class, Packet> packets = new HashMap<Class, Packet>();
         while (i < 10) {
-            if (Static.nextEx(pcap, packets, hdr) == 0) {
+            if (Static.nextEx(pcap, hdr, packets) == 0) {
                //for (Packet p : packets) System.out.print(p.getClass().getName() +":");
                 // ICMP icmp = (ICMP) Packet.parsePacket(packets, ICMP.class);
                 //System.out.println(icmp);

@@ -26,12 +26,11 @@ import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.jxnet.util.FormatUtils;
 import com.ardikars.jxnet.Static;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
 import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
 import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
 import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
-import com.ardikars.opennetcut.view.MainWindow;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,10 +39,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -68,65 +64,29 @@ public class Utils {
         return null;
     }
     
-    public static MacAddress getMacAddrFromArp() {
+    public static MacAddress getGwAddrFromArp() {
 
-        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(StaticField.CURRENT_MAC_ADDRESS, OperationCode.ARP_REQUEST,
+        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(MacAddress.BROADCAST, OperationCode.ARP_REQUEST,
                 StaticField.CURRENT_MAC_ADDRESS, StaticField.CURRENT_INET4ADDRESS,
                 MacAddress.ZERO, StaticField.GATEWAY_INET4ADDRESS);
 
-        /*Ethernet ethernet = new Ethernet().setDestinationMacAddress(MacAddress.BROADCAST)
-                .setSourceMacAddress(currentMacAddr)
-                .setEtherType(EtherType.ARP)
-                .setPadding(true);
-                
-        ARP arp = new ARP().setHardwareType(DatalinkType.EN10MB)
-                .setProtocolType(EtherType.IPV4)
-                .setHardwareAddressLength((byte) 6)
-                .setProtocolAddressLength((byte) 4)
-                .setOpCode(OperationCode.ARP_REQUEST)
-                .setSenderHardwareAddress(currentMacAddr)
-                .setSenderProtocolAddress(currentIpAdd)
-                .setTargetHardwareAddress(MacAddress.ZERO)
-                .setTargetProtocolAddress(gwIpAddr);
-        ethernet.setPacket(arp); */
         ByteBuffer buffer = FormatUtils.toDirectBuffer(ethernet.getBytes());
         PcapPktHdr pktHdr = new PcapPktHdr();
         byte[] bytes;
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<100; i++) {
             if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
                 JOptionPane.showConfirmDialog(null, "Failed to send arp packet.");
                 return null;
             }
-            List<Packet> packets = Static.next(StaticField.PCAP, pktHdr);
-            ARP arp = (ARP) Packet.parsePacket(packets, ARP.class);
+            Map<Class, Packet> packets = Static.next(StaticField.PCAP, pktHdr);
+            if (packets == null) continue;;
+            ARP arp = (ARP) packets.get(ARP.class);
+            if (arp == null) continue;
             if (arp.getOpCode() == OperationCode.ARP_REPLY &&
                     arp.getSenderProtocolAddress().equals(StaticField.GATEWAY_INET4ADDRESS)) {
                 return arp.getSenderHardwareAddress();
             }
         }
-        /*else {
-            ByteBuffer capBuf = null;
-            while (capBuf == null) {
-                capBuf = PcapNext(pcap, pktHdr);
-                if (capBuf == null) {
-                    continue;
-                } else {
-                    bytes = new byte[capBuf.capacity()];
-                    capBuf.get(bytes);
-
-                    if (capBuf != null && pktHdr != null) {
-                        Ethernet capEth = Ethernet.newInstance(bytes);
-                        ARP capArp = null;
-                        if (capEth.getPacket() instanceof ARP) {
-                            capArp = (ARP) capEth.getPacket();
-                            if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
-                                return capArp.getSenderHardwareAddress();
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
         return null;
     }
     
@@ -242,12 +202,14 @@ public class Utils {
             }
         }
 
-        /*StaticField.GATEWAY_MAC_ADDRESS = Utils.getMacAddrFromArp();
+        StaticField.GATEWAY_MAC_ADDRESS = Utils.getGwAddrFromArp();
         if (StaticField.GATEWAY_MAC_ADDRESS == null) {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
             }
-        }*/
+        }
+
+        System.out.println(StaticField.GATEWAY_MAC_ADDRESS);
 
         compile(filter);
         filter();

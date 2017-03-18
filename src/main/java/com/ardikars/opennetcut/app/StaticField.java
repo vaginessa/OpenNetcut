@@ -31,7 +31,7 @@ public class StaticField {
 
     public static String RANDOM_STRING;
 
-    public static Map<Inet4Address, MacAddress> CACHE
-            = new HashMap<Inet4Address, MacAddress>();
+    public static Map<String, Entry> CACHE
+            = new HashMap<String, Entry>();
 
 }

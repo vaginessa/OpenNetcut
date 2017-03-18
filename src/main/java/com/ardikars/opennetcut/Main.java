@@ -18,22 +18,11 @@
 package com.ardikars.opennetcut;
 
 import com.ardikars.jxnet.exception.JxnetException;
-import com.ardikars.jxnet.util.Loader;
-import com.ardikars.opennetcut.app.LoggerHandler;
-import com.ardikars.opennetcut.app.StaticField;
-import com.ardikars.opennetcut.app.Utils;
 import com.ardikars.opennetcut.view.MainWindow;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Main {
     
     public static void main(String[] args) throws JxnetException {
-        run();
-    }
-    
-    private static void run() throws JxnetException {
         MainWindow.main_windows.setVisible(true);
     }
 

@@ -19,11 +19,11 @@ package com.ardikars.jxnet.packet;
 
 import com.ardikars.jxnet.PcapPktHdr;
 
-import java.util.List;
+import java.util.Map;
 
 @FunctionalInterface
 public interface PacketHandler<T> {
 
-    void nextPacket(T arg, PcapPktHdr pktHdr, List<Packet> packets);
+    void nextPacket(T arg, PcapPktHdr pktHdr, Map<Class, Packet> packets);
     
 }

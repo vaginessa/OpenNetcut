@@ -601,8 +601,8 @@ public class MainWindow extends javax.swing.JFrame {
         
         DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
         
-        PacketHandler<Integer> handler = (Integer no, PcapPktHdr pktHdr, List<Packet> packets) -> {
-            ARP arp = (ARP) Packet.parsePacket(packets, ARP.class);
+        PacketHandler<Integer> handler = (Integer no, PcapPktHdr pktHdr, Map<Class, Packet> packets) -> {
+            ARP arp = (ARP) packets.get(ARP.class);
             if (arp == null) return;
             if (arp.getOpCode() == OperationCode.ARP_REPLY) {
                 DtmScanTable.addRow(new Object[] {
