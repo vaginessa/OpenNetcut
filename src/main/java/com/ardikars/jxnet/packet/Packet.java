@@ -27,23 +27,10 @@ import java.util.List;
  */
 public abstract class Packet {
 
-	public abstract void setPacket(Packet packet);
+	public abstract Packet setPacket(Packet packet);
 
 	public abstract Packet getPacket();
 
-    public abstract void setData(byte[] data);
-
-	public abstract byte[] getData();
-
 	public abstract byte[] getBytes();
-
-	public static Packet parsePacket(List<Packet> packets, Class clazz) {
-		for (Packet packet : packets) {
-			if (packet.getClass() == clazz) {
-				return packet;
-			}
-		}
-		return null;
-	}
 
 }

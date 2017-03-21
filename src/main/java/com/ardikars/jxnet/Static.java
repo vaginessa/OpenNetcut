@@ -19,7 +19,7 @@ import static com.ardikars.jxnet.Jxnet.*;
 
 public class Static {
 
-    public static <T> int loop(Pcap pcap, int count, PacketHandler<T> handler, T arg) {
+    public static synchronized <T> int loop(Pcap pcap, int count, PacketHandler<T> handler, T arg) {
         DataLinkType datalinkType = DataLinkType.valueOf((short)PcapDataLink(pcap));
         PcapHandler<PacketHandler<T>> callback = (tPacketHandler, pcapPktHdr, byteBuffer) -> {
             if (pcapPktHdr == null || byteBuffer == null) return;
@@ -31,7 +31,7 @@ public class Static {
     public static Map<Class, Packet> next(Pcap pcap, PcapPktHdr pcapPktHdr) {
         DataLinkType datalinkType = DataLinkType.valueOf((short)PcapDataLink(pcap));
         ByteBuffer byteBuffer = PcapNext(pcap, pcapPktHdr);
-        if (pcapPktHdr == null || byteBuffer == null) return null;
+        if (byteBuffer == null) return null;
         return getPacket(datalinkType, byteBuffer);
     }
 

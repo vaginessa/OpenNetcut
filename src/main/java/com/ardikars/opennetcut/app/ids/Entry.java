@@ -1,8 +1,6 @@
-package com.ardikars.opennetcut.app;
+package com.ardikars.opennetcut.app.ids;
 
 import com.ardikars.jxnet.MacAddress;
-
-import java.util.concurrent.TimeUnit;
 
 public class Entry {
 

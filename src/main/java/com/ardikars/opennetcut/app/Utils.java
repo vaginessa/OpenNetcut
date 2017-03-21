@@ -22,6 +22,7 @@ import com.ardikars.jxnet.*;
 import static com.ardikars.jxnet.Jxnet.*;
 
 import com.ardikars.jxnet.exception.JxnetException;
+import com.ardikars.jxnet.exception.PcapCloseException;
 import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.jxnet.util.FormatUtils;
@@ -79,9 +80,11 @@ public class Utils {
                 return null;
             }
             Map<Class, Packet> packets = Static.next(StaticField.PCAP, pktHdr);
-            if (packets == null) continue;;
+            if (packets == null) continue;
             ARP arp = (ARP) packets.get(ARP.class);
             if (arp == null) continue;
+            if (arp.getOpCode() == OperationCode.ARP_REPLY)
+                System.out.println(arp.getSenderProtocolAddress() + " == " + StaticField.GATEWAY_INET4ADDRESS);
             if (arp.getOpCode() == OperationCode.ARP_REPLY &&
                     arp.getSenderProtocolAddress().equals(StaticField.GATEWAY_INET4ADDRESS)) {
                 return arp.getSenderHardwareAddress();
@@ -127,22 +130,33 @@ public class Utils {
         };
     }
 
-    public static void compile(String filter) {
-        if (PcapCompile(StaticField.PCAP, StaticField.BPF_PROGRAM, filter,
-                StaticField.OPTIMIZE, StaticField.CURRENT_NETMASK_ADDRESS.toInt()) != 0) {
-            if (StaticField.LOGGER != null)
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile bpf.");
+
+    public static boolean compile(Pcap pcap, BpfProgram bpfProgram, String filter) throws PcapCloseException {
+        if (pcap.isClosed()) {
+            throw new PcapCloseException();
         }
+        if (PcapCompile(pcap, bpfProgram, filter,
+                StaticField.OPTIMIZE, StaticField.CURRENT_NETMASK_ADDRESS.toInt()) != 0) {
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile bpf.");
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
-    public static void filter() {
-        if (PcapSetFilter(StaticField.PCAP, StaticField.BPF_PROGRAM) != 0) {
+    public static void filter(Pcap pcap, BpfProgram bpfProgram) throws PcapCloseException {
+        if (pcap.isClosed()) {
+            throw new PcapCloseException();
+        }
+        if (PcapSetFilter(pcap, bpfProgram) != 0) {
             if (StaticField.LOGGER != null)
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile filter.");
         }
     }
 
-    public static void initialize(String s, int snaplen, int promisc, int to_ms, String filter) throws JxnetException {
+    public static void initialize(String s, int snaplen, int promisc, int to_ms) throws JxnetException {
 
         StaticField.SOURCE = (s == null) ? AddrUtils.LookupDev(StaticField.ERRBUF) : s;
         StaticField.SNAPLEN = snaplen;
@@ -160,7 +174,16 @@ public class Utils {
                 StaticField.SNAPLEN,
                 StaticField.PROMISC,
                 StaticField.TIMEOUT, StaticField.ERRBUF);
-        if (StaticField.PCAP == null) {
+        StaticField.Pcap_IDS = PcapOpenLive(StaticField.SOURCE,
+                StaticField.SNAPLEN,
+                StaticField.PROMISC,
+                StaticField.TIMEOUT, StaticField.ERRBUF);
+        StaticField.PCAP_ICMP_TRAP = PcapOpenLive(StaticField.SOURCE,
+                StaticField.SNAPLEN,
+                StaticField.PROMISC,
+                StaticField.TIMEOUT, StaticField.ERRBUF);
+
+        if (StaticField.PCAP == null || StaticField.Pcap_IDS == null || StaticField.PCAP_ICMP_TRAP == null) {
             if (StaticField.LOGGER != null)
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
         }
@@ -170,6 +193,8 @@ public class Utils {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
             }
             PcapClose(StaticField.PCAP);
+            PcapClose(StaticField.Pcap_IDS);
+            PcapClose(StaticField.PCAP_ICMP_TRAP);
         } else {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
         }
@@ -209,10 +234,7 @@ public class Utils {
             }
         }
 
-        System.out.println(StaticField.GATEWAY_MAC_ADDRESS);
-
-        compile(filter);
-        filter();
+        System.out.println("Gateway hw addr: " + StaticField.GATEWAY_MAC_ADDRESS);
 
         //StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
     }
@@ -256,7 +278,5 @@ public class Utils {
         return (short)(s & 0xffff);
     }
 
-    public static void main(String... args) {
-        System.out.println(getPcapTmpFileName());
-    }
+
 }

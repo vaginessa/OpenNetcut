@@ -29,7 +29,7 @@ public class IPv4 extends Packet {
 	public static final int IPV4_HEADER_LENGTH = 20;
 	
 	private byte version;
-	private byte headerLength;
+	private byte headerLength = (byte) 5;
 	private byte diffServ;
 	private byte expCon;
 	private short totalLength;
@@ -171,6 +171,7 @@ public class IPv4 extends Packet {
 	}
 	
 	public IPv4 setOptions(byte[] options) {
+		this.headerLength = (byte) (this.headerLength + options.length);
 		this.options = options;
 		return this;
 	}
@@ -219,31 +220,22 @@ public class IPv4 extends Packet {
 	}
 
 	@Override
-	public void setPacket(Packet packet) {
+	public IPv4 setPacket(Packet packet) {
 		byte[] data = packet.getBytes();
+		this.totalLength = (short) (this.headerLength * 4 + (data == null ? 0
+				: data.length));
 		this.data = data;
+		return this;
 	}
 
 	@Override
 	public Packet getPacket() {
 		if (getProtocol() == null) return null;
 		switch (getProtocol().getValue()) {
-			case 1:
-				ICMP icmp = ICMP.newInstance(getData());
-				return ICMP.newInstance(getData());
-			case 6: return TCP.newInstance(getData());
+			case 1: return ICMP.newInstance(this.data);
+			case 6: return TCP.newInstance(this.data);
 		}
 		return null;
-	}
-
-	@Override
-	public void setData(byte[] data) {
-		this.data = data;
-	}
-
-	@Override
-	public byte[] getData() {
-		return this.data;
 	}
 
 	@Override
@@ -275,6 +267,9 @@ public class IPv4 extends Packet {
 					+ (accumulation & 0xffff);
 			this.checksum = (short) (~accumulation & 0xffff);
 			buffer.putShort(10, (short) (this.checksum & 0xffff));
+		}
+		if (this.data != null) {
+			buffer.put(this.data);
 		}
 		return data;
 	}

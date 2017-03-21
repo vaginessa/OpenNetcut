@@ -113,16 +113,6 @@ public class Ethernet extends Packet {
         return this;
 	}
 
-	@Override
-	public byte[] getData() {
-		return this.data;
-	}
-
-	@Override
-	public void setData(byte[] data) {
-		this.data = data;
-	}
-
 	public static Ethernet newInstance(byte[] bytes) {
 		return Ethernet.newInstance(bytes, 0, bytes.length);
 	}
@@ -198,9 +188,10 @@ public class Ethernet extends Packet {
 	}
 
 	@Override
-	public void setPacket(Packet packet) {
+	public Ethernet setPacket(Packet packet) {
 		byte[] data = packet.getBytes();
 		this.data = data;
+		return this;
 	}
 
 	@Override

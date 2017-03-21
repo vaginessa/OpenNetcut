@@ -12,6 +12,7 @@ import com.ardikars.jxnet.packet.protocol.network.icmp.ICMP;
 import com.ardikars.jxnet.packet.protocol.network.icmp.Type;
 import com.ardikars.jxnet.packet.protocol.network.ip.IPv4;
 import com.ardikars.jxnet.packet.protocol.network.ip.Protocol;
+import com.ardikars.jxnet.util.FormatUtils;
 
 public class PacketBuilder {
 
@@ -45,11 +46,9 @@ public class PacketBuilder {
 
         IPv4 iPv4 = new IPv4()
                 .setVersion((byte) 0x4)
-                .setHeaderLength((byte) 0x5)
-                .setDiffServ((byte) 0x26)
+                .setDiffServ((byte) 0x0)
                 .setExpCon((byte) 0)
-                .setTotalLength((short) 1153)
-                .setIdentification((short) 589)
+                .setIdentification((short) 29257)
                 .setFlags((byte) 0x02)
                 .setFragmentOffset((short) 0)
                 .setTtl((byte) 64)
@@ -61,7 +60,8 @@ public class PacketBuilder {
         Ethernet ethernet = new Ethernet()
                 .setDestinationMacAddress(dst_hwaddr)
                 .setSourceMacAddress(StaticField.CURRENT_MAC_ADDRESS)
-                .setEtherType(EtherType.ARP);
+                .setEtherType(EtherType.IPV4)
+                .setPadding(true);
         ethernet.setPacket(iPv4);
         return ethernet;
     }

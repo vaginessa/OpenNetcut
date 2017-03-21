@@ -263,7 +263,9 @@ public class NIC extends javax.swing.JFrame {
         int newPromisc = (cb_promisc.isSelected() ? 1 : 0);
         int newToMs = Integer.valueOf(SpinnerBufferSize.getValue().toString());
         try {
-            Utils.initialize(device, newSnaplen, newPromisc, newToMs, "arp");
+            Utils.initialize(device, newSnaplen, newPromisc, newToMs);
+            Utils.compile(StaticField.PCAP, StaticField.BPF_PROGRAM, "arp");
+            Utils.filter(StaticField.PCAP, StaticField.BPF_PROGRAM);
         } catch (JxnetException ex) {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.toString());
         }

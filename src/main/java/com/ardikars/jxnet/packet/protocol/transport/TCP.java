@@ -173,9 +173,10 @@ public class TCP extends Packet {
 	}
 
 	@Override
-	public void setPacket(Packet packet) {
+	public TCP setPacket(Packet packet) {
 		byte[] data = packet.getBytes();
 		this.data = data;
+		return this;
 	}
 
 	@Override
@@ -183,12 +184,10 @@ public class TCP extends Packet {
 		return null;
 	}
 
-	@Override
 	public void setData(byte[] data) {
 		this.data = data;
 	}
 
-	@Override
 	public byte[] getData() {
 		return this.data;
 	}

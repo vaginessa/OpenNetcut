@@ -155,22 +155,12 @@ public class ARP extends Packet {
     }
 
     @Override
-    public void setPacket(Packet packet) {
-        return;
+    public ARP setPacket(Packet packet) {
+        return this;
     }
 
     @Override
     public Packet getPacket() {
-        return null;
-    }
-
-    @Override
-    public void setData(byte[] data) {
-        return;
-    }
-
-    @Override
-    public byte[] getData() {
         return null;
     }
 

@@ -45,6 +45,7 @@ artifacts {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile group: 'org.pcap4j', name: 'pcap4j-core', version: '1.7.0'
     compile 'commons-net:commons-net:2.0'
     compile 'com.google.guava:guava:21.0'
     compile 'com.google.code.gson:gson:2.8.0'

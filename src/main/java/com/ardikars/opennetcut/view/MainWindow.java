@@ -66,7 +66,9 @@ public class MainWindow extends javax.swing.JFrame {
 
             }
         };
-        Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT, "arp");
+        Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT);
+        Utils.compile(StaticField.PCAP, StaticField.BPF_PROGRAM, "arp");
+        Utils.filter(StaticField.PCAP, StaticField.BPF_PROGRAM);
         DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
         DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
         setScanTableModel(DtmScanTable);

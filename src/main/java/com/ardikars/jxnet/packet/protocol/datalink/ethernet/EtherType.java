@@ -115,7 +115,6 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
         return registry.put(type.getValue(), type);
     }
 
-
     @Override
     public String toString() {
         if ((getValue() & 0xFFFF) <= IEEE802_3_MAX_LENGTH) {
