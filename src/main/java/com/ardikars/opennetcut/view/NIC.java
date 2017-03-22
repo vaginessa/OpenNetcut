@@ -22,10 +22,10 @@ import static com.ardikars.jxnet.Jxnet.*;
 import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.util.AddrUtils;
-import com.ardikars.opennetcut.app.LoggerHandler;
 import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.StaticField;
-import com.ardikars.opennetcut.app.Utils;
+import com.ardikars.util.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;

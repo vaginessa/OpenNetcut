@@ -42,7 +42,9 @@ public class ICMPTrap extends Thread {
             return;
         }
         Map<Class, Packet> packets = Static.next(StaticField.PCAP_ICMP_TRAP, pktHdr);
-        ICMP icmp = (ICMP) packets.get(ICMP.class);
-        System.out.println(icmp);
+        if (packets != null) {
+            ICMP icmp = (ICMP) packets.get(ICMP.class);
+            if (icmp != null) System.out.println(icmp);
+        }
     }
 }

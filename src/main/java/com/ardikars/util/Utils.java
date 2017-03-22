@@ -1,51 +1,180 @@
-/**
- * Copyright (C) 2017  Ardika Rommy Sanjaya
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+package com.ardikars.util;
 
-package com.ardikars.opennetcut.app;
-
+import com.ardikars.ann.Connection;
+import com.ardikars.ann.Layer;
+import com.ardikars.ann.Neuron;
 import com.ardikars.jxnet.*;
-
-import static com.ardikars.jxnet.Jxnet.*;
-
+import com.ardikars.jxnet.File;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.exception.PcapCloseException;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.util.AddrUtils;
-import com.ardikars.jxnet.util.FormatUtils;
-import com.ardikars.jxnet.Static;
 import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
 import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
 import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
+import com.ardikars.jxnet.util.AddrUtils;
+import com.ardikars.jxnet.util.FormatUtils;
+import com.ardikars.opennetcut.app.LoggerHandler;
+import com.ardikars.opennetcut.app.LoggerStatus;
+import com.ardikars.opennetcut.app.PacketBuilder;
+import com.ardikars.opennetcut.app.StaticField;
+import com.google.gson.stream.JsonWriter;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
-@SuppressWarnings("unchecked")
+import static com.ardikars.jxnet.Jxnet.*;
+import static com.ardikars.jxnet.Jxnet.PcapClose;
+import static com.ardikars.jxnet.Jxnet.PcapOpenOffline;
+
 public class Utils {
+    
+    private static final Random random = new Random();
+    
+    public static double random() {
+        double min = -1;
+        double max = 1;
+        return min + (max - min) * random.nextDouble();
+    }
+
+    public static double[] array(double... value) {
+        return value;
+    }
+
+    public static double[][] generateXorInputs() {
+        return new double[][] {
+                array(1.0, 1.0),
+                array(1.0, 0.0),
+                array(0.0, 1.0),
+                array(0.0, 0.0),
+        };
+    }
+    
+    public static double[][] generateXorOutputs() {
+        return new double[][] { array(0.0), array(1.0), array(1.0), array(0.0) };
+    }
+    
+    public static double[][] generateXorDumpOutputs() {
+        return new double[][] { array(0.0, 0.0), array(1.0, 1.0), array(1.0, 1.0), array(0.0, 0.0) };
+    }
+    
+    public static double[][] generateInputs() {
+        return new double[][] {
+                array(1,	1,	1,	1,	1,	1),
+                array(1,	1,	1,	1,	1,	0),
+                array(1,	1,	1,	1,	0,	0),
+                array(1,	1,	1,	0,	0,	0),
+                array(1,	1,	0,	0,	0,	0),
+                array(1,	0,	0,	0,	0,	0),
+                array(0,	0,	0,	0,	0,	0),
+                array(0,	0,	0,	0,	0,	1),
+                array(0,	0,	0,	0,	1,	1),
+                array(0,	0,	0,	1,	1,	1),
+                array(0,	0,	1,	1,	1,	1),
+                array(0,	1,	1,	1,	1,	1),
+                array(0,	0,	0,	1,	0,	0),
+                array(0,	0,	0,	0,	1,	0),
+                array(0,	0,	0,	1,	1,	0)
+        };
+    }
+
+    public static double[][] generateOutputs() {
+        return new double[][] {
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(0),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(0),
+                array(0),
+                array(0)
+        };
+    }
+    
+    public static double[][] generateDummyOutputs(int a, int b) {
+        double[][] value = new double[a][b];
+        Arrays.fill(value, array(-1));
+        return value;
+    }
+
+    public static void printResult(double[][] inputs,
+                                   double[][] outputs,
+                                   double[][] resultOutputs,
+                                   int inputLayerSize,
+                                   int outputLayerSize) {
+        DecimalFormat df = new DecimalFormat();
+        for (int p = 0; p < inputs.length; p++) {
+            System.out.print("INPUTS: ");
+            for (int x = 0; x < inputLayerSize; x++) {
+                System.out.print(inputs[p][x] + " ");
+            }
+
+            System.out.print("EXPECTED: ");
+            for (int x = 0; x < outputLayerSize; x++) {
+                System.out.print(outputs[p][x] + " ");
+            }
+
+            System.out.print("ACTUAL: ");
+            for (int x = 0; x < outputLayerSize; x++) {
+                System.out.print(resultOutputs[p][x] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+    
+    public static void printWeights(Layer hiddenLayer, Layer outputLayer) {
+        for (Neuron n : hiddenLayer) {
+            List<Connection> connections = n.getConnections();
+            for (Connection con : connections) {
+                System.out.println("[ "+n.getName()+","+con.getLeftNeuron().getName()+" ] = " + con.getWeight());
+            }
+        }
+        // weights for the output layer
+        for (Neuron n : outputLayer) {
+            List<Connection> connections = n.getConnections();
+            for (Connection con : connections) {
+                System.out.println("[ "+n.getName()+","+con.getLeftNeuron().getName()+" ] = " + con.getWeight());
+            }
+        }
+        System.out.println();
+    }
+    
+    public static void writeWeigth(String path, Layer hiddenLayer, Layer outputLayer) {
+        JsonWriter writer = null;
+        try {
+            writer = new JsonWriter(new FileWriter(path));
+                    writer.beginObject();
+            for (Neuron n : hiddenLayer) {
+                List<Connection> cons = n.getConnections();
+                for (Connection con : cons) {
+                    writer.name("Neuron ID").value(n.getID());
+                    writer.name("Connection ID").value(con.getID());
+                    writer.name("Weight").value(con.getWeight());
+                }
+            }
+                    writer.endObject();
+            writer.close();
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    // --------------------------   FOR IDS ---------------------------------- //
 
     public static Inet4Address getCurrentInet4Address(String source) throws JxnetException {
         List<PcapIf> pcapIf = new ArrayList<>();
@@ -57,14 +186,14 @@ public class Utils {
                 for (PcapAddr addrs : If.getAddresses()) {
                     if (addrs.getAddr().getSaFamily() == SockAddr.Family.AF_INET) {
                         return Inet4Address.valueOf(addrs.getAddr().getData());
-                    }                            
+                    }
                 }
                 break;
             }
         }
         return null;
     }
-    
+
     public static MacAddress getGwAddrFromArp() {
 
         Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(MacAddress.BROADCAST, OperationCode.ARP_REQUEST,
@@ -92,7 +221,7 @@ public class Utils {
         }
         return null;
     }
-    
+
     public static MacAddress randomMacAddress() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -104,7 +233,7 @@ public class Utils {
         }
         return MacAddress.valueOf(sb.toString());
     }
-        
+
     public static DefaultTableModel createDefaultTableModel(String[] columnNames) {
         return new DefaultTableModel(new Object[][] {}, columnNames) {
             @Override
@@ -126,7 +255,7 @@ public class Utils {
                         return false;
                 }
             }
-            
+
         };
     }
 
@@ -199,7 +328,7 @@ public class Utils {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
         }
 
-        StaticField.CURRENT_INET4ADDRESS = Utils.getCurrentInet4Address(StaticField.SOURCE);
+        StaticField.CURRENT_INET4ADDRESS = getCurrentInet4Address(StaticField.SOURCE);
         if (StaticField.CURRENT_INET4ADDRESS == null) {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current IP Address.");
@@ -227,7 +356,7 @@ public class Utils {
             }
         }
 
-        StaticField.GATEWAY_MAC_ADDRESS = Utils.getGwAddrFromArp();
+        StaticField.GATEWAY_MAC_ADDRESS = getGwAddrFromArp();
         if (StaticField.GATEWAY_MAC_ADDRESS == null) {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
@@ -238,14 +367,14 @@ public class Utils {
 
         //StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
     }
-    
+
     public static String getPcapTmpFileName() {
         String fileName = MessageFormat.format("{0}.{1}", UUID.randomUUID(), new String("pcap").trim());
         return Paths.get(System.getProperty("java.io.tmpdir"), fileName).toString();
     }
-    
-    public static void copyFileUsingFileChannels(File source, File dest)
-	            throws IOException {
+
+    public static void copyFileUsingFileChannels(java.io.File source, java.io.File dest)
+            throws IOException {
         FileChannel inputChannel = null;
         FileChannel outputChannel = null;
         try {
@@ -257,7 +386,7 @@ public class Utils {
             outputChannel.close();
         }
     }
-    
+
     public static void openPcapFile(PacketHandler handler, LoggerHandler logHandler, String path) {
         StringBuilder errbuf = new StringBuilder();
         Pcap pcap = PcapOpenOffline(path, errbuf);

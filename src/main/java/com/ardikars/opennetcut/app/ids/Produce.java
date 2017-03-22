@@ -45,12 +45,11 @@ public class Produce <T> extends Thread {
         Inet4Address spa = null;
         Inet4Address tpa = null;
 
+        double INVALID_PACKET = 0;
+        double UNCONSISTENT_SHA = 0;
         double UNPADDED_ETHERNET_FRAME = 0;
-        double NOT_SAME_SOURCE_MAC_ADDRESS = 0;
-        double NOT_SAME_DESTINATION_MAC_ADDRESS = 0;
         double UNKNOWN_OUI = 0;
         double EPOCH_TIME = 0;
-        double UNCONSISTENT_SHA = 0;
 
         sha = arp.getSenderHardwareAddress();
         tha = arp.getTargetHardwareAddress();
@@ -63,22 +62,9 @@ public class Produce <T> extends Thread {
             return;
         }
         // Check
-        UNPADDED_ETHERNET_FRAME = (pktHdr.getCapLen() < 60 ? 1 : 0);
-        if (!ethSrc.equals(sha)) {
-            NOT_SAME_SOURCE_MAC_ADDRESS = 1;
-        }
-        if (!ethDst.equals(tha)) {
-            NOT_SAME_DESTINATION_MAC_ADDRESS = 1;
-        }
-        if (OUI.searchVendor(arp.getSenderHardwareAddress().toString()).equals("")) {
-            UNKNOWN_OUI = 1;
-        }
 
-        Long epochTimeCache = StaticField.EPOCH_TIME.get(spa.toString());
-        if (epochTimeCache == null) {
-            StaticField.EPOCH_TIME.put(spa.toString(), Long.valueOf(System.currentTimeMillis()));
-        } else {
-            EPOCH_TIME = System.currentTimeMillis() - (long) epochTimeCache;
+        if (!ethSrc.equals(sha) || !ethDst.equals(tha)) {
+            INVALID_PACKET = 1;
         }
 
         String shaCache = StaticField.ARP_CACHE.get(spa.toString());
@@ -88,15 +74,35 @@ public class Produce <T> extends Thread {
             if (!sha.toString().equals(shaCache)) {
                 UNCONSISTENT_SHA = 1.0;
             }
-            //ICMPTrap.start(sha, StaticField.CURRENT_INET4ADDRESS, MacAddress.ZERO.toBytes());
             StaticField.ARP_CACHE.put(spa.toString(), sha.toString());
         }
-        System.out.println("UNPADDED_ETHERNET_FRAME: "     + UNPADDED_ETHERNET_FRAME);
-        System.out.println("NOT_SAME_SOURCE_MAC_ADDRESS" + NOT_SAME_SOURCE_MAC_ADDRESS);
-        System.out.println("NOT_SAME_DESTINATION_MAC_ADDRESS: " + NOT_SAME_DESTINATION_MAC_ADDRESS);
-        System.out.println("UNKNOWN_OUI: " + UNKNOWN_OUI);
-        System.out.println("EPOCH_TIME: " + EPOCH_TIME);
-        System.out.println("UNCONSISTENT_SHA: " + UNCONSISTENT_SHA);
+
+        UNPADDED_ETHERNET_FRAME = (pktHdr.getCapLen() < 60 ? 1 : 0);
+
+        if (OUI.searchVendor(arp.getSenderHardwareAddress().toString()).equals("")) {
+            UNKNOWN_OUI = 1;
+        }
+
+        Long epochTimeCache = StaticField.EPOCH_TIME.get(spa.toString());
+        if (epochTimeCache == null || epochTimeCache == 0) {
+            StaticField.EPOCH_TIME.put(spa.toString(), Long.valueOf(System.currentTimeMillis()));
+        } else {
+            long time = (System.currentTimeMillis() - (long) epochTimeCache);
+            if (time > 2000) time = 0;
+            EPOCH_TIME = (( time / 5000.0));
+            StaticField.EPOCH_TIME.put(spa.toString(), Long.valueOf(System.currentTimeMillis()));
+        }
+
+        ICMPTrap.start(sha, StaticField.CURRENT_INET4ADDRESS, MacAddress.ZERO.toBytes());
+
+        System.out.println("=================================");
+        System.out.println("INVALID_PACKET          : " + INVALID_PACKET);
+        System.out.println("UNCONSISTENT_SHA        : " + UNCONSISTENT_SHA);
+        System.out.println("UNPADDED_ETHERNET_FRAME : " + UNPADDED_ETHERNET_FRAME);
+        System.out.println("UNKNOWN_OUI             : " + UNKNOWN_OUI);
+        System.out.println("EPOCH_TIME              : " + EPOCH_TIME);
+        System.out.println("=================================");
     }
 
 }
+

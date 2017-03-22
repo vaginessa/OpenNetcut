@@ -17,16 +17,37 @@
 
 package com.ardikars.opennetcut;
 
+import com.ardikars.ann.*;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.opennetcut.app.ids.IDS;
 import com.ardikars.opennetcut.app.StaticField;
-import com.ardikars.opennetcut.app.Utils;
+import com.ardikars.opennetcut.view.MainWindow;
+import com.ardikars.util.Utils;
+
+import java.util.List;
 
 public class Main {
     
     public static void main(String[] args) throws JxnetException {
         //MainWindow.main_windows.setVisible(true);
         runIDS();
+        //train();
+    }
+
+    private static void train() {
+
+        Logger<String> logger = (arg, neuron, connection, printble) -> {
+            System.out.println(printble);
+        };
+
+        ParamBuilder<String> params = ParamBuilder.buildParameters(
+                null, "", 100, 10000, 0.1, 0.1
+        );
+        NeuralNetwork nn = NeuralNetwork.initff(
+                Utils.generateInputs()
+                , 5
+                , Utils.generateOutputs());
+        nn.trainbp(ActivationFunction.Type.SIGMOID, params);
     }
 
     private static void runIDS() {
@@ -42,13 +63,24 @@ public class Main {
         IDS ids = new IDS();
         ids.start();
         System.out.println("Started.");
-        try {
-            Thread.sleep(3600*15);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         //ids.stopThread();
         //PcapClose(StaticField.PCAP);
-        System.out.println("Stopped");
     }
 }
+/**
+ *       |  INVALID_PACKET  |  UNCONSISTENT_SHA  |  UNPADDED_ETHERNET_FRAME  |  UNKNOWN_OUI  |  EPOCH_TIME  |
+ * array(1, 1, 1, 1)           = 1
+ * array(1, 1, 1, 0)           = 1
+ * array(1, 1, 0, 1)           = 1
+ * array(1, 0, 1, 1)           = 1
+ * array(0, 0, 0, 0)           = 0
+ * array(0, 1, 0, 0)           = 1
+ * array(0, 0, 1, 0)           = 0
+ * array(0, 0, 0, 1)           = 0
+ * array(1, 1, 0, 0)           = 1
+ * array(1, 0, 0, 0)           = 1
+ * array(0, 1, 1, 1)           = 1
+ * array(0, 0, 1, 1)           = 0
+ */
+
+
