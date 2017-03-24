@@ -123,12 +123,10 @@ public class NetworkScanner extends Thread {
                 Map<Class, Packet> packets = Static.next(StaticField.PCAP, pktHdr);
                 if (packets != null) {
                     ARP capArp = (ARP) packets.get(ARP.class);
-                    if (capArp != null) {
-                        if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
-                            Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
-                            this.handler.nextPacket(no, pktHdr, packets);
-                            no++;
-                        }
+                    if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
+                        Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
+                        this.handler.nextPacket(no, pktHdr, packets);
+                        no++;
                     }
                 }
             }

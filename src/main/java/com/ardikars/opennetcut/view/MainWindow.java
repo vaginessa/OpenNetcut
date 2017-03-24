@@ -633,7 +633,7 @@ public class MainWindow extends javax.swing.JFrame {
                     scanner = new NetworkScanner(handler, ip);
                     scanner.start();
                     scanOp = true;
-                    //_btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
+                    _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-stop.png")));
                     break;
                 default:
                     return;

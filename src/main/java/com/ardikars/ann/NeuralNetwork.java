@@ -12,10 +12,10 @@ public class NeuralNetwork {
     
     private int maximumEpoch;
     private double minimalError;
- 
-    private final Layer inputLayer = new Layer();
-    private final Layer hiddenLayer = new Layer();
-    private final Layer outputLayer = new Layer();
+
+    public final Layer inputLayer = new Layer();
+    public final Layer hiddenLayer = new Layer();
+    public final Layer outputLayer = new Layer();
     
     private final Neuron bias1 = new Neuron();
     private final Neuron bias2 = new Neuron();
@@ -35,8 +35,8 @@ public class NeuralNetwork {
     private ActivationFunction.Type activationFunction;
     
     private NeuralNetwork(double[][] inputs, int hidden, double[][] outputs) {
-        this.bias1.setName("B1");
-        this.bias2.setName("B2");
+        this.bias1.setName("X");
+        this.bias2.setName("X");
         this.bias1.setOutput(1);
         this.bias2.setOutput(1);
         this.inputs = inputs;
@@ -49,25 +49,25 @@ public class NeuralNetwork {
                     // input layer
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
-                        neuron.setName("X"+j);
+                        neuron.setName("X");
                         this.inputLayer.add(neuron);
                     }   break;
                 case 1:
                     // hidden layer\
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
-                        neuron.setName("Z"+j);
+                        neuron.setName("Z");
                         neuron.addConnections("V", this.inputLayer);
-                        neuron.addBiasConnection("A"+j,this.bias1);
+                        neuron.addBiasConnection("A",this.bias1);
                         this.hiddenLayer.add(neuron);
                     }   break;
                 case 2:
                     // output layer\
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
-                        neuron.setName("Y"+j);
+                        neuron.setName("Y");
                         neuron.addConnections("W", this.hiddenLayer);
-                        neuron.addBiasConnection("B"+j, this.bias2);
+                        neuron.addBiasConnection("B", this.bias2);
                         this.outputLayer.add(neuron);
                     }   break;
                 default:
@@ -229,7 +229,7 @@ public class NeuralNetwork {
     }
  
     public void applyBackpropagation(double expectedOutput[]) {
- 
+        //System.out.println("Apply backpropagation.");
         // error check, normalize value ]0;1[
 //        for (int i = 0; i < expectedOutput.length; i++) {
 //            expectedOutput[i] = ActivationFunction.calculate(expectedOutput[i], ActivationFunction.Type.BINARY);

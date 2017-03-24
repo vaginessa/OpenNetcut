@@ -37,7 +37,7 @@ public class Neuron {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name + ID;
     }
     
     public double getOutput() {
@@ -90,8 +90,8 @@ public class Neuron {
     
     public void addConnections(String name, List<Neuron> inNeurons){
         for (int i=0; i<inNeurons.size(); i++) {
-            Connection con = new Connection(inNeurons.get(i),this);
-            con.setName(name+i);
+            Connection con = new Connection(inNeurons.get(i), this);
+            con.setName(name+ID+i);
             this.connections.add(con);
             this.connectionMapping.put(inNeurons.get(i).ID, con);
         }

@@ -30,8 +30,8 @@ public class Main {
     
     public static void main(String[] args) throws JxnetException {
         //MainWindow.main_windows.setVisible(true);
-        runIDS();
-        //train();
+        //runIDS();
+        train();
     }
 
     private static void train() {
@@ -41,13 +41,14 @@ public class Main {
         };
 
         ParamBuilder<String> params = ParamBuilder.buildParameters(
-                null, "", 100, 10000, 0.1, 0.1
+                logger, "", 1, 1, 0.1, 0.1
         );
         NeuralNetwork nn = NeuralNetwork.initff(
                 Utils.generateInputs()
-                , 5
+                , 2
                 , Utils.generateOutputs());
         nn.trainbp(ActivationFunction.Type.SIGMOID, params);
+
     }
 
     private static void runIDS() {

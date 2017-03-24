@@ -67,21 +67,18 @@ public class Utils {
     
     public static double[][] generateInputs() {
         return new double[][] {
-                array(1,	1,	1,	1,	1,	1),
-                array(1,	1,	1,	1,	1,	0),
-                array(1,	1,	1,	1,	0,	0),
-                array(1,	1,	1,	0,	0,	0),
-                array(1,	1,	0,	0,	0,	0),
-                array(1,	0,	0,	0,	0,	0),
-                array(0,	0,	0,	0,	0,	0),
-                array(0,	0,	0,	0,	0,	1),
-                array(0,	0,	0,	0,	1,	1),
-                array(0,	0,	0,	1,	1,	1),
-                array(0,	0,	1,	1,	1,	1),
-                array(0,	1,	1,	1,	1,	1),
-                array(0,	0,	0,	1,	0,	0),
-                array(0,	0,	0,	0,	1,	0),
-                array(0,	0,	0,	1,	1,	0)
+                array(1, 1, 1, 1),
+                array(1, 1, 1, 0),
+                array(1, 1, 0, 1),
+                array(1, 0, 1, 1),
+                array(0, 0, 0, 0),
+                array(0, 1, 0, 0),
+                array(0, 0, 1, 0),
+                array(0, 0, 0, 1),
+                array(1, 1, 0, 0),
+                array(1, 0, 0, 0),
+                array(0, 1, 1, 1),
+                array(0, 0, 1, 1)
         };
     }
 
@@ -91,16 +88,13 @@ public class Utils {
                 array(1),
                 array(1),
                 array(1),
-                array(1),
-                array(1),
                 array(0),
-                array(1),
-                array(1),
-                array(1),
-                array(1),
                 array(1),
                 array(0),
                 array(0),
+                array(1),
+                array(1),
+                array(1),
                 array(0)
         };
     }
