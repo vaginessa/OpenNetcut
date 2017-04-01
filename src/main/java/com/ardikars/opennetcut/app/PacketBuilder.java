@@ -1,22 +1,20 @@
 package com.ardikars.opennetcut.app;
 
-import com.ardikars.jxnet.DataLinkType;
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
-import com.ardikars.jxnet.packet.protocol.network.icmp.ICMP;
-import com.ardikars.jxnet.packet.protocol.network.icmp.Type;
-import com.ardikars.jxnet.packet.protocol.network.ip.IPv4;
-import com.ardikars.jxnet.packet.protocol.network.ip.Protocol;
-import com.ardikars.jxnet.util.FormatUtils;
+import com.ardikars.jxnet.packet.ethernet.EtherType;
+import com.ardikars.jxnet.packet.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.arp.ARP;
+import com.ardikars.jxnet.packet.arp.ARPOperationCode;
+import com.ardikars.jxnet.packet.icmp.ICMPAbstractMessage;
+import com.ardikars.jxnet.packet.icmp.ICMPv4;
+import com.ardikars.jxnet.packet.ipv4.IPv4;
+import com.ardikars.jxnet.packet.ipv4.Protocol;
 
 public class PacketBuilder {
 
-    public static Packet arpBuilder(MacAddress dst_hwaddr, OperationCode opCode,
+    public static Packet arpBuilder(MacAddress dst_hwaddr, ARPOperationCode opCode,
                                     MacAddress sha, Inet4Address spa,
                                     MacAddress tha, Inet4Address tpa) {
         ARP arp = new ARP()
@@ -37,11 +35,10 @@ public class PacketBuilder {
         return ethernet;
     }
 
-    public static Packet icmpBuilder(MacAddress dst_hwaddr, Type type, byte code,
-                                    Inet4Address src, Inet4Address dst, byte[] data) {
-        ICMP icmp = new ICMP()
-                .setType(type)
-                .setCode(code);
+    public static Packet icmpBuilder(MacAddress dst_hwaddr, ICMPAbstractMessage msg,
+                                     Inet4Address src, Inet4Address dst, byte[] data) {
+        ICMPv4 icmp = new ICMPv4()
+                .setMessage(msg);
         icmp.setData(data);
 
         IPv4 iPv4 = new IPv4()

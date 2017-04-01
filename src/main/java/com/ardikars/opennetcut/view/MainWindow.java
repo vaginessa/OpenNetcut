@@ -19,11 +19,11 @@ package com.ardikars.opennetcut.view;
 
 import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.exception.*;
+import com.ardikars.jxnet.packet.arp.ARPOperationCode;
 import com.ardikars.opennetcut.app.*;
 import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.packet.PacketHandler;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
+import com.ardikars.jxnet.packet.arp.ARP;
 import com.ardikars.util.Utils;
 
 import java.io.File;
@@ -607,7 +607,7 @@ public class MainWindow extends javax.swing.JFrame {
         PacketHandler<Integer> handler = (Integer no, PcapPktHdr pktHdr, Map<Class, Packet> packets) -> {
             ARP arp = (ARP) packets.get(ARP.class);
             if (arp == null) return;
-            if (arp.getOpCode() == OperationCode.ARP_REPLY) {
+            if (arp.getOpCode() == ARPOperationCode.ARP_REPLY) {
                 DtmScanTable.addRow(new Object[] {
                     Integer.toString(no),
                     false,
@@ -878,7 +878,7 @@ public class MainWindow extends javax.swing.JFrame {
             ARP arp = null;
             if (packet instanceof ARP) {
                 arp = (ARP) packet;
-                if (arp.getOpCode() == OperationCode.ARP_REPLY) {
+                if (arp.getOpCode() == ARPOperationCode.ARP_REPLY) {
                     DtmScanTable.addRow(new Object[] {
                         Integer.toString(no),
                         false,

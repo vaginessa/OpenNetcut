@@ -32,11 +32,11 @@ public class NeuralNetwork {
     private double resultOutputs[][];
     private double output[];
     
-    private ActivationFunction.Type activationFunction;
+    private ActivationFunctions.Type activationFunction;
     
     private NeuralNetwork(double[][] inputs, int hidden, double[][] outputs) {
-        this.bias1.setName("X");
-        this.bias2.setName("X");
+        this.bias1.setName("type");
+        this.bias2.setName("type");
         this.bias1.setOutput(1);
         this.bias2.setOutput(1);
         this.inputs = inputs;
@@ -49,7 +49,7 @@ public class NeuralNetwork {
                     // input layer
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
-                        neuron.setName("X");
+                        neuron.setName("type");
                         this.inputLayer.add(neuron);
                     }   break;
                 case 1:
@@ -65,7 +65,7 @@ public class NeuralNetwork {
                     // output layer\
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
-                        neuron.setName("Y");
+                        neuron.setName("code");
                         neuron.addConnections("W", this.hiddenLayer);
                         neuron.addBiasConnection("B", this.bias2);
                         this.outputLayer.add(neuron);
@@ -99,7 +99,7 @@ public class NeuralNetwork {
         return network;
     }
     
-    public NeuralNetwork trainbp(ActivationFunction.Type activationFunction,
+    public NeuralNetwork trainbp(ActivationFunctions.Type activationFunction,
             ParamBuilder params) {
         this.logger = params.getLogger();
         
@@ -152,7 +152,7 @@ public class NeuralNetwork {
     }
     
     public static <T> NeuralNetwork simuff(double[][] inputs, Map<String, Double> weight1, Map<String, Double> weight2,
-            ActivationFunction.Type activationFunction, int hidden, int output) {
+                                           ActivationFunctions.Type activationFunction, int hidden, int output) {
         double[][] outputs = new double[inputs.length][output];
         NeuralNetwork network = new NeuralNetwork(inputs, hidden, outputs);
         network.resultOutputs = Utils.generateDummyOutputs(outputs.length, outputs[0].length);
@@ -232,7 +232,7 @@ public class NeuralNetwork {
         //System.out.println("Apply backpropagation.");
         // error check, normalize value ]0;1[
 //        for (int i = 0; i < expectedOutput.length; i++) {
-//            expectedOutput[i] = ActivationFunction.calculate(expectedOutput[i], ActivationFunction.Type.BINARY);
+//            expectedOutput[i] = ActivationFunctions.calculate(expectedOutput[i], ActivationFunctions.ICMPType.BINARY);
 //        }
 
         int i = 0;

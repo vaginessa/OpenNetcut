@@ -48,7 +48,7 @@ public class Neuron {
         this.output = output;
     }
     
-    public <T> void calculateOutput(ActivationFunction.Type function, Logger<T> logger, T arg) {
+    public <T> void calculateOutput(ActivationFunctions.Type function, Logger<T> logger, T arg) {
         StringBuilder formula = new StringBuilder();
         StringBuilder sb = new StringBuilder();
         formula.append(getName()).append("=").append(function.getDescription()).append("(");
@@ -74,7 +74,7 @@ public class Neuron {
             s = s + (weight*a);
         }
         sb.append(function.getDescription()).append("(").append(s).append(")=");
-        this.output = ActivationFunction.calculate(s, function);
+        this.output = ActivationFunctions.calculate(s, function);
         sb.append(this.output);
         formula.append(sb.toString());
         if (logger != null) {

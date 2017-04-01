@@ -1,6 +1,6 @@
 package com.ardikars.ann;
 
-public class ActivationFunction {
+public class ActivationFunctions {
     
     public enum Type {
         

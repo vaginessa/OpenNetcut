@@ -1,4 +1,4 @@
-package com.ardikars.jxnet.packet.protocol.datalink.ethernet;
+package com.ardikars.jxnet.packet.ethernet;
 
 import com.ardikars.jxnet.util.NamedNumber;
 
@@ -119,7 +119,7 @@ public final class EtherType extends NamedNumber<Short, EtherType> {
     public String toString() {
         if ((getValue() & 0xFFFF) <= IEEE802_3_MAX_LENGTH) {
             StringBuilder sb = new StringBuilder(70);
-            return sb.append("[Type: ")
+            return sb.append("[ICMPType: ")
                     .append(getValue() & 0xFFFF)
                     .append(", Name: ")
                     .append(getName())

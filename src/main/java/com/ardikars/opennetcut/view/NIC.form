@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" message="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" value="Network Interface Card Configuration"/>
-    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+    <Property name="defaultCloseOperation" message="int" value="2"/>
+    <Property name="title" message="java.lang.String" value="Network Interface Card Configuration"/>
+    <Property name="minimumSize" message="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[900, 350]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
-    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+    <SyntheticProperty name="formSizePolicy" message="int" value="1"/>
+    <SyntheticProperty name="generateCenter" message="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
   </Events>
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
-    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
-    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
-    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
-    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoResourcing" message="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" message="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" message="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" message="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" message="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" message="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" message="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" message="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" message="java.lang.Integer" value="2"/>
   </AuxValues>
 
   <Layout>
     <DimensionLayout dim="0">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+      <Group message="103" groupAlignment="0" attributes="0">
+          <Group message="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group message="103" groupAlignment="0" attributes="0">
                   <Component id="NICPanel" max="32767" attributes="0"/>
                   <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -41,11 +41,11 @@
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+      <Group message="103" groupAlignment="0" attributes="0">
+          <Group message="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="NICPanel" max="32767" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace message="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -57,8 +57,8 @@
 
       <Layout>
         <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+          <Group message="103" groupAlignment="0" attributes="0">
+              <Group message="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="NICSP" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -66,8 +66,8 @@
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+          <Group message="103" groupAlignment="0" attributes="0">
+              <Group message="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="NICSP" pref="208" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -78,20 +78,20 @@
       <SubComponents>
         <Container class="javax.swing.JScrollPane" name="NICSP">
           <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+            <AuxValue name="autoScrollPane" message="java.lang.Boolean" value="true"/>
           </AuxValues>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
             <Component class="javax.swing.JTable" name="NICTable">
               <Properties>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                <Property name="model" message="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="0" rowCount="4"/>
                 </Property>
-                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                <Property name="columnModel" message="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0"/>
                 </Property>
-                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                <Property name="tableHeader" message="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
@@ -107,33 +107,33 @@
 
       <Layout>
         <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+          <Group message="103" groupAlignment="0" attributes="0">
+              <Group message="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group message="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <Component id="cb_promisc" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                  <Group message="103" groupAlignment="0" attributes="0">
+                      <Group message="102" alignment="0" attributes="0">
                           <EmptySpace min="0" pref="110" max="32767" attributes="0"/>
                           <Component id="btn_refresh_devices" min="-2" pref="125" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace message="separate" max="-2" attributes="0"/>
                           <Component id="btn_ok" min="-2" pref="125" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace message="separate" max="-2" attributes="0"/>
                           <Component id="btn_cancel" min="-2" pref="125" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
+                      <Group message="102" attributes="0">
                           <Component id="lbl_dev_name" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Group type="102" attributes="0">
+                      <Group message="102" alignment="1" attributes="0">
+                          <Group message="103" groupAlignment="1" attributes="0">
+                              <Group message="102" attributes="0">
                                   <Component id="SliderSnaplen" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="lbl_snaplen" min="-2" pref="40" max="-2" attributes="0"/>
@@ -147,28 +147,28 @@
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+          <Group message="103" groupAlignment="0" attributes="0">
+              <Group message="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
+                  <Group message="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lbl_dev_name" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
+                  <EmptySpace message="separate" max="-2" attributes="0"/>
+                  <Group message="103" groupAlignment="3" attributes="0">
                       <Component id="SpinnerBufferSize" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace message="separate" max="-2" attributes="0"/>
+                  <Group message="103" groupAlignment="0" attributes="0">
                       <Component id="SliderSnaplen" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <Component id="lbl_snaplen" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace message="unrelated" max="-2" attributes="0"/>
+                  <Group message="103" groupAlignment="0" attributes="0">
                       <Component id="cb_promisc" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Group message="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="btn_cancel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btn_ok" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btn_refresh_devices" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -182,38 +182,38 @@
       <SubComponents>
         <Component class="javax.swing.JCheckBox" name="cb_promisc">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Capture packets in promiscuous mode"/>
+            <Property name="text" message="java.lang.String" value="Capture packets in promiscuous mode"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Limit packets"/>
+            <Property name="text" message="java.lang.String" value="Limit packets"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Buffer size"/>
+            <Property name="text" message="java.lang.String" value="Buffer size"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Name"/>
+            <Property name="text" message="java.lang.String" value="Name"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSpinner" name="SpinnerBufferSize">
           <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="300" maximum="1800" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+            <Property name="model" message="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+              <SpinnerModel initial="300" maximum="1800" minimum="0" numberType="java.lang.Integer" stepSize="1" message="number"/>
             </Property>
-            <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="25" type="code"/>
+            <Property name="value" message="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="25" message="code"/>
             </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JSlider" name="SliderSnaplen">
           <Properties>
-            <Property name="maximum" type="int" value="65535"/>
-            <Property name="value" type="int" value="300"/>
+            <Property name="maximum" message="int" value="65535"/>
+            <Property name="value" message="int" value="300"/>
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="SliderSnaplenStateChanged"/>
@@ -221,7 +221,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_ok">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Apply"/>
+            <Property name="text" message="java.lang.String" value="Apply"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_okActionPerformed"/>
@@ -229,7 +229,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_cancel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Close"/>
+            <Property name="text" message="java.lang.String" value="Close"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cancelActionPerformed"/>
@@ -237,21 +237,21 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_snaplen">
           <Properties>
-            <Property name="horizontalAlignment" type="int" value="4"/>
-            <Property name="text" type="java.lang.String" value="65535"/>
+            <Property name="horizontalAlignment" message="int" value="4"/>
+            <Property name="text" message="java.lang.String" value="65535"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lbl_dev_name">
           <Properties>
-            <Property name="text" type="java.lang.String" value="-"/>
+            <Property name="text" message="java.lang.String" value="-"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btn_refresh_devices">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+            <Property name="icon" message="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/com/ardikars/opennetcut/images/16x16/view-refresh.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Refresh"/>
+            <Property name="text" message="java.lang.String" value="Refresh"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_refresh_devicesActionPerformed"/>

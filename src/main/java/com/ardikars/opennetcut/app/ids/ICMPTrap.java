@@ -2,9 +2,9 @@ package com.ardikars.opennetcut.app.ids;
 
 import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
-import com.ardikars.jxnet.packet.protocol.network.icmp.ICMP;
-import com.ardikars.jxnet.packet.protocol.network.icmp.Type;
+import com.ardikars.jxnet.packet.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.icmp.ICMPv4;
+import com.ardikars.jxnet.packet.icmp.ICMPv4EchoReply;
 import com.ardikars.jxnet.util.FormatUtils;
 import com.ardikars.opennetcut.app.PacketBuilder;
 import com.ardikars.opennetcut.app.StaticField;
@@ -32,7 +32,7 @@ public class ICMPTrap extends Thread {
 
     @Override
     public void run() {
-        Ethernet icmpTrap = (Ethernet) PacketBuilder.icmpBuilder(sha, Type.ECHO_REPLY, (byte)0x0,
+        Ethernet icmpTrap = (Ethernet) PacketBuilder.icmpBuilder(sha, ICMPv4EchoReply.ECHO_REPLY,
                 Inet4Address.valueOf("178.234.1.245"), StaticField.CURRENT_INET4ADDRESS,
                 data);
         ByteBuffer buffer = FormatUtils.toDirectBuffer(icmpTrap.getBytes());
@@ -43,7 +43,7 @@ public class ICMPTrap extends Thread {
         }
         Map<Class, Packet> packets = Static.next(StaticField.PCAP_ICMP_TRAP, pktHdr);
         if (packets != null) {
-            ICMP icmp = (ICMP) packets.get(ICMP.class);
+            ICMPv4 icmp = (ICMPv4) packets.get(ICMPv4.class);
             if (icmp != null) System.out.println(icmp);
         }
     }

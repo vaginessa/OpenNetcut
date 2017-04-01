@@ -20,11 +20,9 @@ package com.ardikars.opennetcut.app;
 import com.ardikars.jxnet.*;
 import static com.ardikars.jxnet.Jxnet.PcapSendPacket;
 import com.ardikars.jxnet.util.FormatUtils;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
-import com.ardikars.opennetcut.view.MainWindow;
+import com.ardikars.jxnet.packet.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.arp.ARPOperationCode;
+
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +50,7 @@ public class NetworkSpoofer extends Thread {
 
     @Override
     public void run() {
-        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(victimMacAddr, OperationCode.ARP_REPLY,
+        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(victimMacAddr, ARPOperationCode.ARP_REPLY,
                 spoofedMacAddr, spoofedIpAddr, victimMacAddr, victimIpAddr);
         /*Ethernet ethernet = new Ethernet()
                 .setDestinationMacAddress(victimMacAddr)
@@ -64,7 +62,7 @@ public class NetworkSpoofer extends Thread {
                 .setProtocolType(EtherType.IPV4)
                 .setHardwareAddressLength((byte) 0x06)
                 .setProtocolAddressLength((byte) 0x04)
-                .setOpCode(OperationCode.ARP_REPLY)
+                .setOpCode(ARPOperationCode.ARP_REPLY)
                 .setSenderHardwareAddress(spoofedMacAddr) //spoofed
                 .setSenderProtocolAddress(spoofedIpAddr) //spoofed
                 .setTargetHardwareAddress(victimMacAddr)

@@ -1,4 +1,4 @@
-package com.ardikars.jxnet.packet.protocol.network.ip;
+package com.ardikars.jxnet.packet.ipv4;
 
 import com.ardikars.jxnet.util.NamedNumber;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Protocol extends NamedNumber<Byte, Protocol> {
 
-    public static final Protocol ICMP = new Protocol((byte) 1, "Internet Control Message Protocol");
+    public static final Protocol ICMP = new Protocol((byte) 1, "Internet Control ICMPTypeAndCode Protocol");
 
     public static final Protocol IGMP = new Protocol((byte) 2, "Internet Group Management Protocol");
 

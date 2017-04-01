@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ardikars.jxnet.packet.protocol.lan.arp;
+package com.ardikars.jxnet.packet.arp;
 
 import com.ardikars.jxnet.DataLinkType;
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
+import com.ardikars.jxnet.packet.ethernet.EtherType;
 
 import java.nio.ByteBuffer;
 
@@ -33,7 +33,7 @@ public class ARP extends Packet {
 	private EtherType protocolType;
 	private byte hardwareAddressLength;
 	private byte protocolAddressLength;
-	private OperationCode opCode;
+	private ARPOperationCode opCode;
 	private MacAddress senderHardwareAddress;
 	private Inet4Address senderProtocolAddress;
 	private MacAddress targetHardwareAddress;
@@ -53,7 +53,7 @@ public class ARP extends Packet {
         arp.protocolType = EtherType.getInstance(bb.getShort());
         arp.hardwareAddressLength = bb.get();
         arp.protocolAddressLength = bb.get();
-        arp.opCode = OperationCode.getInstance(bb.getShort());
+        arp.opCode = ARPOperationCode.getInstance(bb.getShort());
         
         byte[] tmphw = new byte[0xff & arp.hardwareAddressLength];
         bb.get(tmphw);
@@ -109,11 +109,11 @@ public class ARP extends Packet {
         return this;
     }
 
-    public OperationCode getOpCode() {
+    public ARPOperationCode getOpCode() {
         return this.opCode;
     }
 
-    public ARP setOpCode(OperationCode opCode) {
+    public ARP setOpCode(ARPOperationCode opCode) {
         this.opCode = opCode;
         return this;
     }
@@ -188,8 +188,8 @@ public class ARP extends Packet {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[Hw Type: ").append(getHardwareType().toString());
-        sb.append(", Proto Type: ").append(getProtocolType().toString());
+        sb.append("[Hw ICMPType: ").append(getHardwareType().toString());
+        sb.append(", Proto ICMPType: ").append(getProtocolType().toString());
         sb.append(", Hw Addr Length: ").append(getHardwareAddressLength());
         sb.append(", Proto Addr length: ").append(getProtocolAddressLength());
         sb.append(", OpCode: ").append(getOpCode().toString());

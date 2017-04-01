@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ardikars.jxnet.packet.protocol.transport;
+package com.ardikars.jxnet.packet.tcp;
 
 import com.ardikars.jxnet.packet.Packet;
 

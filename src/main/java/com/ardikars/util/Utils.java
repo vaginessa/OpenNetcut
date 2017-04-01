@@ -4,16 +4,16 @@ import com.ardikars.ann.Connection;
 import com.ardikars.ann.Layer;
 import com.ardikars.ann.Neuron;
 import com.ardikars.jxnet.*;
-import com.ardikars.jxnet.File;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.jxnet.exception.PcapCloseException;
 import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.packet.PacketHandler;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
+import com.ardikars.jxnet.packet.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.arp.ARP;
+import com.ardikars.jxnet.packet.arp.ARPOperationCode;
 import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.jxnet.util.FormatUtils;
+import com.ardikars.jxnet.util.Platforms;
 import com.ardikars.opennetcut.app.LoggerHandler;
 import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.PacketBuilder;
@@ -51,14 +51,12 @@ public class Utils {
     public static double[][] generateXorInputs() {
         return new double[][] {
                 array(1.0, 1.0),
-                array(1.0, 0.0),
-                array(0.0, 1.0),
-                array(0.0, 0.0),
+                array(1.0, 0.0)
         };
     }
     
     public static double[][] generateXorOutputs() {
-        return new double[][] { array(0.0), array(1.0), array(1.0), array(0.0) };
+        return new double[][] { array(0.0), array(1.0) };
     }
     
     public static double[][] generateXorDumpOutputs() {
@@ -190,7 +188,7 @@ public class Utils {
 
     public static MacAddress getGwAddrFromArp() {
 
-        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(MacAddress.BROADCAST, OperationCode.ARP_REQUEST,
+        Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(MacAddress.BROADCAST, ARPOperationCode.ARP_REQUEST,
                 StaticField.CURRENT_MAC_ADDRESS, StaticField.CURRENT_INET4ADDRESS,
                 MacAddress.ZERO, StaticField.GATEWAY_INET4ADDRESS);
 
@@ -206,9 +204,9 @@ public class Utils {
             if (packets == null) continue;
             ARP arp = (ARP) packets.get(ARP.class);
             if (arp == null) continue;
-            if (arp.getOpCode() == OperationCode.ARP_REPLY)
+            if (arp.getOpCode() == ARPOperationCode.ARP_REPLY)
                 System.out.println(arp.getSenderProtocolAddress() + " == " + StaticField.GATEWAY_INET4ADDRESS);
-            if (arp.getOpCode() == OperationCode.ARP_REPLY &&
+            if (arp.getOpCode() == ARPOperationCode.ARP_REPLY &&
                     arp.getSenderProtocolAddress().equals(StaticField.GATEWAY_INET4ADDRESS)) {
                 return arp.getSenderHardwareAddress();
             }
@@ -279,6 +277,45 @@ public class Utils {
         }
     }
 
+    private static void activate(int snaplen, int promisc, int to_ms) {
+
+        if (Platforms.isWindows()) {
+            StaticField.PCAP = PcapOpenLive(StaticField.SOURCE,
+                    StaticField.SNAPLEN,
+                    StaticField.PROMISC,
+                    StaticField.TIMEOUT, StaticField.ERRBUF);
+            StaticField.PCAP_IDS = PcapOpenLive(StaticField.SOURCE,
+                    StaticField.SNAPLEN,
+                    StaticField.PROMISC,
+                    StaticField.TIMEOUT, StaticField.ERRBUF);
+            StaticField.PCAP_ICMP_TRAP = PcapOpenLive(StaticField.SOURCE,
+                    StaticField.SNAPLEN,
+                    StaticField.PROMISC,
+                    StaticField.TIMEOUT, StaticField.ERRBUF);
+        } else {
+            StaticField.PCAP = Jxnet.PcapCreate(StaticField.SOURCE, StaticField.ERRBUF);
+            Jxnet.PcapSetSnaplen(StaticField.PCAP, snaplen);
+            Jxnet.PcapSetPromisc(StaticField.PCAP, promisc);
+            Jxnet.PcapSetImmediateMode(StaticField.PCAP, 1);
+            Jxnet.PcapSetTimeout(StaticField.PCAP, to_ms);
+            Jxnet.PcapActivate(StaticField.PCAP);
+
+            StaticField.PCAP_IDS = Jxnet.PcapCreate(StaticField.SOURCE, StaticField.ERRBUF);
+            Jxnet.PcapSetSnaplen(StaticField.PCAP_IDS, snaplen);
+            Jxnet.PcapSetPromisc(StaticField.PCAP_IDS, promisc);
+            Jxnet.PcapSetImmediateMode(StaticField.PCAP_IDS, 1);
+            Jxnet.PcapSetTimeout(StaticField.PCAP_IDS, to_ms);
+            Jxnet.PcapActivate(StaticField.PCAP_IDS);
+
+            StaticField.PCAP_ICMP_TRAP = Jxnet.PcapCreate(StaticField.SOURCE, StaticField.ERRBUF);
+            Jxnet.PcapSetSnaplen(StaticField.PCAP_ICMP_TRAP, snaplen);
+            Jxnet.PcapSetPromisc(StaticField.PCAP_ICMP_TRAP, promisc);
+            Jxnet.PcapSetImmediateMode(StaticField.PCAP_ICMP_TRAP, 1);
+            Jxnet.PcapSetTimeout(StaticField.PCAP_ICMP_TRAP, to_ms);
+            Jxnet.PcapActivate(StaticField.PCAP_ICMP_TRAP);
+        }
+    }
+
     public static void initialize(String s, int snaplen, int promisc, int to_ms) throws JxnetException {
 
         StaticField.SOURCE = (s == null) ? AddrUtils.LookupDev(StaticField.ERRBUF) : s;
@@ -293,20 +330,9 @@ public class Utils {
             }
         }
 
-        StaticField.PCAP = PcapOpenLive(StaticField.SOURCE,
-                StaticField.SNAPLEN,
-                StaticField.PROMISC,
-                StaticField.TIMEOUT, StaticField.ERRBUF);
-        StaticField.Pcap_IDS = PcapOpenLive(StaticField.SOURCE,
-                StaticField.SNAPLEN,
-                StaticField.PROMISC,
-                StaticField.TIMEOUT, StaticField.ERRBUF);
-        StaticField.PCAP_ICMP_TRAP = PcapOpenLive(StaticField.SOURCE,
-                StaticField.SNAPLEN,
-                StaticField.PROMISC,
-                StaticField.TIMEOUT, StaticField.ERRBUF);
+        activate(snaplen, promisc, to_ms);
 
-        if (StaticField.PCAP == null || StaticField.Pcap_IDS == null || StaticField.PCAP_ICMP_TRAP == null) {
+        if (StaticField.PCAP == null || StaticField.PCAP_IDS == null || StaticField.PCAP_ICMP_TRAP == null) {
             if (StaticField.LOGGER != null)
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
         }
@@ -316,7 +342,7 @@ public class Utils {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
             }
             PcapClose(StaticField.PCAP);
-            PcapClose(StaticField.Pcap_IDS);
+            PcapClose(StaticField.PCAP_IDS);
             PcapClose(StaticField.PCAP_ICMP_TRAP);
         } else {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;

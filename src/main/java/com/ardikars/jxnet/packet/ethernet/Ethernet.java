@@ -15,13 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ardikars.jxnet.packet.protocol.datalink.ethernet;
+package com.ardikars.jxnet.packet.ethernet;
 
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.network.ip.IPv4;
-import com.ardikars.jxnet.util.Builder;
+import com.ardikars.jxnet.packet.arp.ARP;
+import com.ardikars.jxnet.packet.ipv4.IPv4;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -206,7 +205,7 @@ public class Ethernet extends Packet {
 					.append(", Vlan Identifier: " + getVlanIdentifier())
 					.append(")");
 		}
-		return sb.append(", Ether Type: " + ((getEtherType() == null) ? "UNKNOWN" : getEtherType().getName()))
+		return sb.append(", Ether ICMPType: " + ((getEtherType() == null) ? "UNKNOWN" : getEtherType().getName()))
 				.append("]").toString();
 	}
 

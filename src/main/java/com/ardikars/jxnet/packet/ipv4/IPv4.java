@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ardikars.jxnet.packet.protocol.network.ip;
+package com.ardikars.jxnet.packet.ipv4;
 
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.network.icmp.ICMP;
-import com.ardikars.jxnet.packet.protocol.transport.TCP;
+import com.ardikars.jxnet.packet.icmp.ICMPv4;
+import com.ardikars.jxnet.packet.tcp.TCP;
 
 import java.nio.ByteBuffer;
 
@@ -232,7 +232,7 @@ public class IPv4 extends Packet {
 	public Packet getPacket() {
 		if (getProtocol() == null) return null;
 		switch (getProtocol().getValue()) {
-			case 1: return ICMP.newInstance(this.data);
+			case 1: return ICMPv4.newInstance(this.data);
 			case 6: return TCP.newInstance(this.data);
 		}
 		return null;

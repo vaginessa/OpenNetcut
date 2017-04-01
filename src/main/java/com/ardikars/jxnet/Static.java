@@ -1,18 +1,12 @@
 package com.ardikars.jxnet;
 
-import com.ardikars.jxnet.DataLinkType;
-import com.ardikars.jxnet.Pcap;
-import com.ardikars.jxnet.PcapHandler;
-import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.util.FormatUtils;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.ethernet.Ethernet;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.ardikars.jxnet.Jxnet.*;

@@ -11,7 +11,7 @@ public class StaticField {
 
     public static String SOURCE;
     public static Pcap PCAP;
-    public static Pcap Pcap_IDS;
+    public static Pcap PCAP_IDS;
     public static Pcap PCAP_ICMP_TRAP;
     public static int SNAPLEN = 1500;
     public static int PROMISC = 1;

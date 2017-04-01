@@ -19,11 +19,6 @@ package com.ardikars.opennetcut.app.ids;
 
 import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.packet.PacketHandler;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
-import com.ardikars.opennetcut.app.OUI;
 import com.ardikars.opennetcut.app.StaticField;
 
 import static com.ardikars.jxnet.Jxnet.*;
@@ -37,12 +32,12 @@ public class IDS extends Thread {
             Produce.produce(arg, pktHdr, packets).start();
         };
 
-        Static.loop(StaticField.Pcap_IDS, -1, packetHandler, null);
+        Static.loop(StaticField.PCAP_IDS, -1, packetHandler, null);
 
     }
 
     public void stopThread() {
-        PcapBreakLoop(StaticField.Pcap_IDS);
+        PcapBreakLoop(StaticField.PCAP_IDS);
     }
 
 }

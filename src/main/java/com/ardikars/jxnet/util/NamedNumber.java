@@ -57,7 +57,7 @@ public abstract class NamedNumber<T extends Number, U extends NamedNumber<T, ?>>
 
     @Override
     public String toString() {
-        return new StringBuffer("[Type: ")
+        return new StringBuffer("[ICMPType: ")
                 .append(this.value.toString())
                 .append(", Name: ")
                 .append(this.name.toString())

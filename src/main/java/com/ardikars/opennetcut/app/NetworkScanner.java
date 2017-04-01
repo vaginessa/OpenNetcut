@@ -22,11 +22,11 @@ import static com.ardikars.jxnet.Jxnet.*;
 import com.ardikars.jxnet.util.FormatUtils;
 import com.ardikars.jxnet.Static;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
+import com.ardikars.jxnet.packet.ethernet.EtherType;
 import com.ardikars.jxnet.packet.PacketHandler;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
+import com.ardikars.jxnet.packet.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.arp.ARP;
+import com.ardikars.jxnet.packet.arp.ARPOperationCode;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class NetworkScanner extends Thread {
                 .setProtocolType(EtherType.IPV4)
                 .setHardwareAddressLength((byte) 6)
                 .setProtocolAddressLength((byte) 4)
-                .setOpCode(OperationCode.ARP_REQUEST)
+                .setOpCode(ARPOperationCode.ARP_REQUEST)
                 .setSenderHardwareAddress(StaticField.CURRENT_MAC_ADDRESS)
                 .setSenderProtocolAddress(StaticField.CURRENT_INET4ADDRESS)
                 .setTargetHardwareAddress(MacAddress.ZERO);
@@ -123,7 +123,7 @@ public class NetworkScanner extends Thread {
                 Map<Class, Packet> packets = Static.next(StaticField.PCAP, pktHdr);
                 if (packets != null) {
                     ARP capArp = (ARP) packets.get(ARP.class);
-                    if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
+                    if (capArp.getOpCode() == ARPOperationCode.ARP_REPLY) {
                         Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
                         this.handler.nextPacket(no, pktHdr, packets);
                         no++;
@@ -184,7 +184,7 @@ public class NetworkScanner extends Thread {
                 }
                 ARP capArp = (ARP) packets.get(ARP.class);
                 if (capArp != null) {
-                    if (capArp.getOpCode() == OperationCode.ARP_REPLY) {
+                    if (capArp.getOpCode() == ARPOperationCode.ARP_REPLY) {
                         Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.getBytes()));
                         handler.nextPacket(no, pktHdr, packets);
                         no++;

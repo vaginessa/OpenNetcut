@@ -1,14 +1,13 @@
 package com.ardikars.opennetcut.app.ids;
 
-import com.ardikars.ann.NeuralNetwork;
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.PcapPktHdr;
 import com.ardikars.jxnet.packet.Packet;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.EtherType;
-import com.ardikars.jxnet.packet.protocol.datalink.ethernet.Ethernet;
-import com.ardikars.jxnet.packet.protocol.lan.arp.ARP;
-import com.ardikars.jxnet.packet.protocol.lan.arp.OperationCode;
+import com.ardikars.jxnet.packet.ethernet.EtherType;
+import com.ardikars.jxnet.packet.ethernet.Ethernet;
+import com.ardikars.jxnet.packet.arp.ARP;
+import com.ardikars.jxnet.packet.arp.ARPOperationCode;
 import com.ardikars.opennetcut.app.OUI;
 import com.ardikars.opennetcut.app.StaticField;
 
@@ -56,7 +55,7 @@ public class Produce <T> extends Thread {
         spa = arp.getSenderProtocolAddress();
         tpa = arp.getTargetProtocolAddress();
 
-        if (arp.getOpCode() != OperationCode.ARP_REPLY ||
+        if (arp.getOpCode() != ARPOperationCode.ARP_REPLY ||
                 !ethDst.equals(StaticField.CURRENT_MAC_ADDRESS) ||
                 tpa.equals(StaticField.CURRENT_MAC_ADDRESS)) {
             return;

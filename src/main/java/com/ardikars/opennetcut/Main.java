@@ -21,10 +21,7 @@ import com.ardikars.ann.*;
 import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.opennetcut.app.ids.IDS;
 import com.ardikars.opennetcut.app.StaticField;
-import com.ardikars.opennetcut.view.MainWindow;
 import com.ardikars.util.Utils;
-
-import java.util.List;
 
 public class Main {
     
@@ -41,21 +38,21 @@ public class Main {
         };
 
         ParamBuilder<String> params = ParamBuilder.buildParameters(
-                logger, "", 1, 1, 0.1, 0.1
+                logger, "", 1, 2, 0.1, 0.1
         );
         NeuralNetwork nn = NeuralNetwork.initff(
-                Utils.generateInputs()
+                Utils.generateXorInputs()
                 , 2
-                , Utils.generateOutputs());
-        nn.trainbp(ActivationFunction.Type.SIGMOID, params);
+                , Utils.generateXorOutputs());
+        nn.trainbp(ActivationFunctions.Type.SIGMOID, params);
 
     }
 
     private static void runIDS() {
         Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT);
-        Utils.compile(StaticField.Pcap_IDS, StaticField.BPF_PROGRAM_IDS,
+        Utils.compile(StaticField.PCAP_IDS, StaticField.BPF_PROGRAM_IDS,
                 "ether dst " + StaticField.CURRENT_MAC_ADDRESS.toString() + " and arp");
-        Utils.filter(StaticField.Pcap_IDS, StaticField.BPF_PROGRAM_IDS);
+        Utils.filter(StaticField.PCAP_IDS, StaticField.BPF_PROGRAM_IDS);
 
         Utils.compile(StaticField.PCAP_ICMP_TRAP, StaticField.BPF_PROGRAM_ICMP_TRAP,
                 "ether dst " + StaticField.CURRENT_MAC_ADDRESS.toString() + " and icmp");
