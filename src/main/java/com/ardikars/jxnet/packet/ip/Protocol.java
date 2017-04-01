@@ -1,4 +1,4 @@
-package com.ardikars.jxnet.packet.ipv4;
+package com.ardikars.jxnet.packet.ip;
 
 import com.ardikars.jxnet.util.NamedNumber;
 

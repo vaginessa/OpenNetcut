@@ -20,7 +20,7 @@ package com.ardikars.jxnet.packet.ethernet;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.packet.arp.ARP;
-import com.ardikars.jxnet.packet.ipv4.IPv4;
+import com.ardikars.jxnet.packet.ip.IPv4;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;

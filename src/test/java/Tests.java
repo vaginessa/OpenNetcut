@@ -6,8 +6,8 @@ import com.ardikars.jxnet.packet.ethernet.EtherType;
 import com.ardikars.jxnet.packet.ethernet.Ethernet;
 import com.ardikars.jxnet.packet.icmp.ICMPv4;
 import com.ardikars.jxnet.packet.icmp.ICMPv4TimeExceeded;
-import com.ardikars.jxnet.packet.ipv4.IPv4;
-import com.ardikars.jxnet.packet.ipv4.Protocol;
+import com.ardikars.jxnet.packet.ip.IPv4;
+import com.ardikars.jxnet.packet.ip.Protocol;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;

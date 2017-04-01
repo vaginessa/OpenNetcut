@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ardikars.jxnet.packet.ipv4;
+package com.ardikars.jxnet.packet.ip;
 
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.packet.Packet;
