@@ -1,1 +1,5 @@
 rootProject.name = 'OpenNetcut'
+include 'ann'
+include 'opennetcut'
+include 'tulip'
+
