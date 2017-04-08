@@ -33,8 +33,8 @@ public class NeuralNetwork {
     private ActivationFunctions.Type activationFunction;
     
     private NeuralNetwork(double[][] inputs, int hidden, double[][] outputs) {
-        this.bias1.setName("type");
-        this.bias2.setName("type");
+        this.bias1.setName("B1");
+        this.bias2.setName("B2");
         this.bias1.setOutput(1);
         this.bias2.setOutput(1);
         this.inputs = inputs;
@@ -47,7 +47,7 @@ public class NeuralNetwork {
                     // input layer
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
-                        neuron.setName("type");
+                        neuron.setName("X");
                         this.inputLayer.add(neuron);
                     }   break;
                 case 1:
@@ -63,7 +63,7 @@ public class NeuralNetwork {
                     // output layer\
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
-                        neuron.setName("code");
+                        neuron.setName("Y");
                         neuron.addConnections("W", this.hiddenLayer);
                         neuron.addBiasConnection("B", this.bias2);
                         this.outputLayer.add(neuron);
@@ -76,8 +76,8 @@ public class NeuralNetwork {
         Neuron.resetCounter();
         Connection.resetCounter();
     }
-    
-    public static NeuralNetwork initff(double[][] inputs, int hidden, double[][] outputs) {
+
+        public static NeuralNetwork initff(double[][] inputs, int hidden, double[][] outputs) {
         
         NeuralNetwork network = new NeuralNetwork(inputs, hidden, outputs);
         network.resultOutputs = ANN.generateDummyOutputs(outputs.length, outputs[0].length); // dummy output
@@ -144,7 +144,6 @@ public class NeuralNetwork {
         } else {
             System.out.println("\n[ Result ] :: " + "Epoch = " + (i) + ", SSE = " + error);
             ANN.printWeights(this.hiddenLayer, this.outputLayer);
-            ANN.writeWeigth("weight.json", hiddenLayer, outputLayer);
         }
         return this;
     }

@@ -1,9 +1,5 @@
 package com.ardikars.ann;
 
-import com.google.gson.stream.JsonWriter;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -121,7 +117,7 @@ public class ANN {
         System.out.println();
     }
 
-    public static void writeWeigth(String path, Layer hiddenLayer, Layer outputLayer) {
+    /*public static void writeWeight(String path, Layer hiddenLayer, Layer outputLayer) {
         JsonWriter writer = null;
         try {
             writer = new JsonWriter(new FileWriter(path));
@@ -134,11 +130,19 @@ public class ANN {
                     writer.name("Weight").value(con.getWeight());
                 }
             }
+            for (Neuron n : outputLayer) {
+                List<Connection> cons = n.getConnections();
+                for (Connection con : cons) {
+                    writer.name("Neuron ID").value(n.getID());
+                    writer.name("Connection ID").value(con.getID());
+                    writer.name("Weight").value(con.getWeight());
+                }
+            }
             writer.endObject();
             writer.close();
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
-    }
+    }*/
 
 }

@@ -27,6 +27,8 @@
       <module name="opennetcut_main" target="1.8" />
       <module name="opennetcut_test" target="1.8" />
       <module name="OpenNetcut_test" target="1.8" />
+      <module name="oui_main" target="1.8" />
+      <module name="oui_test" target="1.8" />
       <module name="tulip_main" target="1.8" />
       <module name="tulip_test" target="1.8" />
     </bytecodeTargetLevel>

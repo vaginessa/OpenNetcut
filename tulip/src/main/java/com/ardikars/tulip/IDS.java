@@ -19,7 +19,6 @@ package com.ardikars.tulip;
 
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.MacAddress;
-import com.ardikars.jxnet.Pcap;
 import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.PacketHelper;
 import com.ardikars.jxnet.packet.arp.ARP;
@@ -91,9 +90,9 @@ public class IDS extends Thread {
 
             UNPADDED_ETHERNET_FRAME = (pktHdr.getCapLen() < 60 ? 1 : 0);
 
-            /*if (OUI.searchVendor(arp.getSenderHardwareAddress().toString()).equals("")) {
+            if (OUI.searchVendor(arp.getSenderHardwareAddress().toString()).equals("")) {
                 UNKNOWN_OUI = 1;
-            }*/
+            }
 
             Long epochTimeCache = StaticField.EPOCH_TIME.get(spa);
             if (epochTimeCache == null || epochTimeCache == 0) {
