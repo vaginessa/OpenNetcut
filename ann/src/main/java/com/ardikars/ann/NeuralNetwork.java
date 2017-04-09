@@ -183,7 +183,7 @@ public class NeuralNetwork {
         return this;
     }
     
-    public static <T> NeuralNetwork simuff(double[][] inputs, Map<String, Double> weight1, Map<String, Double> weight2,
+    public static <T> NeuralNetwork simuff(double[][] inputs, Map<String, String> weight1, Map<String, String> weight2,
                                            ActivationFunctions.Type activationFunction, int hidden, int output) {
         double[][] outputs = new double[inputs.length][output];
         NeuralNetwork network = new NeuralNetwork(inputs, hidden, outputs);
@@ -193,14 +193,14 @@ public class NeuralNetwork {
         network.hiddenLayer.stream().forEach((n) -> {
             n.getConnections().stream().forEach((con) -> {
                 String key = "["+n.getID()+","+con.getID()+"]";
-                double newWeight = weight1.get(key);
+                double newWeight = Double.parseDouble(weight1.get(key));
                 con.setWeight(newWeight);
             });
         });
         network.outputLayer.stream().forEach((n) -> {
             n.getConnections().stream().forEach((con) -> {
                 String key = "["+n.getID()+","+con.getID()+"]";
-                double newWeight = weight2.get(key);
+                double newWeight = Double.parseDouble(weight2.get(key));
                 con.setWeight(newWeight);
             });
         });
@@ -374,25 +374,25 @@ public class NeuralNetwork {
         }
     }
     
-    public Map<String, Double> getWeight1() {
-        Map<String, Double> weights = new HashMap<String, Double>();
+    public Map<String, String> getHiddenWeight() {
+        Map<String, String> weights = new HashMap<String, String>();
         for (Neuron n : this.hiddenLayer) {
             List<Connection> cons = n.getConnections();
             for (Connection con : cons) {
                 String id_con = "["+n.getID()+","+con.getID()+"]";
-                weights.put(id_con, con.getWeight());
+                weights.put(id_con, String.valueOf(con.getWeight()));
             }
         }
         return weights;
     }
     
-    public Map<String, Double> getWeight2() {
-        Map<String, Double> weights = new HashMap<String, Double>();
+    public Map<String, String> getOutputWeight() {
+        Map<String, String> weights = new HashMap<String, String>();
         for (Neuron n : this.outputLayer) {
             List<Connection> cons = n.getConnections();
             for (Connection con : cons) {
                 String id_con = "["+n.getID()+","+con.getID()+"]";
-                weights.put(id_con, con.getWeight());
+                weights.put(id_con, String.valueOf(con.getWeight()));
             }
         }
         return weights;

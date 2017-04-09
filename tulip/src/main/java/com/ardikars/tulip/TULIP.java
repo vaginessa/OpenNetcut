@@ -2,6 +2,13 @@ package com.ardikars.tulip;
 
 import com.ardikars.ann.*;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 public class TULIP {
 
     public static void main(String[] args) {
@@ -25,14 +32,54 @@ public class TULIP {
         };
 
         ParamBuilder<String> params = ParamBuilder
-                .buildParameters(longger, null, 100, 10000, 0.1, 0.1);
+                .buildParameters(longger, null, 100, 100000, 0.1, 0.5);
 
         NeuralNetwork nn = NeuralNetwork.initff(generateInputs(),
-                6, generateOutputs(), -1, 1);
+                5, generateOutputs(), -5, 5);
         nn.trainbp(ActivationFunctions.Type.SIGMOID, params);
 
-        NeuralNetwork.simuff(generateInputs(), nn.getWeight1(), nn.getWeight2(),
-                ActivationFunctions.Type.SIGMOID, 6, 1);
+        Properties hiddenWeight = null;
+        Properties outputWeight = null;
+        FileWriter hiddenWriter;
+        FileWriter outputWriter;
+        try {
+            hiddenWeight = new Properties();
+            hiddenWriter = new FileWriter("hidden-weight.properties");
+            hiddenWeight.putAll(nn.getHiddenWeight());
+            hiddenWeight.store(hiddenWriter, "Hidden weight");
+            hiddenWriter.close();
+
+            outputWeight = new Properties();
+            outputWriter = new FileWriter("output-weight.properties");
+            outputWeight.putAll(nn.getOutputWeight());
+            outputWeight.store(outputWriter, "Output weight");
+            outputWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        FileReader hiddenReader;
+        FileReader outputReader;
+        try {
+            hiddenWeight = new Properties();
+            hiddenReader = new FileReader("hidden-weight.properties");
+            hiddenWeight.load(hiddenReader);
+            hiddenReader.close();
+
+            outputWeight = new Properties();
+            outputReader = new FileReader("output-weight.properties");
+            outputWeight.load(outputReader);
+            outputReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, String> hiddenMap = new HashMap<String, String>((Map) hiddenWeight);
+        Map<String, String> outputnMap = new HashMap<String, String>((Map) outputWeight);
+
+
+        NeuralNetwork.simuff(generateInputs(), hiddenMap, outputnMap,
+                ActivationFunctions.Type.SIGMOID, 5, 1);
     }
 
     /* INVALID_PACKET | UNCONSISTENT_SHA | UNPADDED_ETHERNET_FRAME
@@ -40,45 +87,35 @@ public class TULIP {
 
     public static double[][] generateInputs() {
         return new double[][] {
-                array(1, 1, 1, 1, 0.1),
-                array(1, 1, 1, 1, 0.5),
-                array(1, 1, 1, 1, 0.9),
+                array(1, 1, 1, 1, 1),
+                array(1, 1, 0, 0, 0),
+                array(1, 1, 1, 1, 0),
+                array(1, 1, 0, 0, 1),
+                array(1, 1, 1, 0, 1),
+                array(1, 1, 0, 1, 0),
+                array(1, 1, 1, 0, 0),
+                array(1, 1, 0, 1, 1),
 
-                array(1, 1, 1, 0, 0.1),
-                array(1, 1, 0, 1, 0.5),
-                array(1, 0, 1, 1, 0.9),
+                array(1, 0, 1, 1, 1),
+                array(1, 0, 0, 0, 0),
+                array(1, 0, 1, 1, 0),
+                array(1, 0, 0, 0, 1),
+                array(1, 0, 1, 0, 1),
+                array(1, 0, 0, 1, 0),
+                array(1, 0, 1, 0, 0),
+                array(1, 0, 0, 1, 1),
 
-                array(0, 0, 0, 0, 0.1),
-                array(0, 0, 0, 0, 0.5),
-                array(0, 0, 0, 0, 0.9),
+                array(0, 0, 1, 1, 0),
+                array(0, 0, 1, 1, 0),
+                array(0, 0, 1, 1, 1),
+                array(0, 0, 1, 0.5, 1),
 
-                array(0, 1, 0, 0, 0.1),
-                array(0, 1, 0, 0, 0.5),
-                array(0, 1, 0, 0, 0.9),
+                array(0, 0, 0, 1, 0),
 
-                array(0, 0, 1, 0, 0.1),
-                array(0, 0, 1, 0, 0.5),
-                array(0, 0, 1, 0, 0.9),
+                // 0
+                array(0, 0, 1, 0.5, 0),
+                array(0, 0, 0, 0, 0),
 
-                array(0, 0, 0, 1, 0.1),
-                array(0, 0, 0, 1, 0.5),
-                array(0, 0, 0, 1, 0.9),
-
-                array(1, 1, 0, 0, 0.1),
-                array(1, 1, 0, 0, 0.5),
-                array(1, 1, 0, 0, 0.9),
-
-                array(1, 0, 0, 0, 0.1),
-                array(1, 0, 0, 0, 0.5),
-                array(1, 0, 0, 0, 0.9),
-
-                array(0, 1, 1, 1, 0.1),
-                array(0, 1, 1, 1, 0.5),
-                array(0, 1, 1, 1, 0.9),
-
-                array(0, 0, 1, 1, 0.1),
-                array(0, 0, 1, 1, 0.5),
-                array(0, 0, 1, 1, 0.9)
         };
     }
 
@@ -87,27 +124,8 @@ public class TULIP {
                 array(1),
                 array(1),
                 array(1),
-
                 array(1),
                 array(1),
-                array(1),
-
-                array(0),
-                array(0),
-                array(0),
-
-                array(1),
-                array(1),
-                array(1),
-
-                array(0),
-                array(0),
-                array(1),
-
-                array(0),
-                array(0),
-                array(1),
-
                 array(1),
                 array(1),
                 array(1),
@@ -115,14 +133,22 @@ public class TULIP {
                 array(1),
                 array(1),
                 array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
 
                 array(1),
                 array(1),
                 array(1),
-
-                array(0),
-                array(0),
                 array(1),
+
+                array(1),
+
+                // 0
+                array(0),
+                array(0)
         };
     }
 

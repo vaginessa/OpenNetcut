@@ -19,6 +19,5 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="ann_main" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.0" level="project" />
   </component>
 </module>
