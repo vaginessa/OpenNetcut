@@ -1,4 +1,3 @@
-
 package com.ardikars.ann;
 
 import java.util.ArrayList;

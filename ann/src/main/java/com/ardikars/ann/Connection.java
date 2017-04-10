@@ -1,4 +1,3 @@
-
 package com.ardikars.ann;
 
 public class Connection {
@@ -77,5 +76,4 @@ public class Connection {
         this.name = name;
     }
 
-    
 }

@@ -1,8 +1,8 @@
 package com.ardikars.ann;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.*;
 
 public class NeuralNetwork {
 
@@ -11,9 +11,9 @@ public class NeuralNetwork {
     private int maximumEpoch;
     private double minimalError;
 
-    public final Layer inputLayer = new Layer();
-    public final Layer hiddenLayer = new Layer();
-    public final Layer outputLayer = new Layer();
+    private final Layer inputLayer = new Layer();
+    private final Layer hiddenLayer = new Layer();
+    private final Layer outputLayer = new Layer();
     
     private final Neuron bias1 = new Neuron();
     private final Neuron bias2 = new Neuron();
@@ -51,7 +51,7 @@ public class NeuralNetwork {
                         this.inputLayer.add(neuron);
                     }   break;
                 case 1:
-                    // hidden layer\
+                    // hidden layer
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
                         neuron.setName("Z");
@@ -60,7 +60,7 @@ public class NeuralNetwork {
                         this.hiddenLayer.add(neuron);
                     }   break;
                 case 2:
-                    // output layer\
+                    // output layer
                     for (int j = 0; j < this.layers[i]; j++) {
                         Neuron neuron = new Neuron();
                         neuron.setName("Y");
@@ -77,20 +77,20 @@ public class NeuralNetwork {
         Connection.resetCounter();
     }
 
-        public static NeuralNetwork initff(double[][] inputs, int hidden, double[][] outputs) {
+    public static NeuralNetwork initff(double[][] inputs, int hidden, double[][] outputs, double min, double max) {
         
         NeuralNetwork network = new NeuralNetwork(inputs, hidden, outputs);
-        network.resultOutputs = ANN.generateDummyOutputs(outputs.length, outputs[0].length); // dummy output
+        network.resultOutputs = generateDummyOutputs(outputs.length, outputs[0].length); // dummy output
         // initialize random weights
         network.hiddenLayer.stream().map((neuron) -> neuron.getConnections()).forEach((connections) -> {
             connections.stream().forEach((conn) -> {
-                double newWeight = ANN.random();
+                double newWeight = random(min, max);
                 conn.setWeight(newWeight);
             });
         });
         network.outputLayer.stream().map((neuron) -> neuron.getConnections()).forEach((connections) -> {
             connections.stream().forEach((conn) -> {
-                double newWeight = ANN.random();
+                double newWeight = random(min, max);
                 conn.setWeight(newWeight);
             });
         });
@@ -143,7 +143,42 @@ public class NeuralNetwork {
             System.out.println("[ WARNING ] :: " + "Epoch = " + (i) + ", SSE = " + error);
         } else {
             System.out.println("\n[ Result ] :: " + "Epoch = " + (i) + ", SSE = " + error);
-            ANN.printWeights(this.hiddenLayer, this.outputLayer);
+
+            // Print weights
+            // weights for this hidden layer
+            for (Neuron n : this.hiddenLayer) {
+                List<Connection> connections = n.getConnections();
+                for (Connection con : connections) {
+                    System.out.println("[ "+n.getName()+","+con.getLeftNeuron().getName()+" ] = " + con.getWeight());
+                }
+            }
+            // weights for the output layer
+            for (Neuron n : this.outputLayer) {
+                List<Connection> connections = n.getConnections();
+                for (Connection con : connections) {
+                    System.out.println("[ "+n.getName()+","+con.getLeftNeuron().getName()+" ] = " + con.getWeight());
+                }
+            }
+            System.out.println();
+
+            // Print result
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.setRoundingMode(RoundingMode.DOWN);
+            for (int p = 0; p < this.inputs.length; p++) {
+                System.out.print("INPUTS: ");
+                for (int x = 0; x < this.inputLayer.size(); x++) {
+                    System.out.print(inputs[p][x] + " ");
+                }
+                System.out.print("EXPECTED: ");
+                for (int x = 0; x < this.outputLayer.size(); x++) {
+                    System.out.print(this.expectedOutputs[p][x] + " ");
+                }
+                System.out.print("RESULT: ");
+                for (int x = 0; x < this.outputLayer.size(); x++) {
+                    System.out.print(df.format(resultOutputs[p][x]) + " ");
+                }
+                System.out.println();
+            }
         }
         return this;
     }
@@ -152,7 +187,7 @@ public class NeuralNetwork {
                                            ActivationFunctions.Type activationFunction, int hidden, int output) {
         double[][] outputs = new double[inputs.length][output];
         NeuralNetwork network = new NeuralNetwork(inputs, hidden, outputs);
-        network.resultOutputs = ANN.generateDummyOutputs(outputs.length, outputs[0].length);
+        network.resultOutputs = generateDummyOutputs(outputs.length, outputs[0].length);
         network.activationFunction = activationFunction;
             
         network.hiddenLayer.stream().forEach((n) -> {
@@ -184,12 +219,24 @@ public class NeuralNetwork {
                 
             }
         }
-//        Utils.printWeights(network.hiddenLayer, network.outputLayer);
-        ANN.printResult(network.inputs, network.expectedOutputs, network.resultOutputs,
-                network.inputLayer.size(), network.outputLayer.size());
+        // Print result
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.DOWN);
+        for (int p = 0; p < network.inputs.length; p++) {
+            System.out.print("INPUTS: ");
+            for (int x = 0; x < network.inputLayer.size(); x++) {
+                System.out.print(inputs[p][x] + " ");
+            }
+            System.out.print("RESULT: ");
+            for (int x = 0; x < network.outputLayer.size(); x++) {
+                System.out.print(df.format(network.resultOutputs[p][x]) + " ");
+            }
+            System.out.println();
+        }
         return network;
     }
 
+    /*
     public Neuron getBias1() {
         return bias1;
     }
@@ -197,7 +244,7 @@ public class NeuralNetwork {
     public Neuron getBias2() {
         return bias2;
     }
-    
+    */
     
     
     
@@ -350,5 +397,24 @@ public class NeuralNetwork {
         }
         return weights;
     }
-    
+
+
+    // Utils
+
+    public static double[] array(double... value) {
+        return value;
+    }
+
+    public static double[][] generateDummyOutputs(int a, int b) {
+        double[][] value = new double[a][b];
+        Arrays.fill(value, array(-1));
+        return value;
+    }
+
+    private static final Random random = new Random();
+
+    public static double random(double min, double max) {
+        return min + (max - min) * random.nextDouble();
+    }
+
 }
