@@ -19,7 +19,7 @@ task fatJar(type: Jar) {
     manifest {
         attributes 'OpenNetcut': 'OpenNetcut ${version}',
                 'OpenNetcut-Version': version,
-                'Main-Class': 'com.ardikars.opennetcut.Main'
+                'Main-Class': 'com.ardikars.opennetcut.OpenNetcut'
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

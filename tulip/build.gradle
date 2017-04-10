@@ -3,6 +3,25 @@ repositories {
     mavenCentral()
 }
 
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'com.ardikars.tulip.TULIP'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'TULIP': 'TULIP ${version}',
+                'TULIP-Version': version,
+                'Main-Class': 'com.ardikars.tulip.TULIP'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+artifacts {
+    archives fatJar
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile fileTree(dir: '../libs', include: ['*.jar'])
