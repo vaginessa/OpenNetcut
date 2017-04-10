@@ -32,7 +32,7 @@ public class TULIP {
         };
 
         ParamBuilder<String> params = ParamBuilder
-                .buildParameters(longger, null, 100, 100000, 0.1, 0.5);
+                .buildParameters(longger, null, 100, 100000, 0.1, 0.1);
 
         NeuralNetwork nn = NeuralNetwork.initff(generateInputs(),
                 5, generateOutputs(), -5, 5);
@@ -113,8 +113,82 @@ public class TULIP {
                 array(0, 0, 0, 1, 0),
 
                 // 0
+                array(0, 0, 0, 0.5, 0.5),
+                array(0, 0, 0, 0.5, 0.4),
+                array(0, 0, 0, 0.5, 0.3),
+                array(0, 0, 0, 0.5, 0.2),
+                array(0, 0, 0, 0.5, 0.1),
+                array(0, 0, 0, 0.5, 0),
+
+                array(0, 0, 1, 0.5, 0.5),
+                array(0, 0, 1, 0.5, 0.4),
+                array(0, 0, 1, 0.5, 0.3),
+                array(0, 0, 1, 0.5, 0.2),
+                array(0, 0, 1, 0.5, 0.1),
                 array(0, 0, 1, 0.5, 0),
+
+                array(0, 0, 0, 0, 0.5),
+                array(0, 0, 0, 0, 0.4),
+                array(0, 0, 0, 0, 0.3),
+                array(0, 0, 0, 0, 0.2),
+                array(0, 0, 0, 0, 0.1),
                 array(0, 0, 0, 0, 0),
+
+                // 1
+
+                array(1, 1, 1, 1, 0),
+                array(1, 1, 0, 0, 1),
+                array(1, 1, 1, 1, 1),
+                array(1, 1, 0, 0, 0),
+                array(1, 1, 1, 0, 0),
+                array(1, 1, 0, 1, 1),
+                array(1, 1, 1, 0, 1),
+                array(1, 1, 0, 1, 0),
+
+                array(1, 0, 1, 1, 0),
+                array(1, 0, 0, 0, 1),
+                array(1, 0, 1, 1, 1),
+                array(1, 0, 0, 0, 0),
+                array(1, 0, 1, 0, 0),
+                array(1, 0, 0, 1, 1),
+                array(1, 0, 1, 0, 1),
+                array(1, 0, 0, 1, 0),
+
+                array(1, 1, 1, 0.5, 1),
+                array(1, 1, 0, 0.5, 0),
+                array(1, 1, 1, 0.5, 0),
+                array(1, 1, 0, 0.5, 1),
+                array(1, 1, 1, 0.5, 1),
+                array(1, 1, 0, 0.5, 0),
+                array(1, 1, 1, 0.5, 0),
+                array(1, 1, 0, 0.5, 1),
+
+                array(1, 0, 1, 0.5, 1),
+                array(1, 0, 0, 0.5, 0),
+                array(1, 0, 1, 0.5, 0),
+                array(1, 0, 0, 0.5, 1),
+                array(1, 0, 1, 0.5, 1),
+                array(1, 0, 0, 0.5, 0),
+                array(1, 0, 1, 0.5, 0),
+                array(1, 0, 0, 0.5, 1),
+
+                array(1, 1, 1, 0.5, 0),
+                array(1, 1, 0, 0.5, 1),
+                array(1, 1, 1, 0.5, 1),
+                array(1, 1, 0, 0.5, 0),
+                array(1, 1, 1, 0.5, 0),
+                array(1, 1, 0, 0.5, 1),
+                array(1, 1, 1, 0.5, 1),
+                array(1, 1, 0, 0.5, 0),
+
+                array(1, 0, 1, 0.5, 0),
+                array(1, 0, 0, 0.5, 1),
+                array(1, 0, 1, 0.5, 1),
+                array(1, 0, 0, 0.5, 0),
+                array(1, 0, 1, 0.5, 0),
+                array(1, 0, 0, 0.5, 1),
+                array(1, 0, 1, 0.5, 1),
+                array(1, 0, 0, 0.5, 0),
 
         };
     }
@@ -148,7 +222,78 @@ public class TULIP {
 
                 // 0
                 array(0),
-                array(0)
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+
+                // 1
+
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1)
         };
     }
 
