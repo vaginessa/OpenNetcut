@@ -2,17 +2,12 @@ package com.ardikars.opennetcut.app;
 
 import com.ardikars.jxnet.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class StaticField {
 
     public static LoggerHandler<LoggerStatus, String> LOGGER;
 
     public static String SOURCE;
     public static Pcap PCAP;
-    public static Pcap PCAP_IDS;
-    public static Pcap PCAP_ICMP_TRAP;
     public static int SNAPLEN = 1500;
     public static int PROMISC = 1;
     public static int TIMEOUT = 300;
@@ -26,10 +21,10 @@ public class StaticField {
     public static MacAddress GATEWAY_MAC_ADDRESS;
     public static MacAddress CURRENT_MAC_ADDRESS;
 
-    public static Inet4Address GATEWAY_INET4ADDRESS = new Inet4Address();
-    public static Inet4Address CURRENT_INET4ADDRESS = new Inet4Address();
-    public static Inet4Address CURRENT_NETWORK_ADDRESS = new Inet4Address();
-    public static Inet4Address CURRENT_NETMASK_ADDRESS = new Inet4Address();
+    public static Inet4Address GATEWAY_INET4ADDRESS = Inet4Address.ZERO;
+    public static Inet4Address CURRENT_INET4ADDRESS = Inet4Address.ZERO;
+    public static Inet4Address CURRENT_NETWORK_ADDRESS = Inet4Address.ZERO;
+    public static Inet4Address CURRENT_NETMASK_ADDRESS = Inet4Address.ZERO;
 
     public static String RANDOM_STRING;
 

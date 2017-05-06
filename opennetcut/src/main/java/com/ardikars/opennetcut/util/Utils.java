@@ -33,22 +33,32 @@ import java.util.*;
 
 public class Utils {
 
-    public static Inet4Address getCurrentInet4Address(String source) throws JxnetException {
+    public static void getAddresses() {
         List<PcapIf> pcapIf = new ArrayList<PcapIf>();
         if (PcapFindAllDevs(pcapIf, StaticField.ERRBUF) != 0) {
-            throw new JxnetException("Failed to get Ip Address from " + source);
+            throw new JxnetException("Failed to get Ip Address from " + StaticField.SOURCE);
         }
         for (PcapIf If : pcapIf) {
-            if (If.getName().equals(source)) {
+            if (If.getName().equals(StaticField.SOURCE)) {
                 for (PcapAddr addrs : If.getAddresses()) {
                     if (addrs.getAddr().getSaFamily() == SockAddr.Family.AF_INET) {
-                        return Inet4Address.valueOf(addrs.getAddr().getData());
+                        StaticField.CURRENT_INET4ADDRESS = Inet4Address.valueOf(addrs.getAddr().getData());
+                        StaticField.CURRENT_NETMASK_ADDRESS = Inet4Address.valueOf(addrs.getNetmask().getData());
+                        StaticField.CURRENT_NETWORK_ADDRESS = Inet4Address.valueOf(
+                                StaticField.CURRENT_INET4ADDRESS.toInt() & StaticField.CURRENT_NETMASK_ADDRESS.toInt()
+                        );
+                        StaticField.CURRENT_MAC_ADDRESS = MacAddress.fromNicName(StaticField.SOURCE);
+                        if (StaticField.CURRENT_MAC_ADDRESS == null) {
+                            if (StaticField.LOGGER != null) {
+                                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Mac Address.");
+                            }
+                        }
+                        break;
                     }
                 }
-                break;
             }
         }
-        return null;
+
     }
 
     public static MacAddress getGwAddrFromArp() {
@@ -157,20 +167,6 @@ public class Utils {
             Jxnet.PcapSetImmediateMode(StaticField.PCAP, 1);
             Jxnet.PcapSetTimeout(StaticField.PCAP, to_ms);
             Jxnet.PcapActivate(StaticField.PCAP);
-
-            StaticField.PCAP_IDS = Jxnet.PcapCreate(StaticField.SOURCE, StaticField.ERRBUF);
-            Jxnet.PcapSetSnaplen(StaticField.PCAP_IDS, snaplen);
-            Jxnet.PcapSetPromisc(StaticField.PCAP_IDS, promisc);
-            Jxnet.PcapSetImmediateMode(StaticField.PCAP_IDS, 1);
-            Jxnet.PcapSetTimeout(StaticField.PCAP_IDS, to_ms);
-            Jxnet.PcapActivate(StaticField.PCAP_IDS);
-
-            StaticField.PCAP_ICMP_TRAP = Jxnet.PcapCreate(StaticField.SOURCE, StaticField.ERRBUF);
-            Jxnet.PcapSetSnaplen(StaticField.PCAP_ICMP_TRAP, snaplen);
-            Jxnet.PcapSetPromisc(StaticField.PCAP_ICMP_TRAP, promisc);
-            Jxnet.PcapSetImmediateMode(StaticField.PCAP_ICMP_TRAP, 1);
-            Jxnet.PcapSetTimeout(StaticField.PCAP_ICMP_TRAP, to_ms);
-            Jxnet.PcapActivate(StaticField.PCAP_ICMP_TRAP);
         }
     }
 
@@ -181,56 +177,24 @@ public class Utils {
         StaticField.PROMISC = promisc;
         StaticField.TIMEOUT = to_ms;
 
-        if (PcapLookupNet(StaticField.SOURCE, StaticField.CURRENT_NETWORK_ADDRESS,
-                StaticField.CURRENT_NETMASK_ADDRESS, StaticField.ERRBUF) < 0) {
-            if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
-            }
-        }
+        getAddresses();
 
         activate(snaplen, promisc, to_ms);
-
-        if (StaticField.PCAP == null || StaticField.PCAP_IDS == null || StaticField.PCAP_ICMP_TRAP == null) {
-            if (StaticField.LOGGER != null)
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
-        }
 
         if ((short) PcapDataLink(StaticField.PCAP) != DataLinkType.EN10MB.getValue()) {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
             }
             PcapClose(StaticField.PCAP);
-            PcapClose(StaticField.PCAP_IDS);
-            PcapClose(StaticField.PCAP_ICMP_TRAP);
         } else {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
         }
 
-        StaticField.CURRENT_INET4ADDRESS = getCurrentInet4Address(StaticField.SOURCE);
-        if (StaticField.CURRENT_INET4ADDRESS == null) {
-            if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current IP Address.");
-            }
-        }
-
-        StaticField.CURRENT_MAC_ADDRESS = AddrUtils.getHardwareAddress(StaticField.SOURCE);
-        if (StaticField.CURRENT_MAC_ADDRESS == null) {
-            if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Mac Address.");
-            }
-        }
 
         StaticField.GATEWAY_INET4ADDRESS = AddrUtils.getGatewayAddress(StaticField.SOURCE);
         if (StaticField.GATEWAY_INET4ADDRESS == null) {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway IP Address.");
-            }
-        }
-
-        if (StaticField.CURRENT_INET4ADDRESS.equals(Inet4Address.valueOf("127.0.0.1")) ||
-                StaticField.CURRENT_INET4ADDRESS.equals(Inet4Address.valueOf("255.0.0.0"))) {
-            if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is loopback interface.");
             }
         }
 
@@ -240,8 +204,6 @@ public class Utils {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
             }
         }
-
-        System.out.println("Gateway hw addr: " + StaticField.GATEWAY_MAC_ADDRESS);
 
         //StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
     }
@@ -275,15 +237,5 @@ public class Utils {
         PacketHelper.loop(pcap, -1, handler, null);
         PcapClose(pcap);
     }
-
-
-    public static byte BYTE(int b) {
-        return (byte)(b & 0xff);
-    }
-
-    public static short SHORT(int s) {
-        return (short)(s & 0xffff);
-    }
-
 
 }

