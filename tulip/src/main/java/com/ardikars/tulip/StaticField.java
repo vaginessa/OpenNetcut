@@ -25,8 +25,8 @@ public class StaticField {
     public static MacAddress CURRENT_MAC_ADDRESS;
     public static Inet4Address CURRENT_INET4_ADDRESS;
     public static Inet4Address CURRENT_GATEWAY_ADDRESS;
-    public static Inet4Address CURRENT_NETWORK_ADDRESS = new Inet4Address();
-    public static Inet4Address CURRENT_NETMASK_ADDRESS = new Inet4Address();
+    public static Inet4Address CURRENT_NETWORK_ADDRESS = Inet4Address.ZERO;
+    public static Inet4Address CURRENT_NETMASK_ADDRESS = Inet4Address.ZERO;
     public static Map<Inet4Address, MacAddress> ARP_CACHE = new HashMap<Inet4Address, MacAddress>();
     public static Map<Inet4Address, Long> EPOCH_TIME = new HashMap<Inet4Address, Long>();
 
@@ -67,7 +67,7 @@ public class StaticField {
             throw new Exception("Unable to get current mac address.");
         }
 
-        if (AddrUtils.LookupNet(StaticField.source, StaticField.CURRENT_NETWORK_ADDRESS,
+        if (Jxnet.PcapLookupNet(StaticField.source, StaticField.CURRENT_NETWORK_ADDRESS,
                 StaticField.CURRENT_NETMASK_ADDRESS, errbuf) != 0) {
             throw new Exception("Unable to get current netmask and network address: " + errbuf.toString());
         }

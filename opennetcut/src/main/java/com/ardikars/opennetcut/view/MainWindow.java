@@ -20,12 +20,14 @@ package com.ardikars.opennetcut.view;
 import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.exception.*;
 import com.ardikars.jxnet.packet.arp.ARPOperationCode;
+import com.ardikars.jxnet.util.FormatUtils;
 import com.ardikars.opennetcut.app.*;
 import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.arp.ARP;
 import com.ardikars.opennetcut.util.Utils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,8 +82,8 @@ public class MainWindow extends javax.swing.JFrame {
     public void initMyComponents() {
         TxtNicName.setText(StaticField.SOURCE);
         TxtHwAddr.setText(StaticField.CURRENT_MAC_ADDRESS.toString());
-        TxtIpAddr.setText(StaticField.CURRENT_INET4ADDRESS.toString());
-        TxtGwAddr.setText(StaticField.GATEWAY_INET4ADDRESS.toString());
+        TxtGwIpAddr.setText(StaticField.GATEWAY_INET4ADDRESS.toString());
+        TxtGwHwAddr.setText(StaticField.GATEWAY_MAC_ADDRESS.toString());
     }
 
     private void initComponents() {
@@ -124,10 +126,10 @@ public class MainWindow extends javax.swing.JFrame {
         _filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
         _HelpIcon = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        TxtIpAddr = new javax.swing.JTextField();
-        TxtGwAddr = new javax.swing.JTextField();
-        TxtGwIpAddr = new javax.swing.JLabel();
-        TxtGwHwAddr = new javax.swing.JLabel();
+        TxtGwIpAddr = new javax.swing.JTextField();
+        TxtGwHwAddr = new javax.swing.JTextField();
+        LblGwIpAddr = new javax.swing.JLabel();
+        LblGwHwAddr = new javax.swing.JLabel();
         _MenuBar = new javax.swing.JMenuBar();
         _FileMenu = new javax.swing.JMenu();
         _OpenMenu = new javax.swing.JMenuItem();
@@ -135,10 +137,10 @@ public class MainWindow extends javax.swing.JFrame {
         _ExitMenu = new javax.swing.JMenuItem();
         _EditMenu = new javax.swing.JMenu();
         _NICMenu = new javax.swing.JMenuItem();
-        _PluginsMenu = new javax.swing.JMenu();
+        /*_PluginsMenu = new javax.swing.JMenu();
         _DNSSpoofPluginMenu = new javax.swing.JCheckBoxMenuItem();
         _SSLSniffPluginMenu = new javax.swing.JCheckBoxMenuItem();
-        _NDPSupport = new javax.swing.JCheckBoxMenuItem();
+        _NDPSupport = new javax.swing.JCheckBoxMenuItem();*/
         _HelpMenu = new javax.swing.JMenu();
         _UpdateMenu1 = new javax.swing.JMenuItem();
         _UpdateMenu = new javax.swing.JMenuItem();
@@ -401,11 +403,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Network Information"));
 
-        TxtIpAddr.setEditable(false);
+        LblGwIpAddr.setText("Gateway IP");
 
-        TxtGwIpAddr.setText("Gateway IP");
-
-        TxtGwHwAddr.setText("Gateway MAC");
+        LblGwHwAddr.setText("Gateway MAC");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -414,12 +414,12 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TxtGwHwAddr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(TxtGwIpAddr, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                    .addComponent(LblGwHwAddr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(LblGwIpAddr, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TxtIpAddr)
-                    .addComponent(TxtGwAddr))
+                    .addComponent(TxtGwIpAddr)
+                    .addComponent(TxtGwHwAddr))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -428,13 +428,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(TxtIpAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TxtGwIpAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(TxtGwIpAddr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(LblGwIpAddr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TxtGwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TxtGwHwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TxtGwHwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LblGwHwAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -485,7 +485,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         _MenuBar.add(_EditMenu);
 
-        _PluginsMenu.setText("Plugins");
+        /*_PluginsMenu.setText("Plugins");
 
         _DNSSpoofPluginMenu.setSelected(true);
         _DNSSpoofPluginMenu.setText("DNSSpoof");
@@ -499,7 +499,7 @@ public class MainWindow extends javax.swing.JFrame {
         _NDPSupport.setText("NDPSupport");
         _PluginsMenu.add(_NDPSupport);
 
-        _MenuBar.add(_PluginsMenu);
+        _MenuBar.add(_PluginsMenu);*/
 
         _HelpMenu.setText("Help");
 
@@ -648,7 +648,7 @@ public class MainWindow extends javax.swing.JFrame {
         target.clear();
         for (int i=0; i<rowCount; i++) {
             if (TblScan.getValueAt(i, 1).equals(Boolean.TRUE) && 
-                    !TblScan.getValueAt(i, 2).toString().equals(TxtGwAddr.getText())) {
+                    !TblScan.getValueAt(i, 2).toString().equals(TxtGwHwAddr.getText())) {
                 if (target.containsKey(TblScan.getValueAt(i, 2).toString())) {
                     continue;
                 } else {
@@ -729,10 +729,11 @@ public class MainWindow extends javax.swing.JFrame {
     private List<NetworkSpoofer> nss = new ArrayList<NetworkSpoofer>();
     
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {
+        Inet4Address gwIp = Inet4Address.valueOf(TxtGwIpAddr.getText());
+        MacAddress gwHw = MacAddress.valueOf(TxtGwHwAddr.getText());
         if (_btnCut.getText().equals("Cut")) {
             nss.clear();
-            String gw = TxtGwAddr.getText();
-            if(!InetAddress.isValidAddress(gw)) {
+            if(!InetAddress.isValidAddress(TxtGwIpAddr.getText())) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
                 return;
             }
@@ -743,11 +744,11 @@ public class MainWindow extends javax.swing.JFrame {
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             Utils.randomMacAddress(), 
-                            Inet4Address.valueOf(gw),
+                            gwIp,
                             1800));
                     nss.add(new NetworkSpoofer(
-                            StaticField.GATEWAY_MAC_ADDRESS,
-                            Inet4Address.valueOf(gw), 
+                            gwHw,
+                            gwIp,
                             Utils.randomMacAddress(), 
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
                             1800));
@@ -763,6 +764,27 @@ public class MainWindow extends javax.swing.JFrame {
             for (NetworkSpoofer ns : nss) {
                 ns.stopThread();
             }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            byte[] toGw = null;
+            byte[] toVic = null;
+            for (int i=0; i<TblTarget.getRowCount(); i++) {
+                if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
+                    MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
+                    toGw = PacketBuilder.arpBuilder(gwHw, ARPOperationCode.ARP_REPLY,
+                            victimMac, Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), gwHw, gwIp)
+                            .toBytes();
+                    toVic = PacketBuilder.arpBuilder(victimMac, ARPOperationCode.ARP_REPLY,
+                            gwHw, gwIp, victimMac, Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()))
+                            .toBytes();
+
+                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
+                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
+                }
+            }
             statusTargetButton(true);
             _btnMITM.setEnabled(true);
             _btnCut.setText("Cut");
@@ -771,15 +793,21 @@ public class MainWindow extends javax.swing.JFrame {
 
     private List<NetworkSpoofer> nssMITM = new ArrayList<NetworkSpoofer>();
     private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {
+        Inet4Address gwIp = Inet4Address.valueOf(TxtGwIpAddr.getText());
+        MacAddress gwHw = MacAddress.valueOf(TxtGwHwAddr.getText());
         if (_btnMITM.getText().equals("MITM")) {
             nssMITM.clear();
+            if(!InetAddress.isValidAddress(TxtGwIpAddr.getText())) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
+                return;
+            }
             for (int i=0; i<TblTarget.getRowCount(); i++) {
                 if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
                     MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
                     //GW
                     nssMITM.add(new NetworkSpoofer(
-                            StaticField.GATEWAY_MAC_ADDRESS,
-                            StaticField.GATEWAY_INET4ADDRESS,
+                            gwHw,
+                            gwIp,
                             StaticField.CURRENT_MAC_ADDRESS,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
                             1800));
@@ -788,7 +816,7 @@ public class MainWindow extends javax.swing.JFrame {
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             StaticField.CURRENT_MAC_ADDRESS,
-                            StaticField.GATEWAY_INET4ADDRESS,
+                            gwIp,
                             1800));
                 }
             }
@@ -801,6 +829,27 @@ public class MainWindow extends javax.swing.JFrame {
         } else {
             for (NetworkSpoofer ns : nssMITM) {
                 ns.stopThread();
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            byte[] toGw = null;
+            byte[] toVic = null;
+            for (int i=0; i<TblTarget.getRowCount(); i++) {
+                if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
+                    MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
+                    toGw = PacketBuilder.arpBuilder(gwHw, ARPOperationCode.ARP_REPLY,
+                            victimMac, Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), gwHw, gwIp)
+                            .toBytes();
+                    toVic = PacketBuilder.arpBuilder(victimMac, ARPOperationCode.ARP_REPLY,
+                            gwHw, gwIp, victimMac, Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()))
+                            .toBytes();
+
+                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
+                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
+                }
             }
             statusTargetButton(true);
             _btnCut.setEnabled(true);
@@ -921,12 +970,12 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel ScanPanel;
     private javax.swing.JTable TblScan;
     private javax.swing.JTable TblTarget;
-    private javax.swing.JTextField TxtGwAddr;
+    private javax.swing.JTextField TxtGwHwAddr;
     private javax.swing.JTextField TxtHwAddr;
-    private javax.swing.JTextField TxtIpAddr;
+    private javax.swing.JTextField TxtGwIpAddr;
     private javax.swing.JTextField TxtNicName;
     private javax.swing.JMenuItem _AboutMenu;
-    private javax.swing.JCheckBoxMenuItem _DNSSpoofPluginMenu;
+    //private javax.swing.JCheckBoxMenuItem _DNSSpoofPluginMenu;
     private javax.swing.JMenu _EditMenu;
     private javax.swing.JMenuItem _ExitMenu;
     private javax.swing.JMenu _FileMenu;
@@ -935,12 +984,12 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel _LogoPanel;
     private javax.swing.JScrollPane _LogsSP;
     private javax.swing.JMenuBar _MenuBar;
-    private javax.swing.JCheckBoxMenuItem _NDPSupport;
+    //private javax.swing.JCheckBoxMenuItem _NDPSupport;
     private javax.swing.JMenuItem _NICMenu;
     private javax.swing.JLabel _OpenIcon;
     private javax.swing.JMenuItem _OpenMenu;
-    private javax.swing.JMenu _PluginsMenu;
-    private javax.swing.JCheckBoxMenuItem _SSLSniffPluginMenu;
+    //private javax.swing.JMenu _PluginsMenu;
+    //private javax.swing.JCheckBoxMenuItem _SSLSniffPluginMenu;
     private javax.swing.JLabel _SaveIcon;
     private javax.swing.JMenuItem _SaveMenu;
     private javax.swing.JScrollPane _ScanSP;
@@ -972,8 +1021,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JProgressBar _progressBar;
     private javax.swing.JTextField _txtInputFind;
     private javax.swing.JTextArea _txt_logs;
-    private javax.swing.JLabel TxtGwIpAddr;
-    private javax.swing.JLabel TxtGwHwAddr;
+    private javax.swing.JLabel LblGwIpAddr;
+    private javax.swing.JLabel LblGwHwAddr;
     private javax.swing.JPanel jPanel1;
 
 }

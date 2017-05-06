@@ -6,6 +6,7 @@ import com.ardikars.jxnet.packet.PacketHelper;
 import com.ardikars.jxnet.packet.ethernet.Ethernet;
 import com.ardikars.jxnet.packet.ethernet.ProtocolType;
 import com.ardikars.jxnet.packet.icmp.ICMP;
+import com.ardikars.jxnet.packet.icmp.ICMPv4;
 import com.ardikars.jxnet.packet.icmp.ICMPv4EchoReply;
 import com.ardikars.jxnet.packet.ip.IPProtocolType;
 import com.ardikars.jxnet.packet.ip.IPv4;
@@ -33,7 +34,7 @@ public class ICMPTrap extends Thread {
             return;
         }
 
-        Packet icmp = new ICMP()
+        Packet icmp = new ICMPv4()
                 .setTypeAndCode(ICMPv4EchoReply.ECHO_REPLY)
                 .setPayload(MacAddress.DUMMY.toBytes()).build();
         Packet ipv4 = new IPv4()
