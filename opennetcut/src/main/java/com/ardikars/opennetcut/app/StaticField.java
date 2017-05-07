@@ -1,10 +1,15 @@
 package com.ardikars.opennetcut.app;
 
 import com.ardikars.jxnet.*;
+import com.ardikars.opennetcut.OpenNetcut;
+
+import java.awt.*;
 
 public class StaticField {
 
     public static LoggerHandler<LoggerStatus, String> LOGGER;
+
+    public static final Image ICON_IMAGE = Toolkit.getDefaultToolkit().getImage(OpenNetcut.class.getResource("/com/ardikars/opennetcut/images/16x16/icon.png"));
 
     public static String SOURCE;
     public static Pcap PCAP;

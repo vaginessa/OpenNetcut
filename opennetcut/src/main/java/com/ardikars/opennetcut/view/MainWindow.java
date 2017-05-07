@@ -27,7 +27,9 @@ import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.arp.ARP;
 import com.ardikars.opennetcut.util.Utils;
 
-import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,7 +89,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void initComponents() {
-
+        setIconImage(StaticField.ICON_IMAGE);
         _TargetPanel = new javax.swing.JPanel();
         _TargetSP = new javax.swing.JScrollPane();
         TblTarget = new javax.swing.JTable();
@@ -383,14 +385,32 @@ public class MainWindow extends javax.swing.JFrame {
         _Toolbar.add(_filler1);
 
         _OpenIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/document-open.png"))); // NOI18N
+        _OpenIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                _OpenMenuActionPerformed(null);
+            }
+        });
         _Toolbar.add(_OpenIcon);
         _Toolbar.add(_filler2);
 
         _SaveIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/document-save.png"))); // NOI18N
+        _SaveIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                _SaveMenuActionPerformed(null);
+            }
+        });
         _Toolbar.add(_SaveIcon);
         _Toolbar.add(_filler4);
 
         _SettingIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/applications-system.png"))); // NOI18N
+        _SettingIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                _NICMenuActionPerformed(null);
+            }
+        });
         _Toolbar.add(_SettingIcon);
         _Toolbar.add(_filler5);
 
@@ -399,6 +419,12 @@ public class MainWindow extends javax.swing.JFrame {
         _Toolbar.add(_filler6);
 
         _HelpIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/help-browser.png"))); // NOI18N
+        _HelpIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                new About().setVisible(true);
+            }
+        });
         _Toolbar.add(_HelpIcon);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Network Information"));
@@ -859,7 +885,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void _SaveMenuActionPerformed(java.awt.event.ActionEvent evt) {
-        if (StaticField.RANDOM_STRING == null) {
+        if (StaticField.RANDOM_STRING == null || TblScan.getRowCount() <= 0) {
             return;
         }
         JFileChooser fileChooser = new JFileChooser();
@@ -887,6 +913,8 @@ public class MainWindow extends javax.swing.JFrame {
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             fileName = fileChooser.getSelectedFile().getAbsolutePath();
             if (fileName == null) return;
+        } else {
+            return;
         }
         
         DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
@@ -921,7 +949,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void _AboutMenuActionPerformed(java.awt.event.ActionEvent evt) {
-        JOptionPane.showMessageDialog(null, "Version: 0.0.1");
+        new About().setVisible(true);
     }
 
     private void _UpdateMenuActionPerformed(java.awt.event.ActionEvent evt) {

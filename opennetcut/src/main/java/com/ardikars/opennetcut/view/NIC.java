@@ -48,7 +48,7 @@ public class NIC extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        setIconImage(StaticField.ICON_IMAGE);
         NICPanel = new javax.swing.JPanel();
         NICSP = new javax.swing.JScrollPane();
         NICTable = new javax.swing.JTable();

@@ -17,6 +17,8 @@
 
 package com.ardikars.opennetcut.view;
 
+import com.ardikars.opennetcut.app.StaticField;
+
 public class About extends javax.swing.JFrame {
 
     public About() {
@@ -28,7 +30,7 @@ public class About extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        setIconImage(StaticField.ICON_IMAGE);
         AboutTP = new javax.swing.JTabbedPane();
         AboutPanel = new javax.swing.JPanel();
         lbl_app_version = new javax.swing.JLabel();
