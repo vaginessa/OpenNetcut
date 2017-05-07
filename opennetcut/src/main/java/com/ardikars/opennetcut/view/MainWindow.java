@@ -27,9 +27,10 @@ import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.arp.ARP;
 import com.ardikars.opennetcut.util.Utils;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -124,12 +125,32 @@ public class MainWindow extends javax.swing.JFrame {
         _filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
         _SettingIcon = new javax.swing.JLabel();
         _filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
-        _WifiIcon = new javax.swing.JLabel();
-        _filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
-        _HelpIcon = new javax.swing.JLabel();
+        //_WifiIcon = new javax.swing.JLabel();
+        //_filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10));
+        _AboutIcon = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         TxtGwIpAddr = new javax.swing.JTextField();
+        TxtGwIpAddr.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
+                    TxtGwIpAddr.setBackground(Color.WHITE);
+                } else {
+                    TxtGwIpAddr.setBackground(Color.RED);
+                }
+            }
+        });
         TxtGwHwAddr = new javax.swing.JTextField();
+        TxtGwHwAddr.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (MacAddress.isValid(TxtGwHwAddr.getText())) {
+                    TxtGwHwAddr.setBackground(Color.WHITE);
+                } else {
+                    TxtGwHwAddr.setBackground(Color.RED);
+                }
+            }
+        });
         LblGwIpAddr = new javax.swing.JLabel();
         LblGwHwAddr = new javax.swing.JLabel();
         _MenuBar = new javax.swing.JMenuBar();
@@ -414,18 +435,18 @@ public class MainWindow extends javax.swing.JFrame {
         _Toolbar.add(_SettingIcon);
         _Toolbar.add(_filler5);
 
-        _WifiIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/network-wireless.png"))); // NOI18N
+        /*_WifiIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/network-wireless.png"))); // NOI18N
         _Toolbar.add(_WifiIcon);
-        _Toolbar.add(_filler6);
+        _Toolbar.add(_filler6);*/
 
-        _HelpIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/help-browser.png"))); // NOI18N
-        _HelpIcon.addMouseListener(new MouseAdapter() {
+        _AboutIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/32x32/help-browser.png"))); // NOI18N
+        _AboutIcon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 new About().setVisible(true);
             }
         });
-        _Toolbar.add(_HelpIcon);
+        _Toolbar.add(_AboutIcon);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Network Information"));
 
@@ -755,14 +776,18 @@ public class MainWindow extends javax.swing.JFrame {
     private List<NetworkSpoofer> nss = new ArrayList<NetworkSpoofer>();
     
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
+            return;
+        }
+        if (!MacAddress.isValid(TxtGwHwAddr.getText())) {
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway Mac Address is not valid.");
+            return;
+        }
         Inet4Address gwIp = Inet4Address.valueOf(TxtGwIpAddr.getText());
         MacAddress gwHw = MacAddress.valueOf(TxtGwHwAddr.getText());
         if (_btnCut.getText().equals("Cut")) {
             nss.clear();
-            if(!InetAddress.isValidAddress(TxtGwIpAddr.getText())) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
-                return;
-            }
             for (int i=0; i<TblTarget.getRowCount(); i++) {
                 if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
                     MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
@@ -819,14 +844,18 @@ public class MainWindow extends javax.swing.JFrame {
 
     private List<NetworkSpoofer> nssMITM = new ArrayList<NetworkSpoofer>();
     private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {
+        if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
+            return;
+        }
+        if (!MacAddress.isValid(TxtGwHwAddr.getText())) {
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway Mac Address is not valid.");
+            return;
+        }
         Inet4Address gwIp = Inet4Address.valueOf(TxtGwIpAddr.getText());
         MacAddress gwHw = MacAddress.valueOf(TxtGwHwAddr.getText());
         if (_btnMITM.getText().equals("MITM")) {
             nssMITM.clear();
-            if(!InetAddress.isValidAddress(TxtGwIpAddr.getText())) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
-                return;
-            }
             for (int i=0; i<TblTarget.getRowCount(); i++) {
                 if (TblTarget.getValueAt(i, 1).equals(Boolean.TRUE)) {
                     MacAddress victimMac = target.get(TblTarget.getValueAt(i, 0).toString());
@@ -1007,7 +1036,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu _EditMenu;
     private javax.swing.JMenuItem _ExitMenu;
     private javax.swing.JMenu _FileMenu;
-    private javax.swing.JLabel _HelpIcon;
+    private javax.swing.JLabel _AboutIcon;
     private javax.swing.JMenu _HelpMenu;
     private javax.swing.JPanel _LogoPanel;
     private javax.swing.JScrollPane _LogsSP;
@@ -1027,7 +1056,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JToolBar _Toolbar;
     private javax.swing.JMenuItem _UpdateMenu;
     private javax.swing.JMenuItem _UpdateMenu1;
-    private javax.swing.JLabel _WifiIcon;
+    //private javax.swing.JLabel _WifiIcon;
     private javax.swing.JButton _btnAddTarget;
     private javax.swing.JButton _btnCut;
     private javax.swing.JButton _btnDeleteTarget;

@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d14099e4-3cc1-4dd0-8056-3fe4b20859c5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/jxnet-all-1.1.1-SHAPSHOT.jar" afterPath="$PROJECT_DIR$/libs/jxnet-all-1.1.1-SHAPSHOT.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/StaticField.java" afterPath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/StaticField.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/About.java" afterPath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/About.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java" afterPath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/NIC.java" afterPath="$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/NIC.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/ann/.gradle/" />
@@ -53,117 +51,21 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="NetworkSpoofer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/NetworkSpoofer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="53" column="76" lean-forward="false" selection-start-line="52" selection-start-column="8" selection-end-line="53" selection-end-column="76" />
-              <folding>
-                <element signature="n#!!doc" expanded="false" />
-                <element signature="imports" expanded="false" />
-                <element signature="e#2665#2666#0" expanded="false" />
-                <element signature="e#2697#2698#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf>
       <file leaf-file-name="MainWindow.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="887" column="78" lean-forward="false" selection-start-line="887" selection-start-column="78" selection-end-line="887" selection-end-column="78" />
+            <state relative-caret-position="371">
+              <caret line="784" column="19" lean-forward="false" selection-start-line="784" selection-start-column="19" selection-end-line="784" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1779#1799#0" expanded="true" />
-                <element signature="e#7128#7300#0" expanded="true" />
-                <element signature="e#7235#7236#0" expanded="false" />
-                <element signature="e#7289#7290#0" expanded="false" />
-                <element signature="e#7299#7300#0" expanded="true" />
-                <element signature="e#20617#20784#0" expanded="true" />
-                <element signature="e#20783#20784#0" expanded="true" />
-                <element signature="e#21035#21202#0" expanded="true" />
-                <element signature="e#21201#21202#0" expanded="true" />
-                <element signature="e#21465#21631#0" expanded="true" />
-                <element signature="e#21630#21631#0" expanded="true" />
-                <element signature="e#22100#22265#0" expanded="true" />
-                <element signature="e#22264#22265#0" expanded="true" />
-                <element signature="e#39159#39175#0" expanded="true" />
-                <element signature="e#42212#42228#0" expanded="true" />
-                <element signature="e#48084#48085#0" expanded="true" />
-                <element signature="e#48128#48129#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="About.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/About.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="32" column="43" lean-forward="false" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
-              <folding>
-                <element signature="n#!!doc" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NIC.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/NIC.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="50" column="43" lean-forward="false" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
-              <folding>
-                <element signature="n#!!doc" expanded="false" />
-                <element signature="imports" expanded="false" />
-                <element signature="e#2923#2924#0" expanded="false" />
-                <element signature="e#2977#2978#0" expanded="false" />
-                <element signature="e#3376#3377#0" expanded="false" />
-                <element signature="e#3433#3434#0" expanded="false" />
-                <element signature="e#4853#4854#0" expanded="false" />
-                <element signature="e#4915#4916#0" expanded="false" />
-                <element signature="e#5106#5107#0" expanded="false" />
-                <element signature="e#5164#5165#0" expanded="false" />
-                <element signature="e#5363#5364#0" expanded="false" />
-                <element signature="e#5425#5426#0" expanded="false" />
-                <element signature="e#5953#5954#0" expanded="false" />
-                <element signature="e#6024#6025#0" expanded="false" />
-                <element signature="e#14111#14112#0" expanded="false" />
-                <element signature="e#14155#14156#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/util/Utils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="231" column="0" lean-forward="false" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StaticField.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/StaticField.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PacketBuilder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/PacketBuilder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="32" column="48" lean-forward="false" selection-start-line="32" selection-start-column="48" selection-end-line="32" selection-end-column="48" />
-              <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="e#1793#1813#0" expanded="true" />
+                <element signature="e#6064#6428#0" expanded="true" />
+                <element signature="e#6427#6428#0" expanded="true" />
+                <element signature="e#6518#6873#0" expanded="true" />
+                <element signature="e#6872#6873#0" expanded="true" />
+                <element signature="e#39980#39996#0" expanded="true" />
+                <element signature="e#43216#43232#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -185,10 +87,11 @@
       <find>IP Address</find>
       <find>Plugins</find>
       <find>NetworkSpo</find>
-      <find>TxtGw</find>
       <find>about</find>
       <find>new Ni</find>
       <find>Save</find>
+      <find>TxtGw</find>
+      <find>TxtGwIpAddr.getText()</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -1113,10 +1016,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2" />
-    <option name="y" value="-23" />
-    <option name="width" value="1370" />
-    <option name="height" value="795" />
+    <option name="width" value="1364" />
+    <option name="height" value="741" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -1134,8 +1035,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1180,8 +1079,74 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="OpenNetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="OpenNetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="opennetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="opennetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="OpenNetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="OpenNetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="opennetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="opennetcut" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -1369,18 +1334,17 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-23" width="1370" height="795" extended-state="4" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1364" height="741" extended-state="4" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32866043" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2538941" sideWeight="0.5088235" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22670375" sideWeight="0.49117646" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22585669" sideWeight="0.49117646" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24450952" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24411765" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1397,6 +1361,10 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add action listener" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add action listener" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="1" />
@@ -1408,12 +1376,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="53" column="76" lean-forward="false" selection-start-line="52" selection-start-column="8" selection-end-line="53" selection-end-column="76" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#2665#2666#0" expanded="false" />
-            <element signature="e#2697#2698#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1421,9 +1383,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
           <caret line="32" column="43" lean-forward="false" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1472,9 +1431,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="32" column="48" lean-forward="false" selection-start-line="32" selection-start-column="48" selection-end-line="32" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1484,23 +1440,13 @@
           <caret line="907" column="0" lean-forward="false" selection-start-line="907" selection-start-column="0" selection-end-line="907" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1779#1799#0" expanded="true" />
-            <element signature="e#7128#7300#0" expanded="true" />
-            <element signature="e#7235#7236#0" expanded="false" />
-            <element signature="e#7289#7290#0" expanded="false" />
-            <element signature="e#7299#7300#0" expanded="true" />
-            <element signature="e#20617#20784#0" expanded="true" />
-            <element signature="e#20783#20784#0" expanded="true" />
-            <element signature="e#21035#21202#0" expanded="true" />
-            <element signature="e#21201#21202#0" expanded="true" />
-            <element signature="e#21465#21631#0" expanded="true" />
-            <element signature="e#21630#21631#0" expanded="true" />
-            <element signature="e#22100#22265#0" expanded="true" />
-            <element signature="e#22264#22265#0" expanded="true" />
-            <element signature="e#39159#39175#0" expanded="true" />
-            <element signature="e#42212#42228#0" expanded="true" />
-            <element signature="e#48084#48085#0" expanded="true" />
-            <element signature="e#48128#48129#0" expanded="true" />
+            <element signature="e#1793#1813#0" expanded="true" />
+            <element signature="e#6064#6428#0" expanded="true" />
+            <element signature="e#6427#6428#0" expanded="true" />
+            <element signature="e#6518#6873#0" expanded="true" />
+            <element signature="e#6872#6873#0" expanded="true" />
+            <element signature="e#39980#39996#0" expanded="true" />
+            <element signature="e#43216#43232#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1511,23 +1457,13 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1779#1799#0" expanded="true" />
-            <element signature="e#7128#7300#0" expanded="true" />
-            <element signature="e#7235#7236#0" expanded="false" />
-            <element signature="e#7289#7290#0" expanded="false" />
-            <element signature="e#7299#7300#0" expanded="true" />
-            <element signature="e#20617#20784#0" expanded="true" />
-            <element signature="e#20783#20784#0" expanded="true" />
-            <element signature="e#21035#21202#0" expanded="true" />
-            <element signature="e#21201#21202#0" expanded="true" />
-            <element signature="e#21465#21631#0" expanded="true" />
-            <element signature="e#21630#21631#0" expanded="true" />
-            <element signature="e#22100#22265#0" expanded="true" />
-            <element signature="e#22264#22265#0" expanded="true" />
-            <element signature="e#39159#39175#0" expanded="true" />
-            <element signature="e#42212#42228#0" expanded="true" />
-            <element signature="e#48084#48085#0" expanded="true" />
-            <element signature="e#48128#48129#0" expanded="true" />
+            <element signature="e#1793#1813#0" expanded="true" />
+            <element signature="e#6064#6428#0" expanded="true" />
+            <element signature="e#6427#6428#0" expanded="true" />
+            <element signature="e#6518#6873#0" expanded="true" />
+            <element signature="e#6872#6873#0" expanded="true" />
+            <element signature="e#39980#39996#0" expanded="true" />
+            <element signature="e#43216#43232#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1546,23 +1482,13 @@
           <caret line="617" column="41" lean-forward="false" selection-start-line="617" selection-start-column="41" selection-end-line="617" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1779#1799#0" expanded="true" />
-            <element signature="e#7128#7300#0" expanded="true" />
-            <element signature="e#7235#7236#0" expanded="false" />
-            <element signature="e#7289#7290#0" expanded="false" />
-            <element signature="e#7299#7300#0" expanded="true" />
-            <element signature="e#20617#20784#0" expanded="true" />
-            <element signature="e#20783#20784#0" expanded="true" />
-            <element signature="e#21035#21202#0" expanded="true" />
-            <element signature="e#21201#21202#0" expanded="true" />
-            <element signature="e#21465#21631#0" expanded="true" />
-            <element signature="e#21630#21631#0" expanded="true" />
-            <element signature="e#22100#22265#0" expanded="true" />
-            <element signature="e#22264#22265#0" expanded="true" />
-            <element signature="e#39159#39175#0" expanded="true" />
-            <element signature="e#42212#42228#0" expanded="true" />
-            <element signature="e#48084#48085#0" expanded="true" />
-            <element signature="e#48128#48129#0" expanded="true" />
+            <element signature="e#1793#1813#0" expanded="true" />
+            <element signature="e#6064#6428#0" expanded="true" />
+            <element signature="e#6427#6428#0" expanded="true" />
+            <element signature="e#6518#6873#0" expanded="true" />
+            <element signature="e#6872#6873#0" expanded="true" />
+            <element signature="e#39980#39996#0" expanded="true" />
+            <element signature="e#43216#43232#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1571,7 +1497,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="952">
           <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1601,9 +1526,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="31" column="13" lean-forward="false" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1618,7 +1540,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="130" column="26" lean-forward="false" selection-start-line="130" selection-start-column="26" selection-end-line="130" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1658,26 +1579,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/NetworkSpoofer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="53" column="76" lean-forward="false" selection-start-line="52" selection-start-column="8" selection-end-line="53" selection-end-column="76" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#2665#2666#0" expanded="false" />
-            <element signature="e#2697#2698#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/PacketBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="32" column="48" lean-forward="false" selection-start-line="32" selection-start-column="48" selection-end-line="32" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1689,19 +1594,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/util/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="231" column="0" lean-forward="false" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/app/NetworkSpoofer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="62">
+          <caret line="53" column="76" lean-forward="false" selection-start-line="52" selection-start-column="8" selection-end-line="53" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/About.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
+        <state relative-caret-position="17">
           <caret line="32" column="43" lean-forward="false" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/NIC.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
+        <state relative-caret-position="17">
           <caret line="50" column="43" lean-forward="false" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
           <folding>
             <element signature="n#!!doc" expanded="false" />
@@ -1724,37 +1641,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/util/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="231" column="0" lean-forward="false" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="887" column="78" lean-forward="false" selection-start-line="887" selection-start-column="78" selection-end-line="887" selection-end-column="78" />
+        <state relative-caret-position="371">
+          <caret line="784" column="19" lean-forward="false" selection-start-line="784" selection-start-column="19" selection-end-line="784" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1779#1799#0" expanded="true" />
-            <element signature="e#7128#7300#0" expanded="true" />
-            <element signature="e#7235#7236#0" expanded="false" />
-            <element signature="e#7289#7290#0" expanded="false" />
-            <element signature="e#7299#7300#0" expanded="true" />
-            <element signature="e#20617#20784#0" expanded="true" />
-            <element signature="e#20783#20784#0" expanded="true" />
-            <element signature="e#21035#21202#0" expanded="true" />
-            <element signature="e#21201#21202#0" expanded="true" />
-            <element signature="e#21465#21631#0" expanded="true" />
-            <element signature="e#21630#21631#0" expanded="true" />
-            <element signature="e#22100#22265#0" expanded="true" />
-            <element signature="e#22264#22265#0" expanded="true" />
-            <element signature="e#39159#39175#0" expanded="true" />
-            <element signature="e#42212#42228#0" expanded="true" />
-            <element signature="e#48084#48085#0" expanded="true" />
-            <element signature="e#48128#48129#0" expanded="true" />
+            <element signature="e#1793#1813#0" expanded="true" />
+            <element signature="e#6064#6428#0" expanded="true" />
+            <element signature="e#6427#6428#0" expanded="true" />
+            <element signature="e#6518#6873#0" expanded="true" />
+            <element signature="e#6872#6873#0" expanded="true" />
+            <element signature="e#39980#39996#0" expanded="true" />
+            <element signature="e#43216#43232#0" expanded="true" />
           </folding>
         </state>
       </provider>
