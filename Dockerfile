@@ -1,10 +1,23 @@
 
-FROM resin/rpi-raspbian:jessie-20160831
-RUN apt-get update && apt-get install git --no-install-recommends && rm -rf /var/cache/apt/archives/* 
-RUN cd /usr/local/src/ && \
-        git clone -b master git://github.com/ardikars/OpenNetcut.git
-WORKDIR /usr/local/src/OpenNetcut
-RUN ./gradlew build --info 2>&1 | tee build.log
-ENTRYPOINT ["/usr/bin/java", "/usr/local/src/OpenNetcut/lib/OpenNetcut-all-*.jar"]
-CMD ["eth0", "false"]
+FROM alpine:3.3
+
+RUN wget -c http://ardikars.com/mirrors/java/jre-8u131-linux-x64.tar.gz -O /tmp/jre.tar.gz
+
+RUN mkdir -p -m 755 /root/apps
+
+RUN tar -xzvf /tmp/jre.tar.gz -C /root/apps
+
+RUN mv /root/apps/jre1.8.0_131 /root/apps/jre
+
+RUN rm -rf /tmp/jre.tar.gz
+
+ENV JAVA_HOME /root/apps/jre
+
+RUN mkdir -p -m 755 /root/apps/opennetcut
+
+WORKDIR /root/apps/opennetcut
+
+RUN wget -c https://ardikars.com/downloads/opennetcut/opennetcut-latest.jar -O /root/apps/opennetcut/opennetcut.jar
+
+CMD ["/root/apps/jre/bin/java", "-jar", "/root/apps/opennetcut/opennetcut.jar"]
 
