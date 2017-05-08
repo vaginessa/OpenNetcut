@@ -144,7 +144,7 @@ public class MainWindow extends javax.swing.JFrame {
         TxtGwHwAddr.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if (MacAddress.isValid(TxtGwHwAddr.getText())) {
+                if (MacAddress.isValidAddress(TxtGwHwAddr.getText())) {
                     TxtGwHwAddr.setBackground(Color.WHITE);
                 } else {
                     TxtGwHwAddr.setBackground(Color.RED);
@@ -780,7 +780,7 @@ public class MainWindow extends javax.swing.JFrame {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
             return;
         }
-        if (!MacAddress.isValid(TxtGwHwAddr.getText())) {
+        if (!MacAddress.isValidAddress(TxtGwHwAddr.getText())) {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway Mac Address is not valid.");
             return;
         }
@@ -848,7 +848,7 @@ public class MainWindow extends javax.swing.JFrame {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
             return;
         }
-        if (!MacAddress.isValid(TxtGwHwAddr.getText())) {
+        if (!MacAddress.isValidAddress(TxtGwHwAddr.getText())) {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway Mac Address is not valid.");
             return;
         }
