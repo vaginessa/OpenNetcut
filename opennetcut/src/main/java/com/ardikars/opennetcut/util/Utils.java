@@ -47,6 +47,8 @@ public class Utils {
                         StaticField.CURRENT_NETWORK_ADDRESS = Inet4Address.valueOf(
                                 StaticField.CURRENT_INET4ADDRESS.toInt() & StaticField.CURRENT_NETMASK_ADDRESS.toInt()
                         );
+                        System.out.println(StaticField.CURRENT_NETWORK_ADDRESS);
+                        System.out.println(StaticField.CURRENT_NETMASK_ADDRESS);
                         StaticField.CURRENT_MAC_ADDRESS = MacAddress.fromNicName(StaticField.SOURCE);
                         if (StaticField.CURRENT_MAC_ADDRESS == null) {
                             if (StaticField.LOGGER != null) {
@@ -172,7 +174,7 @@ public class Utils {
 
     public static void initialize(String s, int snaplen, int promisc, int to_ms) throws JxnetException {
 
-        StaticField.SOURCE = (s == null) ? AddrUtils.LookupDev(StaticField.ERRBUF) : s;
+        StaticField.SOURCE = (s == null) ? Jxnet.PcapLookupDev(StaticField.ERRBUF) : s;
         StaticField.SNAPLEN = snaplen;
         StaticField.PROMISC = promisc;
         StaticField.TIMEOUT = to_ms;
@@ -191,7 +193,11 @@ public class Utils {
         }
 
 
-        StaticField.GATEWAY_INET4ADDRESS = AddrUtils.getGatewayAddress(StaticField.SOURCE);
+        try {
+            StaticField.GATEWAY_INET4ADDRESS = AddrUtils.GetGatewayAddress();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (StaticField.GATEWAY_INET4ADDRESS == null) {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway IP Address.");

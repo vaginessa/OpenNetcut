@@ -40,7 +40,7 @@ public class StaticField {
 
         StringBuilder errbuf = new StringBuilder();
 
-        String source = (src == null) ? AddrUtils.LookupDev(errbuf) : src;
+        String source = (src == null) ? Jxnet.PcapLookupDev(errbuf) : src;
         if (source == null) {
             throw new Exception("Unable to find network interface.");
         }
@@ -57,12 +57,12 @@ public class StaticField {
             throw new Exception("Unable to get current ip address.");
         }
 
-        StaticField.CURRENT_GATEWAY_ADDRESS = AddrUtils.getGatewayAddress(source);
+        StaticField.CURRENT_GATEWAY_ADDRESS = AddrUtils.GetGatewayAddress();
         if (StaticField.CURRENT_GATEWAY_ADDRESS == null) {
             throw new Exception("Unable to get current gateway address.");
         }
 
-        StaticField.CURRENT_MAC_ADDRESS = AddrUtils.getHardwareAddress(source);
+        StaticField.CURRENT_MAC_ADDRESS = MacAddress.valueOf(source);
         if (StaticField.CURRENT_MAC_ADDRESS == null) {
             throw new Exception("Unable to get current mac address.");
         }

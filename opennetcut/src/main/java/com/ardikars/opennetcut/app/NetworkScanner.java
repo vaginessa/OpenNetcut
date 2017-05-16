@@ -57,7 +57,7 @@ public class NetworkScanner extends Thread {
 
         String[] strips = su.getInfo().getAllAddresses();
         for (String ip : strips) {
-            ips.add(Inet4Address.valueOf(ip));
+            ips.add(Inet4Address.valueOf(ip.trim()));
         }
         this.handler = handler;
         this.index = 0;

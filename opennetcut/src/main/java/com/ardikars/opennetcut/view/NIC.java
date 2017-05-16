@@ -21,7 +21,6 @@ import static com.ardikars.jxnet.Jxnet.*;
 
 import com.ardikars.jxnet.*;
 import com.ardikars.jxnet.exception.JxnetException;
-import com.ardikars.jxnet.util.AddrUtils;
 import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.StaticField;
 import com.ardikars.opennetcut.util.Utils;
@@ -304,7 +303,7 @@ public class NIC extends javax.swing.JFrame {
                     list[3] = dev.getAddr().toString().toUpperCase();
                 }
             }
-            byte[] mac = AddrUtils.GetMACAddress(devs.getName());
+            byte[] mac = MacAddress.valueOf(devs.getName()).toBytes();
             if (mac == null) continue;
             MacAddress macAddr = MacAddress.valueOf(mac);
             list[4] = (macAddr == null ? "" : macAddr.toString());
