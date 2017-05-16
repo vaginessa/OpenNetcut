@@ -17,6 +17,8 @@
 
 package com.ardikars.tulip;
 
+import com.ardikars.ann.ActivationFunctions;
+import com.ardikars.ann.NeuralNetwork;
 import com.ardikars.jxnet.Inet4Address;
 import com.ardikars.jxnet.MacAddress;
 import com.ardikars.jxnet.packet.PacketHandler;
@@ -26,15 +28,22 @@ import com.ardikars.jxnet.packet.arp.ARPOperationCode;
 import com.ardikars.jxnet.packet.ethernet.Ethernet;
 import com.ardikars.jxnet.packet.ethernet.ProtocolType;
 
+import java.util.Map;
+
 import static com.ardikars.jxnet.Jxnet.*;
 
 public class IDS extends Thread {
 
-    private IDS() {
+    private volatile Map<String, String> hiddenMap;
+    private volatile Map<String, String> outputnMap;
+
+    private IDS(Map<String, String> hiddenMap, Map<String, String> outputMap) {
+        this.hiddenMap = hiddenMap;
+        this.outputnMap = outputMap;
     }
 
-    public static IDS newThread() {
-        return new IDS();
+    public static IDS newThread(Map<String, String> hiddenMap, Map<String, String> outputMap) {
+        return new IDS(hiddenMap, outputMap);
     }
 
     @Override
@@ -96,26 +105,27 @@ public class IDS extends Thread {
 
             Long epochTimeCache = StaticField.EPOCH_TIME.get(spa);
             if (epochTimeCache == null || epochTimeCache == 0) {
-                StaticField.EPOCH_TIME.put(spa, Long.valueOf(System.currentTimeMillis()));
+                StaticField.EPOCH_TIME.put(spa, pktHdr.getTvUsec());
             } else {
-                long time = (System.currentTimeMillis() - (long) epochTimeCache);
-                if (time > 2000) time = 0;
-                EPOCH_TIME = (( time / 5000.0));
-                StaticField.EPOCH_TIME.put(spa, Long.valueOf(System.currentTimeMillis()));
+                long time = (pktHdr.getTvUsec() - (long) epochTimeCache);
+                System.out.print("Time: " + time);
+                if (time > 500.0) time = 0;
+                EPOCH_TIME = (( time / 500.0));
+                System.out.println(", Delta time: " + EPOCH_TIME);
+                StaticField.EPOCH_TIME.put(spa, pktHdr.getTvUsec());
             }
 
-            System.out.println("=================================");
-            System.out.println("INVALID_PACKET          : " + INVALID_PACKET);
-            System.out.println("UNCONSISTENT_SHA        : " + UNCONSISTENT_SHA);
-            System.out.println("UNPADDED_ETHERNET_FRAME : " + UNPADDED_ETHERNET_FRAME);
-            System.out.println("UNKNOWN_OUI             : " + UNKNOWN_OUI);
-            System.out.println("EPOCH_TIME              : " + EPOCH_TIME);
-            System.out.println("=================================");
+            double[][] inputs = new double[][] {
+                    TULIP.array(INVALID_PACKET, UNCONSISTENT_SHA, UNPADDED_ETHERNET_FRAME, UNKNOWN_OUI, EPOCH_TIME)
+            };
 
-            if (StaticField.ICMP_HANDLER != null) {
-                ICMPTrap.run(sha).start();
+            if (NeuralNetwork.simuff(TULIP.generateInputs(), hiddenMap, outputnMap,
+                    ActivationFunctions.Type.SIGMOID, 5, 1).getOutput()[0] > 0.5) {
+                if (StaticField.ICMP_HANDLER != null) {
+                    ICMPTrap.run(sha).start();
+                }
+                System.out.println("detected");
             }
-
         };
 
         PacketHelper.loop(StaticField.ARP_HANDLER, -1, packetHandler, null);

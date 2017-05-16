@@ -62,7 +62,7 @@ public class StaticField {
             throw new Exception("Unable to get current gateway address.");
         }
 
-        StaticField.CURRENT_MAC_ADDRESS = MacAddress.valueOf(source);
+        StaticField.CURRENT_MAC_ADDRESS = MacAddress.fromNicName(source);
         if (StaticField.CURRENT_MAC_ADDRESS == null) {
             throw new Exception("Unable to get current mac address.");
         }

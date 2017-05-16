@@ -16,13 +16,36 @@ public class TULIP {
     }
 
     public static void run() {
+
+        Properties hiddenWeight = null;
+        Properties outputWeight = null;
+
+        FileReader hiddenReader;
+        FileReader outputReader;
         try {
-            StaticField.initialize(null, 1500, 1, 1, 2000, 1);
+            hiddenWeight = new Properties();
+            hiddenReader = new FileReader("hidden-weight.properties");
+            hiddenWeight.load(hiddenReader);
+            hiddenReader.close();
+
+            outputWeight = new Properties();
+            outputReader = new FileReader("output-weight.properties");
+            outputWeight.load(outputReader);
+            outputReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Map<String, String> hiddenMap = new HashMap<String, String>((Map) hiddenWeight);
+        Map<String, String> outputnMap = new HashMap<String, String>((Map) outputWeight);
+
+        try {
+            StaticField.initialize("eth0", 1500, 1, 1, 2000, 1);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
-        IDS ids = IDS.newThread();
+        IDS ids = IDS.newThread(hiddenMap, outputnMap);
         ids.start();
     }
 
@@ -114,24 +137,12 @@ public class TULIP {
 
                 // 0
                 array(0, 0, 0, 0.5, 0.5),
-                array(0, 0, 0, 0.5, 0.4),
-                array(0, 0, 0, 0.5, 0.3),
-                array(0, 0, 0, 0.5, 0.2),
-                array(0, 0, 0, 0.5, 0.1),
                 array(0, 0, 0, 0.5, 0),
 
                 array(0, 0, 1, 0.5, 0.5),
-                array(0, 0, 1, 0.5, 0.4),
-                array(0, 0, 1, 0.5, 0.3),
-                array(0, 0, 1, 0.5, 0.2),
-                array(0, 0, 1, 0.5, 0.1),
                 array(0, 0, 1, 0.5, 0),
 
                 array(0, 0, 0, 0, 0.5),
-                array(0, 0, 0, 0, 0.4),
-                array(0, 0, 0, 0, 0.3),
-                array(0, 0, 0, 0, 0.2),
-                array(0, 0, 0, 0, 0.1),
                 array(0, 0, 0, 0, 0),
 
                 // 1
@@ -190,6 +201,14 @@ public class TULIP {
                 array(1, 0, 1, 0.5, 1),
                 array(1, 0, 0, 0.5, 0),
 
+                array(0, 0, 0, 0, 0.5),
+                array(0, 0, 0, 0, 0.6),
+                array(0, 0, 0, 0, 0.7),
+                array(0, 0, 0, 0, 0.8),
+                array(0, 0, 0, 0, 0.9),
+                array(0, 0, 0, 0, 1.0),
+
+
         };
     }
 
@@ -221,20 +240,6 @@ public class TULIP {
                 array(1),
 
                 // 0
-                array(0),
-                array(0),
-                array(0),
-                array(0),
-                array(0),
-                array(0),
-
-                array(0),
-                array(0),
-                array(0),
-                array(0),
-                array(0),
-                array(0),
-
                 array(0),
                 array(0),
                 array(0),
@@ -293,7 +298,56 @@ public class TULIP {
                 array(1),
                 array(1),
                 array(1),
-                array(1)
+                array(1),
+
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+        };
+    }
+
+    public static double[][] inputs() {
+        return new double[][] {
+                array(0, 0, 0, 0, 0.5),
+                array(0, 0, 0, 0, 0.6),
+                array(0, 0, 0, 0, 0.7),
+                array(0, 0, 0, 0, 0.8),
+                array(0, 0, 0, 0, 0.9),
+                array(0, 0, 0, 0, 1.0),
+
+                array(1, 0, 0, 0, 0),
+                array(1, 1, 0, 0, 0),
+
+                array(0, 0, 0, 0.5, 0.5),
+                array(0, 0, 0, 0.5, 0),
+                array(0, 0, 1, 0.5, 0.5),
+                array(0, 0, 1, 0.5, 0),
+                array(0, 0, 0, 0, 0.5),
+                array(0, 0, 0, 0, 0),
+        };
+    }
+
+    public static double[][] outputs() {
+        return new double[][] {
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+                array(1),
+
+                array(1),
+                array(1),
+
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+                array(0),
+                array(0)
         };
     }
 
