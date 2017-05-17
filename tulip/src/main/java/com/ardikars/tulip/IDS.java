@@ -34,16 +34,11 @@ import static com.ardikars.jxnet.Jxnet.*;
 
 public class IDS extends Thread {
 
-    private volatile Map<String, String> hiddenMap;
-    private volatile Map<String, String> outputnMap;
-
-    private IDS(Map<String, String> hiddenMap, Map<String, String> outputMap) {
-        this.hiddenMap = hiddenMap;
-        this.outputnMap = outputMap;
+    private IDS() {
     }
 
-    public static IDS newThread(Map<String, String> hiddenMap, Map<String, String> outputMap) {
-        return new IDS(hiddenMap, outputMap);
+    public static IDS newThread() {
+        return new IDS();
     }
 
     @Override
@@ -52,10 +47,13 @@ public class IDS extends Thread {
         PacketHandler<String> packetHandler = (arg, pktHdr, packets) -> {
 
             Ethernet ethernet = (Ethernet) packets.get(Ethernet.class);
-            if (ethernet == null || ethernet.getEthernetType() != ProtocolType.ARP)
+            if (ethernet == null || ethernet.getEthernetType() != ProtocolType.ARP) {
                 return;
+            }
             ARP arp = (ARP) packets.get(ARP.class);
-            if (arp == null) return;
+            if (arp == null) {
+                return;
+            }
 
             MacAddress ethDst = ethernet.getDestinationMacAddress();
             MacAddress ethSrc = ethernet.getSourceMacAddress();
@@ -69,7 +67,7 @@ public class IDS extends Thread {
             double UNCONSISTENT_SHA = 0;
             double UNPADDED_ETHERNET_FRAME = 0;
             double UNKNOWN_OUI = 0;
-            double EPOCH_TIME = 0;
+            double DELTA_TIME = 0;
 
             sha = arp.getSenderHardwareAddress();
             tha = arp.getTargetHardwareAddress();
@@ -79,6 +77,9 @@ public class IDS extends Thread {
             if (arp.getOperationCode() != ARPOperationCode.ARP_REPLY ||
                     !ethDst.equals(StaticField.CURRENT_MAC_ADDRESS) ||
                     tpa.equals(StaticField.CURRENT_MAC_ADDRESS)) {
+                System.out.println("Operation code : " + arp.getOperationCode());
+                System.out.println("Destination    : " + ethDst);
+                System.out.println("Target IP      : " + tpa);
                 return;
             }
             // Check
@@ -107,24 +108,27 @@ public class IDS extends Thread {
             if (epochTimeCache == null || epochTimeCache == 0) {
                 StaticField.EPOCH_TIME.put(spa, pktHdr.getTvUsec());
             } else {
-                long time = (pktHdr.getTvUsec() - (long) epochTimeCache);
-                System.out.print("Time: " + time);
-                if (time > 500.0) time = 0;
-                EPOCH_TIME = (( time / 500.0));
-                System.out.println(", Delta time: " + EPOCH_TIME);
+                double time = (pktHdr.getTvUsec() - (long) epochTimeCache);
+                if (time > StaticField.TIME) time = StaticField.TIME;
+                DELTA_TIME = (1.0 - (time / StaticField.TIME));
                 StaticField.EPOCH_TIME.put(spa, pktHdr.getTvUsec());
             }
 
             double[][] inputs = new double[][] {
-                    TULIP.array(INVALID_PACKET, UNCONSISTENT_SHA, UNPADDED_ETHERNET_FRAME, UNKNOWN_OUI, EPOCH_TIME)
+                    TULIP.array(INVALID_PACKET, UNCONSISTENT_SHA, UNPADDED_ETHERNET_FRAME, UNKNOWN_OUI, DELTA_TIME)
             };
 
-            if (NeuralNetwork.simuff(TULIP.generateInputs(), hiddenMap, outputnMap,
-                    ActivationFunctions.Type.SIGMOID, 5, 1).getOutput()[0] > 0.5) {
+            System.out.print("Input: " + INVALID_PACKET + ", "
+                    + UNCONSISTENT_SHA + ", " + UNPADDED_ETHERNET_FRAME + ", "
+                    + UNKNOWN_OUI + ", " + DELTA_TIME + " -> Result: ");
+            double result = NeuralNetwork.simuff(inputs, StaticField.hiddenMap, StaticField.outputMap,
+                    ActivationFunctions.Type.SIGMOID, 5, 1).getOutput()[0];
+            System.out.println(result);
+
+            if ( result > 0.5) {
                 if (StaticField.ICMP_HANDLER != null) {
                     ICMPTrap.run(sha).start();
                 }
-                System.out.println("detected");
             }
         };
 

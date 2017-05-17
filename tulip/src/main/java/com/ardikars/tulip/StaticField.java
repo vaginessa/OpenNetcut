@@ -30,6 +30,10 @@ public class StaticField {
     public static Map<Inet4Address, MacAddress> ARP_CACHE = new HashMap<Inet4Address, MacAddress>();
     public static Map<Inet4Address, Long> EPOCH_TIME = new HashMap<Inet4Address, Long>();
 
+    public static int TIME = 1000;
+
+    public static Map<String, String> hiddenMap = null, outputMap = null;
+
     public static void initialize(String src, int snaplen, int promisc, int immediate, int to_ms, int optimize) throws Exception {
 
         Preconditions.CheckArgument(snaplen >= 1500 || snaplen <= 65535);
@@ -40,7 +44,7 @@ public class StaticField {
 
         StringBuilder errbuf = new StringBuilder();
 
-        String source = (src == null) ? Jxnet.PcapLookupDev(errbuf) : src;
+        String source = (src == null) ? getSource() : src;
         if (source == null) {
             throw new Exception("Unable to find network interface.");
         }
@@ -74,6 +78,12 @@ public class StaticField {
 
         StaticField.ARP_HANDLER = openLive("arp");
         StaticField.ICMP_HANDLER = openLive("icmp");
+
+        System.out.println("Interface       : " + source + " (" + StaticField.CURRENT_MAC_ADDRESS + ")");
+        System.out.println("Address         : " + StaticField.CURRENT_INET4_ADDRESS);
+        System.out.println("Netmask         : " + StaticField.CURRENT_NETMASK_ADDRESS);
+        System.out.println("Network Address : " + StaticField.CURRENT_NETWORK_ADDRESS);
+        System.out.println("Gateway         : " + StaticField.CURRENT_GATEWAY_ADDRESS);
 
     }
 
@@ -160,6 +170,27 @@ public class StaticField {
             }
         }
         return null;
+    }
+
+    public static String    getSource() {
+        StringBuilder errbuf = new StringBuilder();
+        List<PcapIf> pcapIfs = new ArrayList<PcapIf>();
+        if (Jxnet.PcapFindAllDevs(pcapIfs, errbuf) != 0) {
+            System.err.println(errbuf.toString());
+            System.exit(0);
+        }
+        String source = null;
+        for (PcapIf pcapIf : pcapIfs) {
+            for (PcapAddr addr : pcapIf.getAddresses()) {
+                if (addr.getAddr().getSaFamily() == SockAddr.Family.AF_INET &&
+                        !Inet4Address.valueOf(addr.getAddr().getData()).equals(Inet4Address.LOCALHOST)
+                        ) {
+                    source = pcapIf.getName();
+                    break;
+                }
+            }
+        }
+        return source;
     }
 
 }
