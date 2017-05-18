@@ -303,9 +303,8 @@ public class NIC extends javax.swing.JFrame {
                     list[3] = dev.getAddr().toString().toUpperCase();
                 }
             }
-            byte[] mac = MacAddress.valueOf(devs.getName()).toBytes();
-            if (mac == null) continue;
-            MacAddress macAddr = MacAddress.valueOf(mac);
+            MacAddress macAddr = MacAddress.fromNicName(devs.getName());
+            if (macAddr == null) continue;
             list[4] = (macAddr == null ? "" : macAddr.toString());
             list[5] = devs.getDescription();
             if(macAddr != null) {

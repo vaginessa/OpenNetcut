@@ -371,7 +371,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         _lblLogo.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
         _lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        _lblLogo.setText(" [ OpenNetcut ] ");
+        _lblLogo.setText(" [ TULIP ] ");
 
         _lblJxnet.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
         _lblJxnet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
