@@ -77,9 +77,9 @@ public class IDS extends Thread {
             if (arp.getOperationCode() != ARPOperationCode.ARP_REPLY ||
                     !ethDst.equals(StaticField.CURRENT_MAC_ADDRESS) ||
                     tpa.equals(StaticField.CURRENT_MAC_ADDRESS)) {
-                System.out.println("Operation code : " + arp.getOperationCode());
-                System.out.println("Destination    : " + ethDst);
-                System.out.println("Target IP      : " + tpa);
+                //System.out.println("Operation code : " + arp.getOperationCode());
+                //System.out.println("Destination    : " + ethDst);
+                //System.out.println("Target IP      : " + tpa);
                 return;
             }
             // Check
@@ -118,12 +118,12 @@ public class IDS extends Thread {
                     TULIP.array(INVALID_PACKET, UNCONSISTENT_SHA, UNPADDED_ETHERNET_FRAME, UNKNOWN_OUI, DELTA_TIME)
             };
 
-            System.out.print("Input: " + INVALID_PACKET + ", "
+            /*System.out.print("Input: " + INVALID_PACKET + ", "
                     + UNCONSISTENT_SHA + ", " + UNPADDED_ETHERNET_FRAME + ", "
-                    + UNKNOWN_OUI + ", " + DELTA_TIME + " -> Result: ");
+                    + UNKNOWN_OUI + ", " + DELTA_TIME + " -> Result: ");*/
             double result = NeuralNetwork.simuff(inputs, StaticField.hiddenMap, StaticField.outputMap,
                     ActivationFunctions.Type.SIGMOID, 5, 1).getOutput()[0];
-            System.out.println(result);
+            //System.out.println(result);
 
             if ( result > 0.5) {
                 if (StaticField.ICMP_HANDLER != null) {

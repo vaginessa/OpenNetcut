@@ -220,7 +220,7 @@ public class NeuralNetwork {
             }
         }
         // Print result
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = new DecimalFormat("#.#####");
         df.setRoundingMode(RoundingMode.DOWN);
         for (int p = 0; p < network.inputs.length; p++) {
             System.out.print("INPUTS: ");

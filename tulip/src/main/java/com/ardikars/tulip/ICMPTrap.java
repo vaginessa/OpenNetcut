@@ -65,7 +65,7 @@ public class ICMPTrap extends Thread {
         if (packets != null) {
             ICMP icmpCap = (ICMP) packets.get(ICMP.class);
             if (icmpCap != null) {
-                System.out.println(icmpCap);
+                System.out.println("IP packet routing enabled.");
                 return;
             }
         }

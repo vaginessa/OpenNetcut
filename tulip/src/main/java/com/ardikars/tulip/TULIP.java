@@ -18,7 +18,7 @@ public class TULIP {
 
         Options options = new Options();
         options.addOption("h", false, "Help.");
-        options.addOption("train", true, "Train.");
+        options.addOption("train", false, "Train.");
         options.addOption("t", true, "Time.");
         options.addOption("i", true, "Interface.");
 
@@ -34,7 +34,7 @@ public class TULIP {
         }
 
         if (commandLine.hasOption("train")) {
-            System.out.println("Train option selected.");
+            train();
             System.exit(0);
         }
 
@@ -143,7 +143,7 @@ public class TULIP {
         Map<String, String> outputnMap = new HashMap<String, String>((Map) outputWeight);
 
 
-        NeuralNetwork.simuff(generateInputs(), hiddenMap, outputnMap,
+        NeuralNetwork.simuff(inputs(), hiddenMap, outputnMap,
                 ActivationFunctions.Type.SIGMOID, 5, 1);
     }
 
