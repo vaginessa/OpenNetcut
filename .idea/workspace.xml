@@ -1,54 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d342855e-68be-4b81-9573-c84555b3956f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/ann/ann.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/ann/ann_main.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/ann/ann_test.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/oui/oui.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/oui/oui_main.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/oui/oui_test.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/tulip/tulip.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/tulip/tulip_main.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules/tulip/tulip_test.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/applications-system.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/document-open.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/document-save.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/edit-cut.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/go-next-rtl.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/go-next.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/help-browser.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/media-playback-start.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/media-playback-stop.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/network-idle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/process-stop.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/system-software-update.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/view-refresh.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/window-close.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/zoom-in.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/16x16/zoom-out.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/32x32/applications-system.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/32x32/document-open.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/32x32/document-save.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/32x32/help-browser.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/32x32/network-wireless.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/opennetcut/com/ardikars/opennetcut/images/32x32/system-software-install.png" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/cache.properties.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ann/src/main/java/com/ardikars/ann/NeuralNetwork.java" afterPath="$PROJECT_DIR$/ann/src/main/java/com/ardikars/ann/NeuralNetwork.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/settings.gradle" afterPath="$PROJECT_DIR$/settings.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tulip/src/main/java/com/ardikars/tulip/ICMPTrap.java" afterPath="$PROJECT_DIR$/tulip/src/main/java/com/ardikars/tulip/ICMPTrap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tulip/src/main/java/com/ardikars/tulip/IDS.java" afterPath="$PROJECT_DIR$/tulip/src/main/java/com/ardikars/tulip/IDS.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tulip/src/main/java/com/ardikars/tulip/TULIP.java" afterPath="$PROJECT_DIR$/tulip/src/main/java/com/ardikars/tulip/TULIP.java" />
-    </list>
+    <list default="true" id="d342855e-68be-4b81-9573-c84555b3956f" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/ann/.gradle/" />
     <ignored path="$PROJECT_DIR$/ann/build/" />
@@ -95,11 +48,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/util/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-403">
               <caret line="33" column="13" lean-forward="false" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainWindow.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-16298">
+              <caret line="44" column="13" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -1279,6 +1242,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="-3" width="1370" height="748" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -1288,7 +1252,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24670571" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24670571" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32937685" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1348,6 +1312,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-403">
           <caret line="33" column="13" lean-forward="false" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/opennetcut/src/main/java/com/ardikars/opennetcut/view/MainWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-16298">
+          <caret line="44" column="13" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
           <folding />
         </state>
       </provider>

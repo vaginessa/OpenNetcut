@@ -1,8 +1,10 @@
 /target
+/out
 nb-configuration.xml
 /build
 /ann/build
 /opennetcut/build
+/opennetcut/out
 /tulip/build
 /*.jar
 *.log
