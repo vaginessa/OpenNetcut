@@ -1,8 +1,8 @@
+/.idea
+/.gradle
 /target
-/out
-nb-configuration.xml
 /build
-/ann/build
+/out
 /opennetcut/build
 /opennetcut/out
 /tulip/build
