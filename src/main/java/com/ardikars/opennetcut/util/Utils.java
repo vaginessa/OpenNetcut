@@ -47,8 +47,6 @@ public class Utils {
                         StaticField.CURRENT_NETWORK_ADDRESS = Inet4Address.valueOf(
                                 StaticField.CURRENT_INET4ADDRESS.toInt() & StaticField.CURRENT_NETMASK_ADDRESS.toInt()
                         );
-                        System.out.println(StaticField.CURRENT_NETWORK_ADDRESS);
-                        System.out.println(StaticField.CURRENT_NETMASK_ADDRESS);
                         StaticField.CURRENT_MAC_ADDRESS = MacAddress.fromNicName(StaticField.SOURCE);
                         if (StaticField.CURRENT_MAC_ADDRESS == null) {
                             if (StaticField.LOGGER != null) {
@@ -81,8 +79,6 @@ public class Utils {
             if (packets == null) continue;
             ARP arp = (ARP) packets.get(ARP.class);
             if (arp == null) continue;
-            if (arp.getOperationCode() == ARPOperationCode.ARP_REPLY)
-                System.out.println(arp.getSenderProtocolAddress() + " == " + StaticField.GATEWAY_INET4ADDRESS);
             if (arp.getOperationCode() == ARPOperationCode.ARP_REPLY &&
                     arp.getSenderProtocolAddress().equals(StaticField.GATEWAY_INET4ADDRESS)) {
                 return arp.getSenderHardwareAddress();
@@ -174,10 +170,15 @@ public class Utils {
 
     public static void initialize(String s, int snaplen, int promisc, int to_ms) throws JxnetException {
 
-        StaticField.SOURCE = (s == null) ? Jxnet.PcapLookupDev(StaticField.ERRBUF) : s;
+        StaticField.SOURCE = (s == null) ? LookupDev() : s;
         StaticField.SNAPLEN = snaplen;
         StaticField.PROMISC = promisc;
         StaticField.TIMEOUT = to_ms;
+
+        if (StaticField.SOURCE == null) {
+            System.err.println("Failed to get device name.");
+            System.exit(1);
+        }
 
         getAddresses();
 
@@ -211,6 +212,15 @@ public class Utils {
             }
         }
 
+        System.out.println("Interface           : " + StaticField.SOURCE);
+        System.out.println("Address             : " + StaticField.CURRENT_INET4ADDRESS + "" +
+                " (" + StaticField.CURRENT_MAC_ADDRESS + ")");
+        System.out.println("Gateway             : " + StaticField.GATEWAY_INET4ADDRESS + "" +
+                " (" + StaticField.GATEWAY_MAC_ADDRESS + ") ");
+        System.out.println("Netmask             : " + StaticField.CURRENT_NETMASK_ADDRESS);
+        System.out.println("Network Address     : " + StaticField.CURRENT_NETWORK_ADDRESS);
+
+
         //StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
     }
 
@@ -242,6 +252,25 @@ public class Utils {
         }
         PacketHelper.loop(pcap, -1, handler, null);
         PcapClose(pcap);
+    }
+
+    public static String LookupDev() {
+        StringBuilder errbuf = new StringBuilder();
+        List<PcapIf> alldevsp = new ArrayList<>();
+        if (Jxnet.PcapFindAllDevs(alldevsp, errbuf) != 0) {
+            return null;
+        }
+        for (PcapIf dev : alldevsp) {
+            for (PcapAddr addr : dev.getAddresses()) {
+                if (dev.getName() != null &&
+                        addr.getAddr().getSaFamily() == SockAddr.Family.AF_INET &&
+                        !Inet4Address.valueOf(addr.getAddr().getData()).equals(Inet4Address.LOCALHOST) &&
+                        !Inet4Address.valueOf(addr.getBroadAddr().getData()).equals(InetAddress.valueOf("0.0.0.0"))) {
+                    return dev.getName();
+                }
+            }
+        }
+        return null;
     }
 
 }
