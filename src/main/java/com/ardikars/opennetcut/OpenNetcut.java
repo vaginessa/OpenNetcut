@@ -27,20 +27,3 @@ public class OpenNetcut {
     }
 
 }
-/**
- *       |  INVALID_PACKET  |  UNCONSISTENT_SHA  |  UNPADDED_ETHERNET_FRAME  |  UNKNOWN_OUI  |  EPOCH_TIME  |
- * array(1, 1, 1, 1)           = 1
- * array(1, 1, 1, 0)           = 1
- * array(1, 1, 0, 1)           = 1
- * array(1, 0, 1, 1)           = 1
- * array(0, 0, 0, 0)           = 0
- * array(0, 1, 0, 0)           = 1
- * array(0, 0, 1, 0)           = 0
- * array(0, 0, 0, 1)           = 0
- * array(1, 1, 0, 0)           = 1
- * array(1, 0, 0, 0)           = 1
- * array(0, 1, 1, 1)           = 1
- * array(0, 0, 1, 1)           = 0
- */
-
-

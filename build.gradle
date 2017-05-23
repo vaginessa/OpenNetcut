@@ -1,20 +1,54 @@
 
-allprojects {
+apply plugin: 'java'
 
-    apply plugin: 'java'
+group = 'com.ardikars.opennetcut'
+version = '1.1.1-SHAPSHOT'
 
-    group = 'com.ardikars.jxnet'
-    version = '1.1.1-SHAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-    repositories {
-        mavenCentral()
-    }
-
+repositories {
+    mavenCentral()
 }
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDirs 'src/main/java'
+            include 'com/ardikars/opennetcut/images/**/*'
+        }
+    }
+}
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'com.ardikars.opennetcut.OpenNetcut'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'OpenNetcut': 'OpenNetcut ${version}',
+                'OpenNetcut-Version': version,
+                'Main-Class': 'com.ardikars.opennetcut.OpenNetcut'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+artifacts {
+    archives fatJar
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'commons-net:commons-net:2.0'
+    compile 'junit:junit:4.12'
+}
+
