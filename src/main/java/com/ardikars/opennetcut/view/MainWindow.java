@@ -170,7 +170,7 @@ public class MainWindow extends javax.swing.JFrame {
         _AboutMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("OpenNetcut");
+        setTitle("TULIP");
         setMinimumSize(new java.awt.Dimension(1000, 600));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -178,7 +178,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        _TargetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Attack ]"));
+        _TargetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Serangan ]"));
 
         TblTarget.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -257,7 +257,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        ScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Network Client ]"));
+        ScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Pengguna Jaringan ]"));
 
         TblScan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -276,14 +276,14 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        _cbScanBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Auto", "IP Address" }));
+        _cbScanBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Otomatis", "Alamat IP" }));
         _cbScanBy.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 _cbScanByItemStateChanged(evt);
             }
         });
 
-        _lblFindBy.setText("Find target by");
+        _lblFindBy.setText("Cari berdasarkan");
 
         _txtInputFind.setEditable(false);
 
@@ -301,9 +301,9 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        _lblNICName.setText("NIC Name");
+        _lblNICName.setText("Nama Kartu Jaringan");
 
-        _lblHwAddr.setText("Hardware Address");
+        _lblHwAddr.setText("Alamat Fisik");
 
         TxtNicName.setEditable(false);
 
@@ -448,7 +448,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
         _Toolbar.add(_AboutIcon);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Network Information"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Infromasi Jaringan"));
 
         LblGwIpAddr.setText("Gateway IP");
 
@@ -485,11 +485,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        _FileMenu.setText("File");
+        _FileMenu.setText("Berkas");
 
         _OpenMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         _OpenMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-open.png"))); // NOI18N
-        _OpenMenu.setText("Open");
+        _OpenMenu.setText("Buka");
         _OpenMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _OpenMenuActionPerformed(evt);
@@ -499,7 +499,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         _SaveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         _SaveMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-save.png"))); // NOI18N
-        _SaveMenu.setText("Save");
+        _SaveMenu.setText("Simpan");
         _SaveMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _SaveMenuActionPerformed(evt);
@@ -508,7 +508,7 @@ public class MainWindow extends javax.swing.JFrame {
         _FileMenu.add(_SaveMenu);
 
         _ExitMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/window-close.png"))); // NOI18N
-        _ExitMenu.setText("Exit");
+        _ExitMenu.setText("Keluar");
         _ExitMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _ExitMenuActionPerformed(evt);
@@ -518,11 +518,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         _MenuBar.add(_FileMenu);
 
-        _EditMenu.setText("Edit");
+        _EditMenu.setText("Ubah");
 
         _NICMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         _NICMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/applications-system.png"))); // NOI18N
-        _NICMenu.setText("Network Interface Card");
+        _NICMenu.setText("Kartu Jaringan");
         _NICMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _NICMenuActionPerformed(evt);
@@ -548,10 +548,10 @@ public class MainWindow extends javax.swing.JFrame {
 
         _MenuBar.add(_PluginsMenu);*/
 
-        _HelpMenu.setText("Help");
+        _HelpMenu.setText("Tentang");
 
         _UpdateMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
-        _UpdateMenu1.setText("Check For Update");
+        _UpdateMenu1.setText("Perbaharui Aplikasi");
         _UpdateMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _UpdateMenu1ActionPerformed(evt);
@@ -560,7 +560,7 @@ public class MainWindow extends javax.swing.JFrame {
         _HelpMenu.add(_UpdateMenu1);
 
         _UpdateMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
-        _UpdateMenu.setText("Update OUI");
+        _UpdateMenu.setText("Perbaharui kamus data Mac Address");
         _UpdateMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _UpdateMenuActionPerformed(evt);
@@ -570,7 +570,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         _AboutMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         _AboutMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/help-browser.png"))); // NOI18N
-        _AboutMenu.setText("About");
+        _AboutMenu.setText("Tentang");
         _AboutMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _AboutMenuActionPerformed(evt);

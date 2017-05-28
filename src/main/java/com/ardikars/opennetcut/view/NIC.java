@@ -28,9 +28,12 @@ import com.ardikars.opennetcut.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 @SuppressWarnings("unchecked")
 public class NIC extends javax.swing.JFrame {
+
+	private boolean isConnected = false;
 
     public NIC() throws JxnetException {
         initComponents();
@@ -65,7 +68,7 @@ public class NIC extends javax.swing.JFrame {
         btn_refresh_devices = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Network Interface Card Configuration");
+        setTitle("Pengaturan Kartu Jaringan");
         setMinimumSize(new java.awt.Dimension(900, 350));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -108,13 +111,13 @@ public class NIC extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        cb_promisc.setText("Capture packets in promiscuous mode");
+        cb_promisc.setText("Mode Promiscuous");
 
-        jLabel2.setText("Limit packets");
+        jLabel2.setText("Ukuran paket yang dapat ditangkap");
 
-        jLabel4.setText("Buffer size");
+        jLabel4.setText("Waktu tunggu");
 
-        jLabel3.setText("Name");
+        jLabel3.setText("Nama");
 
         SpinnerBufferSize.setModel(new javax.swing.SpinnerNumberModel(300, 0, 1800, 1));
         SpinnerBufferSize.setValue(25);
@@ -127,14 +130,14 @@ public class NIC extends javax.swing.JFrame {
             }
         });
 
-        btn_ok.setText("Apply");
+        btn_ok.setText("Terapkan");
         btn_ok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_okActionPerformed(evt);
             }
         });
 
-        btn_cancel.setText("Close");
+        btn_cancel.setText("Keluar");
         btn_cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cancelActionPerformed(evt);
@@ -147,7 +150,7 @@ public class NIC extends javax.swing.JFrame {
         lbl_dev_name.setText("-");
 
         btn_refresh_devices.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/view-refresh.png"))); // NOI18N
-        btn_refresh_devices.setText("Refresh");
+        btn_refresh_devices.setText("Segarkan");
         btn_refresh_devices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_refresh_devicesActionPerformed(evt);
@@ -256,7 +259,11 @@ public class NIC extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_cancelActionPerformed
 
     private void btn_okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_okActionPerformed
-        StringBuilder errbuf = new StringBuilder();
+        if (!isConnected) {
+		JOptionPane.showMessageDialog(null, "Kartu jaringan tidak terkoneksi.");
+		return;
+	}
+	StringBuilder errbuf = new StringBuilder();
         String device = lbl_dev_name.getText();
         int newSnaplen = Integer.valueOf(lbl_snaplen.getText());
         int newPromisc = (cb_promisc.isSelected() ? 1 : 0);
@@ -266,13 +273,25 @@ public class NIC extends javax.swing.JFrame {
             Utils.compile(StaticField.PCAP, StaticField.BPF_PROGRAM, "arp");
             Utils.filter(StaticField.PCAP, StaticField.BPF_PROGRAM);
         } catch (JxnetException ex) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.toString());
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ PERINGATAN ] :: " + ex.toString());
         }
     }//GEN-LAST:event_btn_okActionPerformed
 
     private void NICTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NICTableMouseClicked
         int selectedRow = NICTable.getSelectedRow();
         lbl_dev_name.setText(NICTable.getValueAt(selectedRow, 1).toString());
+	Inet4Address addr = Inet4Address.ZERO;
+	try {
+		addr = Inet4Address.valueOf(NICTable.getValueAt(selectedRow, 2).toString());
+	} catch (Exception e) {
+		isConnected = false;
+		return;
+	}
+	if (addr.equals(Inet4Address.ZERO) || addr.equals(Inet4Address.LOCALHOST)) {
+		isConnected = false;
+	} else {
+		isConnected = true;
+	}
     }//GEN-LAST:event_NICTableMouseClicked
 
     private void refresh() {
@@ -288,8 +307,9 @@ public class NIC extends javax.swing.JFrame {
         
         List<PcapIf> alldevsp = new ArrayList<PcapIf>();
         if(PcapFindAllDevs(alldevsp, StaticField.ERRBUF) != 0) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.ERRBUF.toString());
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ PERINGATAN ] :: " + StaticField.ERRBUF.toString());
         }
+	
         String[] list = new String[6];
         int no = 1;
         for(PcapIf devs : alldevsp) {
@@ -303,7 +323,12 @@ public class NIC extends javax.swing.JFrame {
                     list[3] = dev.getAddr().toString().toUpperCase();
                 }
             }
-            MacAddress macAddr = MacAddress.fromNicName(devs.getName());
+	    MacAddress macAddr = null;
+	    try {
+            	macAddr = MacAddress.fromNicName(devs.getName());
+	    } catch (Exception e) {
+	    	continue;
+	    }
             if (macAddr == null) continue;
             list[4] = (macAddr == null ? "" : macAddr.toString());
             list[5] = devs.getDescription();
@@ -312,6 +337,35 @@ public class NIC extends javax.swing.JFrame {
                 no++;
             }
         }
+	/*
+	String[] list = new String[6];
+	int no = 1;
+	String tmp_dev = null, tmp_ip = null, tmp_mac = null, tmp_desc = null;
+	for (PcapIf devs : alldevsp) {
+		for (PcapAddr dev : devs.getAddresses()) {
+			if (dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET) {
+				tmp_dev = devs.getName();
+				tmp_ip = dev.getAddr().toString();
+				MacAddress macAddr = MacAddress.fromNicName(tmp_dev);
+				if (macAddr != null) {
+					tmp_mac = macAddr.toString();
+				}
+				tmp_desc = devs.getDescription();
+			} else {
+				tmp_dev = null;
+			}
+		}
+		if (tmp_dev != null) {
+			list[0] = String.valueOf(no);
+			list[1] = tmp_dev;
+			list[2] = tmp_ip;
+			list[3] = "";
+			list[4] = tmp_mac;
+			list[5] = tmp_desc;
+			dtm.addRow(list);
+			no ++;
+		}
+	}*/
         NICTable.setModel(dtm);
         NICTable.getColumnModel().getColumn(0).setMaxWidth(50);
         NICTable.getColumnModel().getColumn(0).setMinWidth(50);

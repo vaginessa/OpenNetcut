@@ -43,9 +43,14 @@ public class OUI implements Runnable {
         final String vendorId = MacAddr;
         String res = null;    
         try (Stream<String> lines = Files.lines(new File("oui.txt").toPath(), Charset.defaultCharset())) {
-            res = lines.filter(l -> l.startsWith(vendorId)).findFirst().orElse(null);
+            try {
+		res = lines.filter(l -> l.startsWith(vendorId))
+		    .findFirst().orElse("");
+	    } catch (Exception e) {
+	    	return "";
+	    }
         } catch (IOException ex) {
-            return res;
+            return "";
         }
 	if (res == null) return "";
         String[] vendorName = res.split("#");

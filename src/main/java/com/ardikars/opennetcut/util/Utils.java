@@ -205,21 +205,20 @@ public class Utils {
             }
         }
 
+	System.out.println("Interface           : " + StaticField.SOURCE);
+        System.out.println("Address             : " + StaticField.CURRENT_INET4ADDRESS + "" +
+                " (" + StaticField.CURRENT_MAC_ADDRESS + ")");
+        System.out.println("Netmask             : " + StaticField.CURRENT_NETMASK_ADDRESS);
+        System.out.println("Network Address     : " + StaticField.CURRENT_NETWORK_ADDRESS);
+	System.out.print("Gateway             : " + StaticField.GATEWAY_INET4ADDRESS);
+                
         StaticField.GATEWAY_MAC_ADDRESS = getGwAddrFromArp();
         if (StaticField.GATEWAY_MAC_ADDRESS == null) {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
             }
         }
-
-        System.out.println("Interface           : " + StaticField.SOURCE);
-        System.out.println("Address             : " + StaticField.CURRENT_INET4ADDRESS + "" +
-                " (" + StaticField.CURRENT_MAC_ADDRESS + ")");
-        System.out.println("Gateway             : " + StaticField.GATEWAY_INET4ADDRESS + "" +
-                " (" + StaticField.GATEWAY_MAC_ADDRESS + ") ");
-        System.out.println("Netmask             : " + StaticField.CURRENT_NETMASK_ADDRESS);
-        System.out.println("Network Address     : " + StaticField.CURRENT_NETWORK_ADDRESS);
-
+	System.out.println(" (" + StaticField.GATEWAY_MAC_ADDRESS + ")");
 
         //StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
     }
@@ -264,6 +263,7 @@ public class Utils {
             for (PcapAddr addr : dev.getAddresses()) {
                 if (dev.getName() != null &&
                         addr.getAddr().getSaFamily() == SockAddr.Family.AF_INET &&
+			!Inet4Address.valueOf(addr.getAddr().getData()).equals(Inet4Address.ZERO) &&
                         !Inet4Address.valueOf(addr.getAddr().getData()).equals(Inet4Address.LOCALHOST) &&
                         !Inet4Address.valueOf(addr.getBroadAddr().getData()).equals(InetAddress.valueOf("0.0.0.0"))) {
                     return dev.getName();
