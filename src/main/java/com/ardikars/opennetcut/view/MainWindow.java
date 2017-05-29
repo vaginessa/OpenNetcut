@@ -634,6 +634,13 @@ public class MainWindow extends javax.swing.JFrame {
             ARP arp = (ARP) packets.get(ARP.class);
             if (arp == null) return;
             if (arp.getOperationCode() == ARPOperationCode.ARP_REPLY) {
+		boolean isAvaible = false;
+		for (int i=0; i<TblScan.getRowCount(); i++) {
+			if (TblScan.getValueAt(i, 2).equals(arp.getSenderProtocolAddress().toString().toUpperCase())) {
+				isAvaible = true;
+			}
+		}
+		if (!isAvaible) {
                 DtmScanTable.addRow(new Object[] {
                     Integer.toString(no),
                     false,
@@ -642,6 +649,7 @@ public class MainWindow extends javax.swing.JFrame {
                     OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
                 });
                 setScanTableModel(DtmScanTable);
+		}
             }
         };
         if (scanOp) {
@@ -776,6 +784,10 @@ public class MainWindow extends javax.swing.JFrame {
     private List<NetworkSpoofer> nss = new ArrayList<NetworkSpoofer>();
     
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {
+		if (TblTarget.getRowCount() < 1) {
+			JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
+			return;
+		}
         if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
             return;
@@ -844,7 +856,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     private List<NetworkSpoofer> nssMITM = new ArrayList<NetworkSpoofer>();
     private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {
-        if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
+		if (TblTarget.getRowCount() < 1) {
+			JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
+			return;
+		}
+		if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
             return;
         }

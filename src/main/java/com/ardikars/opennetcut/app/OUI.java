@@ -39,6 +39,7 @@ public class OUI implements Runnable {
     
     
     public static String searchVendor(String MacAddr) {
+	if (MacAddr == null) return "";
         MacAddr = MacAddr.trim().substring(0, 8).toUpperCase();
         final String vendorId = MacAddr;
         String res = null;    
