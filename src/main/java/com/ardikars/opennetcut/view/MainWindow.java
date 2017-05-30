@@ -784,10 +784,11 @@ public class MainWindow extends javax.swing.JFrame {
     private List<NetworkSpoofer> nss = new ArrayList<NetworkSpoofer>();
     
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {
-		if (TblTarget.getRowCount() < 1) {
-			JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
-			return;
-		}
+	if (TblTarget.getRowCount() < 1) {
+		JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
+		return;
+	}
+	
         if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
             return;
@@ -817,9 +818,13 @@ public class MainWindow extends javax.swing.JFrame {
                             1800));
                 }
             }
+            if (nss.size() < 1) {
+                JOptionPane.showMessageDialog(null, "Pilih target terlebih dahulu.");
+		return;
+            }
             for (NetworkSpoofer ns : nss) {
                 ns.start();
-            }
+            } 
             statusTargetButton(false);
             _btnMITM.setEnabled(false);
             _btnCut.setText("Stop");
@@ -856,11 +861,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     private List<NetworkSpoofer> nssMITM = new ArrayList<NetworkSpoofer>();
     private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {
-		if (TblTarget.getRowCount() < 1) {
-			JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
-			return;
-		}
-		if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
+	if (TblTarget.getRowCount() < 1) {
+		JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
+		return;
+	}
+	if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
             return;
         }
@@ -891,13 +896,17 @@ public class MainWindow extends javax.swing.JFrame {
                             1800));
                 }
             }
+            if (nssMITM.size() < 1) {
+                JOptionPane.showMessageDialog(null, "Pilih target terlebih dahulu.");
+                return;
+            }
             for (NetworkSpoofer ns : nssMITM) {
                 ns.start();
             }
             statusTargetButton(false);
             _btnCut.setEnabled(false);
             _btnMITM.setText("Stop");
-        } else {
+        } else { 
             for (NetworkSpoofer ns : nssMITM) {
                 ns.stopThread();
             }
