@@ -176,7 +176,7 @@ public class Utils {
         StaticField.TIMEOUT = to_ms;
 
         if (StaticField.SOURCE == null) {
-            System.err.println("Failed to get device name.");
+            JOptionPane.showMessageDialog(null, "Failed to get device name.");
             System.exit(1);
         }
 
@@ -185,10 +185,12 @@ public class Utils {
         activate(snaplen, promisc, to_ms);
 
         if ((short) PcapDataLink(StaticField.PCAP) != DataLinkType.EN10MB.getValue()) {
-            if (StaticField.LOGGER != null) {
+            /*if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
-            }
+            }*/
+	    JOptionPane.showMessageDialog(null, StaticField.SOURCE + " is not Ethernet link type.");
             PcapClose(StaticField.PCAP);
+            System.exit(1);
         } else {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
         }
@@ -204,6 +206,12 @@ public class Utils {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway IP Address.");
             }
         }
+
+	if (StaticField.GATEWAY_INET4ADDRESS == null) {
+            JOptionPane.showMessageDialog(null, "Periksa koneksi jaringan anda.");
+            PcapClose(StaticField.PCAP);
+            System.exit(1);
+	}
 
 	System.out.println("Interface           : " + StaticField.SOURCE);
         System.out.println("Address             : " + StaticField.CURRENT_INET4ADDRESS + "" +
