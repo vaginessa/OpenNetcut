@@ -95,7 +95,7 @@ public class Language {
 
 	public static String SCAN_STARTED = "Scanning started";
 
-	public static String SCAN_FINISHED = "Scan finished";
+	public static String SCAN_FINISHED = "Scaning finished";
 
 	public static String FAILED_TO_SEND_PACKET = "Failed to send packet";
 
