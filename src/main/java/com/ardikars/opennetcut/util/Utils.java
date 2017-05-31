@@ -72,7 +72,7 @@ public class Utils {
         ByteBuffer buffer = FormatUtils.toDirectBuffer(ethernet.toBytes());
         PcapPktHdr pktHdr = new PcapPktHdr();
         byte[] bytes;
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<10; i++) {
             if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
                 JOptionPane.showConfirmDialog(null, FAILED_TO_SEND_PACKET);
                 return null;
