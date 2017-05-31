@@ -75,7 +75,7 @@ public class MainWindow extends javax.swing.JFrame {
         Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT);
         Utils.compile(StaticField.PCAP, StaticField.BPF_PROGRAM, "arp");
         Utils.filter(StaticField.PCAP, StaticField.BPF_PROGRAM);
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, "Vendor Manufactur"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, MANUFACTURE});
         DtmTargetTable = Utils.createDefaultTableModel(new String[] {IPV4_ADDRESS, ADD});
         setScanTableModel(DtmScanTable);
         setTargetTableModel(DtmTargetTable);
@@ -630,7 +630,7 @@ public class MainWindow extends javax.swing.JFrame {
     private NetworkScanner scanner = null;
     private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {
 
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, "Vendor Manufactur"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, MANUFACTURE});
         
         PacketHandler<Integer> handler = (Integer no, PcapPktHdr pktHdr, Map<Class, Packet> packets) -> {
             ARP arp = (ARP) packets.get(ARP.class);
@@ -642,7 +642,7 @@ public class MainWindow extends javax.swing.JFrame {
 				isAvaible = true;
 			}
 		}
-		if (!isAvaible && arp.getSenderProtocolAddress().equals(Inet4Address.valueOf(TxtGwIpAddr.getText()))) {
+		if (!isAvaible && !arp.getSenderProtocolAddress().equals(Inet4Address.valueOf(TxtGwIpAddr.getText()))) {
                     DtmScanTable.addRow(new Object[] {
                         Integer.toString(no),
                         false,
@@ -973,7 +973,7 @@ public class MainWindow extends javax.swing.JFrame {
             return;
         }
         
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, "Vendor Manufactur"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, MANUFACTURE});
 
         PacketHandler handler = (no, pcapPktHdr, map) -> {
             ARP arp = (ARP) map.get(ARP.class);

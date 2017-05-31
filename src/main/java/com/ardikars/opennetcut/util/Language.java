@@ -89,6 +89,27 @@ public class Language {
 
 	public static String CONTACT_COUNTRY = "Indonesia";
 
+	public static String INFORMATION = "INFORMATION";
+
+	public static String WARNING = "WARNING";
+
+	public static String SCAN_STARTED = "Scanning started";
+
+	public static String SCAN_FINISHED = "Scan finished";
+
+	public static String FAILED_TO_SEND_PACKET = "Failed to send packet";
+
+	public static String UPDATE_OUI = "Update OUI";
+
+	public static String UPDATE_OUI_FINISHED = "Update OUI finished";
+
+	public static String FAILED_TO_GET_INET4_ADDRESS = "Failed to get IP Address";
+
+	public static String FAILED_TO_GET_GATEWAY_INET4_ADDRESS = "Failed to get Gateway Address";
+
+	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Filed to get gateway MAC Address";
+
+	public static String CHECK_YOUR_NETWORK_CONNECTION = "Check your network connection";
 	*/
 
 	///////////////////////////////////////////////////////
@@ -179,9 +200,6 @@ public class Language {
 
 	public static String CONTACT_COUNTRY = "Indonesia";
 
-
-	/* LOG */
-
 	public static String INFORMATION = "INFORMASI";
 
 	public static String WARNING = "PERINGATAN";
@@ -201,6 +219,8 @@ public class Language {
 	public static String FAILED_TO_GET_GATEWAY_INET4_ADDRESS = "Gagal mendapatkan Gateway";
 
 	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Gagal mendapatkan Gateway MAC";
+
+	public static String CHECK_YOUR_NETWORK_CONNECTION = "Periksa koneksi jaringan anda";
 
 }
 

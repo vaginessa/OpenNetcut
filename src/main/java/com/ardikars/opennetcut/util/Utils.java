@@ -178,8 +178,9 @@ public class Utils {
         StaticField.TIMEOUT = to_ms;
 
         if (StaticField.SOURCE == null) {
-            JOptionPane.showMessageDialog(null, "Failed to get device name.");
-            System.exit(1);
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + CHECK_YOUR_NETWORK_CONNECTION);
+            }
         }
 
         getAddresses();
@@ -187,12 +188,10 @@ public class Utils {
         activate(snaplen, promisc, to_ms);
 
         if ((short) PcapDataLink(StaticField.PCAP) != DataLinkType.EN10MB.getValue()) {
-            /*if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
-            }*/
-	    JOptionPane.showMessageDialog(null, StaticField.SOURCE + " is not Ethernet link type.");
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
+            }
             PcapClose(StaticField.PCAP);
-            System.exit(1);
         } else {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
         }
@@ -210,15 +209,15 @@ public class Utils {
         }
 
 	if (StaticField.GATEWAY_INET4ADDRESS == null) {
-            JOptionPane.showMessageDialog(null, "Periksa koneksi jaringan anda.");
-            PcapClose(StaticField.PCAP);
-            System.exit(1);
+            if (StaticField.LOGGER != null) {
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + CHECK_YOUR_NETWORK_CONNECTION);
+            }
 	}
 
 	System.out.println("Interface           : " + StaticField.SOURCE);
         System.out.println("Address             : " + StaticField.CURRENT_INET4ADDRESS + "" +
                 " (" + StaticField.CURRENT_MAC_ADDRESS + ")");
-        System.out.println("Netmask             : " + StaticField.CURRENT_NETMASK_ADDRESS);
+        System.out.println("Netmask Address     : " + StaticField.CURRENT_NETMASK_ADDRESS);
         System.out.println("Network Address     : " + StaticField.CURRENT_NETWORK_ADDRESS);
 	System.out.print("Gateway             : " + StaticField.GATEWAY_INET4ADDRESS);
                 
