@@ -38,7 +38,7 @@ public class Utils {
     public static void getAddresses() {
         List<PcapIf> pcapIf = new ArrayList<PcapIf>();
         if (PcapFindAllDevs(pcapIf, StaticField.ERRBUF) != 0) {
-            throw new JxnetException("Failed to get Ip Address from " + StaticField.SOURCE);
+            throw new JxnetException(FAILED_TO_GET_INET4_ADDRESS + " from " + StaticField.SOURCE);
         }
         for (PcapIf If : pcapIf) {
             if (If.getName().equals(StaticField.SOURCE)) {
@@ -52,7 +52,7 @@ public class Utils {
                         StaticField.CURRENT_MAC_ADDRESS = MacAddress.fromNicName(StaticField.SOURCE);
                         if (StaticField.CURRENT_MAC_ADDRESS == null) {
                             if (StaticField.LOGGER != null) {
-                                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed get current Mac Address.");
+                                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_GATEWAY_MAC_ADDRESS);
                             }
                         }
                         break;
@@ -205,7 +205,7 @@ public class Utils {
         }
         if (StaticField.GATEWAY_INET4ADDRESS == null) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed get current Gateway IP Address.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_INET4_ADDRESS);
             }
         }
 
@@ -225,7 +225,7 @@ public class Utils {
         StaticField.GATEWAY_MAC_ADDRESS = getGwAddrFromArp();
         if (StaticField.GATEWAY_MAC_ADDRESS == null) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed get current Gateway Mac Address.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_GATEWAY_MAC_ADDRESS);
             }
         }
 	System.out.println(" (" + StaticField.GATEWAY_MAC_ADDRESS + ")");
@@ -252,6 +252,7 @@ public class Utils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static void openPcapFile(PacketHandler handler, LoggerHandler logHandler, String path) {
         StringBuilder errbuf = new StringBuilder();
         Pcap pcap = PcapOpenOffline(path, errbuf);
@@ -275,7 +276,7 @@ public class Utils {
                         addr.getAddr().getSaFamily() == SockAddr.Family.AF_INET &&
 			!Inet4Address.valueOf(addr.getAddr().getData()).equals(Inet4Address.ZERO) &&
                         !Inet4Address.valueOf(addr.getAddr().getData()).equals(Inet4Address.LOCALHOST) &&
-                        !Inet4Address.valueOf(addr.getBroadAddr().getData()).equals(InetAddress.valueOf("0.0.0.0"))) {
+                        !Inet4Address.valueOf(addr.getBroadAddr().getData()).equals(Inet4Address.ZERO)) {
                     return dev.getName();
                 }
             }

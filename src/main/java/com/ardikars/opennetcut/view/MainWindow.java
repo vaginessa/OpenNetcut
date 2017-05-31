@@ -90,6 +90,7 @@ public class MainWindow extends javax.swing.JFrame {
         TxtGwHwAddr.setText(StaticField.GATEWAY_MAC_ADDRESS.toString());
     }
 
+    @SuppressWarnings("unchecked")
     private void initComponents() {
         setIconImage(StaticField.ICON_IMAGE);
         _TargetPanel = new javax.swing.JPanel();
@@ -641,15 +642,15 @@ public class MainWindow extends javax.swing.JFrame {
 				isAvaible = true;
 			}
 		}
-		if (!isAvaible) {
-                DtmScanTable.addRow(new Object[] {
-                    Integer.toString(no),
-                    false,
-                    arp.getSenderProtocolAddress().toString().toUpperCase(),
-                    arp.getSenderHardwareAddress().toString().toUpperCase(),
-                    OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
-                });
-                setScanTableModel(DtmScanTable);
+		if (!isAvaible && arp.getSenderProtocolAddress().equals(Inet4Address.valueOf(TxtGwIpAddr.getText()))) {
+                    DtmScanTable.addRow(new Object[] {
+                        Integer.toString(no),
+                        false,
+                        arp.getSenderProtocolAddress().toString().toUpperCase(),
+                        arp.getSenderHardwareAddress().toString().toUpperCase(),
+                        OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
+                    });
+                    setScanTableModel(DtmScanTable);
 		}
             }
         };

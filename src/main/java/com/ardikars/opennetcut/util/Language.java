@@ -196,6 +196,11 @@ public class Language {
 
 	public static String UPDATE_OUI_FINISHED = "Pembaharuan OUI selesai";
 
+	public static String FAILED_TO_GET_INET4_ADDRESS = "Gagal mendapatkan IP Address";
+
+	public static String FAILED_TO_GET_GATEWAY_INET4_ADDRESS = "Gagal mendapatkan Gateway";
+
+	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Gagal mendapatkan Gateway MAC";
 
 }
 
