@@ -110,6 +110,9 @@ public class Language {
 	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Filed to get gateway MAC Address";
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Check your network connection";
+
+	public static String SUCCESS = "Berhasil";
+
 	*/
 
 	///////////////////////////////////////////////////////
@@ -221,6 +224,8 @@ public class Language {
 	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Gagal mendapatkan Gateway MAC";
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Periksa koneksi jaringan anda";
+
+	public static String SUCCESS = "Berhasil";
 
 }
 

@@ -226,10 +226,10 @@ public class Utils {
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_GATEWAY_MAC_ADDRESS);
             }
-        }
-	System.out.println(" (" + StaticField.GATEWAY_MAC_ADDRESS + ")");
-
-        //StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFO ] :: Choosing inferface successed.");
+        } else {
+		System.out.println(" (" + StaticField.GATEWAY_MAC_ADDRESS + ")");
+		StaticField.LOGGER.log(LoggerStatus.COMMON, "[ "+ INFORMATION +" ] :: " + SUCCESS);
+	}
     }
 
     public static String getPcapTmpFileName() {
@@ -284,3 +284,4 @@ public class Utils {
     }
 
 }
+
