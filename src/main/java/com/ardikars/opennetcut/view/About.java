@@ -18,13 +18,14 @@
 package com.ardikars.opennetcut.view;
 
 import com.ardikars.opennetcut.app.StaticField;
+import static com.ardikars.opennetcut.util.Language.*;
 
 public class About extends javax.swing.JFrame {
 
     public About() {
         initComponents();
         setLocationRelativeTo(null);
-        lbl_version.setText("Version 0.0.1");
+        lbl_version.setText(VERSION);
     }
     
     @SuppressWarnings("unchecked")
@@ -58,20 +59,20 @@ public class About extends javax.swing.JFrame {
         lbl_app_name = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("About");
+        setTitle(ABOUT);
         setAlwaysOnTop(true);
         setMinimumSize(new java.awt.Dimension(600, 400));
-        setName("About"); // NOI18N
+        setName(ABOUT); // NOI18N
         setResizable(false);
 
         lbl_app_version.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        lbl_app_version.setText("OpenNetcut");
+        lbl_app_version.setText(APPLICATION_NAME);
 
-        lbl_website.setText("Website    : opennetcut.ardikars.com");
+        lbl_website.setText("Website    : " + APPLICATION_WEBSITE);
 
-        lbl_copyright.setText("Copyright (c) 2015 - 2016 Ardika Rommy Sanjaya");
+        lbl_copyright.setText(ABOUT_COPYRIGHT);
 
-        lbl_version.setText("Vx");
+        //lbl_version.setText("Vx");
 
         javax.swing.GroupLayout AboutPanelLayout = new javax.swing.GroupLayout(AboutPanel);
         AboutPanel.setLayout(AboutPanelLayout);
@@ -102,7 +103,7 @@ public class About extends javax.swing.JFrame {
                 .addContainerGap(129, Short.MAX_VALUE))
         );
 
-        AboutTP.addTab("About", AboutPanel);
+        AboutTP.addTab(ABOUT, AboutPanel);
 
         License.setColumns(20);
         License.setRows(5);
@@ -161,7 +162,7 @@ public class About extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        AboutTP.addTab("Credits", CreditsPanel);
+        //AboutTP.addTab("Credits", CreditsPanel);
 
         jLabel2.setText("Email ");
 
@@ -174,17 +175,17 @@ public class About extends javax.swing.JFrame {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Ardika Rommy Sanjaya");
 
-        jLabel7.setText(": contact@ardikars.com");
+        jLabel7.setText(": " + CONTACT_EMAIL);
 
-        jLabel8.setText(": http://ardikars.com");
+        jLabel8.setText(": " + CONTACT_WEBSITE);
 
-        jLabel9.setText(": https://twitter.com/ardikars");
+        jLabel9.setText(": " + CONTACT_TWITTER);
 
-        jLabel10.setText(": https://github.com/ardikars");
+        jLabel10.setText(": " + CONTACT_GITHUB);
 
         jLabel11.setText("Country");
 
-        jLabel12.setText(": Indonesia");
+        jLabel12.setText(": " + CONTACT_COUNTRY);
 
         javax.swing.GroupLayout ContactPanelLayout = new javax.swing.GroupLayout(ContactPanel);
         ContactPanel.setLayout(ContactPanelLayout);
@@ -238,11 +239,11 @@ public class About extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        AboutTP.addTab("Contact", ContactPanel);
+        AboutTP.addTab(CONTACT, ContactPanel);
 
         lbl_app_name.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         lbl_app_name.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbl_app_name.setText("OpenNetcut");
+        lbl_app_name.setText(APPLICATION_NAME);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

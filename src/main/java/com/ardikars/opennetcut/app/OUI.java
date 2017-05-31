@@ -28,6 +28,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import static com.ardikars.opennetcut.util.Language.*;
+
 @SuppressWarnings("unchecked")
 public class OUI implements Runnable {
 
@@ -61,19 +63,19 @@ public class OUI implements Runnable {
     
     @Override
     public void run() {
-        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: Download OUI.");
+        logHandler.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + UPDATE_OUI);
         URL website = null;
         try {
             website = new URL("https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=manuf;hb=HEAD");
         } catch (MalformedURLException ex) {
-            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+            logHandler.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + ex.getMessage());
         }
         try (InputStream in = website.openStream()) {
             Files.copy(in, Paths.get("oui.txt"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+            logHandler.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + ex.getMessage());
         }
-        logHandler.log(LoggerStatus.COMMON, "[ INFO ] :: UOI Update finished.");
+        logHandler.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + UPDATE_OUI_FINISHED);
     }
     
 }

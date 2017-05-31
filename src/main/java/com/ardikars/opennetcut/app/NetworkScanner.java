@@ -28,6 +28,8 @@ import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.ethernet.Ethernet;
 import com.ardikars.jxnet.packet.arp.ARP;
 import com.ardikars.jxnet.packet.arp.ARPOperationCode;
+import static com.ardikars.opennetcut.util.Language.*;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +74,7 @@ public class NetworkScanner extends Thread {
     @Override
     public void run() {
         if (StaticField.LOGGER != null)
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFORMASI ] :: Memulai pemindaian.");
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + SCAN_STARTED);
         ethernet.setDestinationMacAddress(MacAddress.BROADCAST)
                 .setSourceMacAddress(StaticField.CURRENT_MAC_ADDRESS)
                 .setEthernetType(ProtocolType.ARP)
@@ -104,7 +106,7 @@ public class NetworkScanner extends Thread {
         dumper = Jxnet.PcapDumpOpen(StaticField.PCAP, StaticField.RANDOM_STRING);
         if (dumper == null) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ PERINGATAN ] :: " + Jxnet.PcapGetErr(StaticField.PCAP));
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + Jxnet.PcapGetErr(StaticField.PCAP));
             }
         }
         PcapPktHdr pktHdr = new PcapPktHdr();
@@ -118,7 +120,7 @@ public class NetworkScanner extends Thread {
             buffer = FormatUtils.toDirectBuffer(ethernet.toBytes());
             if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
                 if (StaticField.LOGGER != null) {
-                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ Pertingatan ] :: Gagal mengirim paket ARP.");
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_SEND_PACKET);
                 }
                 break;
             } else {
@@ -136,7 +138,7 @@ public class NetworkScanner extends Thread {
                 StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
                 if (!dumper.isClosed()) {
                     Jxnet.PcapDumpClose(dumper);
-                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFORMASI ] :: Pemindaian selesai.");
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + SCAN_FINISHED);
                 }
                 return;
             }
@@ -148,7 +150,7 @@ public class NetworkScanner extends Thread {
         }
         if (!dumper.isClosed()) {
             Jxnet.PcapDumpClose(dumper);
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFORMASI ] :: Pemindaian selesai.");
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + SCAN_FINISHED);
         }
     }
     
@@ -158,7 +160,7 @@ public class NetworkScanner extends Thread {
         dumper = Jxnet.PcapDumpOpen(StaticField.PCAP, StaticField.RANDOM_STRING);
         if (dumper == null) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ PERINGATAN ] :: " + Jxnet.PcapGetErr(StaticField.PCAP));
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + Jxnet.PcapGetErr(StaticField.PCAP));
             }
         }
         PcapPktHdr pktHdr = new PcapPktHdr();
@@ -170,7 +172,7 @@ public class NetworkScanner extends Thread {
         buffer = FormatUtils.toDirectBuffer(ethernet.toBytes());
         if (Jxnet.PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ PERINGATAN ] :: Gagal mengirim paket ARP.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_SEND_PACKET);
             }
             return;
         } else {
@@ -180,7 +182,7 @@ public class NetworkScanner extends Thread {
                     StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
                     if (!dumper.isClosed()) {
                         Jxnet.PcapDumpClose(dumper);
-                        StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFORMASI ] :: Pemindaian selesai.");
+                        StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + SCAN_FINISHED);
                     }
                     return;
                 }
@@ -198,7 +200,7 @@ public class NetworkScanner extends Thread {
             StaticField.LOGGER.log(LoggerStatus.PROGRESS, Integer.toString(100));
             if (!dumper.isClosed()) {
                 Jxnet.PcapDumpClose(dumper);
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ INFORMASI ] :: Pemindaian selesai.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + SCAN_FINISHED);
             }
         }
     }

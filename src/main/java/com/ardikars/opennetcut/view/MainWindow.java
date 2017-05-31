@@ -26,6 +26,7 @@ import com.ardikars.jxnet.packet.Packet;
 import com.ardikars.jxnet.packet.PacketHandler;
 import com.ardikars.jxnet.packet.arp.ARP;
 import com.ardikars.opennetcut.util.Utils;
+import static com.ardikars.opennetcut.util.Language.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -74,8 +75,8 @@ public class MainWindow extends javax.swing.JFrame {
         Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT);
         Utils.compile(StaticField.PCAP, StaticField.BPF_PROGRAM, "arp");
         Utils.filter(StaticField.PCAP, StaticField.BPF_PROGRAM);
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
-        DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, "Vendor Manufactur"});
+        DtmTargetTable = Utils.createDefaultTableModel(new String[] {IPV4_ADDRESS, ADD});
         setScanTableModel(DtmScanTable);
         setTargetTableModel(DtmTargetTable);
         setLocationRelativeTo(null);
@@ -170,7 +171,7 @@ public class MainWindow extends javax.swing.JFrame {
         _AboutMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TULIP");
+        setTitle(APPLICATION_NAME);
         setMinimumSize(new java.awt.Dimension(1000, 600));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -178,7 +179,7 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        _TargetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Serangan ]"));
+        _TargetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ "+ ATTACK_MODE +" ]"));
 
         TblTarget.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -257,7 +258,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        ScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ Pengguna Jaringan ]"));
+        ScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("[ " + NETWORK_CLIENT +" ]"));
 
         TblScan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -276,14 +277,14 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        _cbScanBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Otomatis", "Alamat IP" }));
+        _cbScanBy.setModel(new javax.swing.DefaultComboBoxModel(new String[] { SCAN_BY_AUTOMATICLY, SCAN_BY_IPV4_ADDRESS }));
         _cbScanBy.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 _cbScanByItemStateChanged(evt);
             }
         });
 
-        _lblFindBy.setText("Cari berdasarkan");
+        _lblFindBy.setText(SCAN_BY);
 
         _txtInputFind.setEditable(false);
 
@@ -301,9 +302,9 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        _lblNICName.setText("Nama Kartu Jaringan");
+        _lblNICName.setText(NIC_NAME);
 
-        _lblHwAddr.setText("Alamat Fisik");
+        _lblHwAddr.setText(MAC_ADDRESS);
 
         TxtNicName.setEditable(false);
 
@@ -369,13 +370,13 @@ public class MainWindow extends javax.swing.JFrame {
         _txt_logs.setRows(5);
         _LogsSP.setViewportView(_txt_logs);
 
-        _lblLogo.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
+        _lblLogo.setFont(new java.awt.Font("Arial Black", 1, 22)); // NOI18N
         _lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        _lblLogo.setText(" [ TULIP ] ");
+        _lblLogo.setText(" [ " + APPLICATION_NAME + "  ] ");
 
         _lblJxnet.setFont(new java.awt.Font("Dialog", 3, 12)); // NOI18N
         _lblJxnet.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        _lblJxnet.setText("Powered by Jxnet");
+        //_lblJxnet.setText("Powered by Jxnet");
 
         javax.swing.GroupLayout _LogoPanelLayout = new javax.swing.GroupLayout(_LogoPanel);
         _LogoPanel.setLayout(_LogoPanelLayout);
@@ -448,11 +449,11 @@ public class MainWindow extends javax.swing.JFrame {
         });
         _Toolbar.add(_AboutIcon);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Infromasi Jaringan"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(NETWORK_INFORMATION));
 
-        LblGwIpAddr.setText("Gateway IP");
+        LblGwIpAddr.setText(GATEWAY_IPV4_ADDRESS);
 
-        LblGwHwAddr.setText("Gateway MAC");
+        LblGwHwAddr.setText(GATEWAY_MAC_ADDRESS);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -485,11 +486,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        _FileMenu.setText("Berkas");
+        _FileMenu.setText(FILE);
 
         _OpenMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         _OpenMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-open.png"))); // NOI18N
-        _OpenMenu.setText("Buka");
+        _OpenMenu.setText(FILE_OPEN);
         _OpenMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _OpenMenuActionPerformed(evt);
@@ -499,7 +500,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         _SaveMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         _SaveMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/document-save.png"))); // NOI18N
-        _SaveMenu.setText("Simpan");
+        _SaveMenu.setText(FILE_SAVE);
         _SaveMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _SaveMenuActionPerformed(evt);
@@ -508,7 +509,7 @@ public class MainWindow extends javax.swing.JFrame {
         _FileMenu.add(_SaveMenu);
 
         _ExitMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/window-close.png"))); // NOI18N
-        _ExitMenu.setText("Keluar");
+        _ExitMenu.setText(FILE_EXIT);
         _ExitMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _ExitMenuActionPerformed(evt);
@@ -518,11 +519,11 @@ public class MainWindow extends javax.swing.JFrame {
 
         _MenuBar.add(_FileMenu);
 
-        _EditMenu.setText("Ubah");
+        _EditMenu.setText(EDIT);
 
         _NICMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         _NICMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/applications-system.png"))); // NOI18N
-        _NICMenu.setText("Kartu Jaringan");
+        _NICMenu.setText(EDIT_NIC);
         _NICMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _NICMenuActionPerformed(evt);
@@ -548,10 +549,10 @@ public class MainWindow extends javax.swing.JFrame {
 
         _MenuBar.add(_PluginsMenu);*/
 
-        _HelpMenu.setText("Tentang");
+        _HelpMenu.setText(ABOUT);
 
         _UpdateMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
-        _UpdateMenu1.setText("Perbaharui Aplikasi");
+        _UpdateMenu1.setText(ABOUT_UPDATE_APPLICATION);
         _UpdateMenu1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _UpdateMenu1ActionPerformed(evt);
@@ -560,7 +561,7 @@ public class MainWindow extends javax.swing.JFrame {
         _HelpMenu.add(_UpdateMenu1);
 
         _UpdateMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/system-software-update.png"))); // NOI18N
-        _UpdateMenu.setText("Perbaharui kamus data Mac Address");
+        _UpdateMenu.setText(ABOUT_UPDATE_OUI);
         _UpdateMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _UpdateMenuActionPerformed(evt);
@@ -570,7 +571,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         _AboutMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         _AboutMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/help-browser.png"))); // NOI18N
-        _AboutMenu.setText("Tentang");
+        _AboutMenu.setText(ABOUT_APPLICATION);
         _AboutMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _AboutMenuActionPerformed(evt);
@@ -628,7 +629,7 @@ public class MainWindow extends javax.swing.JFrame {
     private NetworkScanner scanner = null;
     private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {
 
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, "Vendor Manufactur"});
         
         PacketHandler<Integer> handler = (Integer no, PcapPktHdr pktHdr, Map<Class, Packet> packets) -> {
             ARP arp = (ARP) packets.get(ARP.class);
@@ -699,7 +700,7 @@ public class MainWindow extends javax.swing.JFrame {
         if (rowCount < 1) {
             return;
         }
-        DtmTargetTable = Utils.createDefaultTableModel(new String[] {"IP Address","Add"});
+        DtmTargetTable = Utils.createDefaultTableModel(new String[] {IPV4_ADDRESS, ADD});
         target.clear();
         for (int i=0; i<rowCount; i++) {
             if (TblScan.getValueAt(i, 1).equals(Boolean.TRUE) && 
@@ -971,7 +972,7 @@ public class MainWindow extends javax.swing.JFrame {
             return;
         }
         
-        DtmScanTable = Utils.createDefaultTableModel(new String[] {"No", "Add", "IP Address", "MAC Address", "Vendor Manufactur"});
+        DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, "Vendor Manufactur"});
 
         PacketHandler handler = (no, pcapPktHdr, map) -> {
             ARP arp = (ARP) map.get(ARP.class);

@@ -22,6 +22,7 @@ import static com.ardikars.jxnet.Jxnet.PcapSendPacket;
 import com.ardikars.jxnet.util.FormatUtils;
 import com.ardikars.jxnet.packet.ethernet.Ethernet;
 import com.ardikars.jxnet.packet.arp.ARPOperationCode;
+import static com.ardikars.opennetcut.util.Language.*;
 
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
@@ -61,7 +62,7 @@ public class NetworkSpoofer extends Thread {
             ByteBuffer buffer = FormatUtils.toDirectBuffer(ethernet.toBytes());
             if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
                 if (StaticField.LOGGER != null) {
-                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to send arp packet.");
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_SEND_PACKET);
                 }
                 stop = true;
             }

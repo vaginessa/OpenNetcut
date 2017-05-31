@@ -24,6 +24,7 @@ import com.ardikars.jxnet.exception.JxnetException;
 import com.ardikars.opennetcut.app.LoggerStatus;
 import com.ardikars.opennetcut.app.StaticField;
 import com.ardikars.opennetcut.util.Utils;
+import static com.ardikars.opennetcut.util.Language.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,7 @@ public class NIC extends javax.swing.JFrame {
         btn_refresh_devices = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Pengaturan Kartu Jaringan");
+        setTitle(EDIT_NIC);
         setMinimumSize(new java.awt.Dimension(900, 350));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -111,13 +112,13 @@ public class NIC extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        cb_promisc.setText("Mode Promiscuous");
+        cb_promisc.setText(PROMISCUOUS_MODE);
 
-        jLabel2.setText("Ukuran paket yang dapat ditangkap");
+        jLabel2.setText(PACKET_BUFFER_SIZE);
 
-        jLabel4.setText("Waktu tunggu");
+        jLabel4.setText(TIMEOUT);
 
-        jLabel3.setText("Nama");
+        jLabel3.setText(NIC_NAME);
 
         SpinnerBufferSize.setModel(new javax.swing.SpinnerNumberModel(300, 0, 1800, 1));
         SpinnerBufferSize.setValue(25);
@@ -130,14 +131,14 @@ public class NIC extends javax.swing.JFrame {
             }
         });
 
-        btn_ok.setText("Terapkan");
+        btn_ok.setText(APPLY);
         btn_ok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_okActionPerformed(evt);
             }
         });
 
-        btn_cancel.setText("Keluar");
+        btn_cancel.setText(CLOSE);
         btn_cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cancelActionPerformed(evt);
@@ -150,7 +151,7 @@ public class NIC extends javax.swing.JFrame {
         lbl_dev_name.setText("-");
 
         btn_refresh_devices.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/view-refresh.png"))); // NOI18N
-        btn_refresh_devices.setText("Segarkan");
+        btn_refresh_devices.setText(REFRESH);
         btn_refresh_devices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_refresh_devicesActionPerformed(evt);
@@ -296,7 +297,7 @@ public class NIC extends javax.swing.JFrame {
 
     private void refresh() {
         DefaultTableModel dtm = new DefaultTableModel(null, new String[] {
-                "No", "Name", "IPv4 Address", "IPv6 Address", "MAC Address", "Description"
+                NO, NIC_NAME, IPV4_ADDRESS, IPV6_ADDRESS, MAC_ADDRESS, NIC_DESCRIPTION
                 }) {
             @Override
             public boolean isCellEditable(int row, int column) {

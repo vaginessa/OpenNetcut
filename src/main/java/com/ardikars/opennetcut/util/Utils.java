@@ -31,6 +31,8 @@ import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.*;
 
+import static com.ardikars.opennetcut.util.Language.*;
+
 public class Utils {
 
     public static void getAddresses() {
@@ -50,7 +52,7 @@ public class Utils {
                         StaticField.CURRENT_MAC_ADDRESS = MacAddress.fromNicName(StaticField.SOURCE);
                         if (StaticField.CURRENT_MAC_ADDRESS == null) {
                             if (StaticField.LOGGER != null) {
-                                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Mac Address.");
+                                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed get current Mac Address.");
                             }
                         }
                         break;
@@ -72,7 +74,7 @@ public class Utils {
         byte[] bytes;
         for (int i=0; i<100; i++) {
             if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
-                JOptionPane.showConfirmDialog(null, "Failed to send arp packet.");
+                JOptionPane.showConfirmDialog(null, FAILED_TO_SEND_PACKET);
                 return null;
             }
             Map<Class, Packet> packets = PacketHelper.next(StaticField.PCAP, pktHdr);
@@ -132,7 +134,7 @@ public class Utils {
         if (PcapCompile(pcap, bpfProgram, filter,
                 StaticField.OPTIMIZE, StaticField.CURRENT_NETMASK_ADDRESS.toInt()) != 0) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile bpf.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed to compile bpf.");
                 return false;
             }
             return true;
@@ -146,7 +148,7 @@ public class Utils {
         }
         if (PcapSetFilter(pcap, bpfProgram) != 0) {
             if (StaticField.LOGGER != null)
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed to compile filter.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed to compile filter.");
         }
     }
 
@@ -203,7 +205,7 @@ public class Utils {
         }
         if (StaticField.GATEWAY_INET4ADDRESS == null) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway IP Address.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed get current Gateway IP Address.");
             }
         }
 
@@ -223,7 +225,7 @@ public class Utils {
         StaticField.GATEWAY_MAC_ADDRESS = getGwAddrFromArp();
         if (StaticField.GATEWAY_MAC_ADDRESS == null) {
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Failed get current Gateway Mac Address.");
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: Failed get current Gateway Mac Address.");
             }
         }
 	System.out.println(" (" + StaticField.GATEWAY_MAC_ADDRESS + ")");
@@ -254,7 +256,7 @@ public class Utils {
         StringBuilder errbuf = new StringBuilder();
         Pcap pcap = PcapOpenOffline(path, errbuf);
         if (pcap == null) {
-            logHandler.log(LoggerStatus.COMMON, "[ WARNING ] :: " + errbuf.toString());
+            logHandler.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + errbuf.toString());
             return;
         }
         PacketHelper.loop(pcap, -1, handler, null);
