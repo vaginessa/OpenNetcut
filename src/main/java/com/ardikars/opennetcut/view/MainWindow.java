@@ -931,6 +931,9 @@ public class MainWindow extends javax.swing.JFrame {
 
                     Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
                     Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
+                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
+                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
+ 
                 }
             }
             statusTargetButton(true);
