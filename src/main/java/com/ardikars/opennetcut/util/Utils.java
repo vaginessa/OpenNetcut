@@ -168,6 +168,7 @@ public class Utils {
             Jxnet.PcapSetTimeout(StaticField.PCAP, to_ms);
             Jxnet.PcapActivate(StaticField.PCAP);
         }
+
     }
 
     public static void initialize(String s, int snaplen, int promisc, int to_ms) throws JxnetException {
