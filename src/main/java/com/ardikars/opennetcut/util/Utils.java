@@ -74,7 +74,7 @@ public class Utils {
         byte[] bytes;
         for (int i=0; i<10; i++) {
             if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
-                JOptionPane.showConfirmDialog(null, FAILED_TO_SEND_PACKET);
+                JOptionPane.showMessageDialog(null, FAILED_TO_SEND_PACKET);
                 return null;
             }
             Map<Class, Packet> packets = PacketHelper.next(StaticField.PCAP, pktHdr);
@@ -188,10 +188,13 @@ public class Utils {
         activate(snaplen, promisc, to_ms);
 
         if ((short) PcapDataLink(StaticField.PCAP) != DataLinkType.EN10MB.getValue()) {
+            if (JOptionPane.showConfirmDialog(null, StaticField.SOURCE + ": " + NOT_ETHERNET_TYPE, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                  Jxnet.PcapClose(StaticField.PCAP);
+                  System.exit(1); 
+            }
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
             }
-            PcapClose(StaticField.PCAP);
         } else {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
         }
@@ -200,10 +203,18 @@ public class Utils {
         try {
             StaticField.GATEWAY_INET4ADDRESS = AddrUtils.GetGatewayAddress();
         } catch (IOException e) {
+		if (JOptionPane.showConfirmDialog(null, NOT_CONNECTED, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                  Jxnet.PcapClose(StaticField.PCAP);
+                  System.exit(1);
+            }
             e.printStackTrace();
         }
         if (StaticField.GATEWAY_INET4ADDRESS == null) {
             if (StaticField.LOGGER != null) {
+		if (JOptionPane.showConfirmDialog(null, NOT_CONNECTED, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                  Jxnet.PcapClose(StaticField.PCAP);
+                  System.exit(1);
+            }
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_INET4_ADDRESS);
             }
         }
@@ -224,6 +235,10 @@ public class Utils {
         StaticField.GATEWAY_MAC_ADDRESS = getGwAddrFromArp();
         if (StaticField.GATEWAY_MAC_ADDRESS == null) {
             if (StaticField.LOGGER != null) {
+		if (JOptionPane.showConfirmDialog(null, FAILED_TO_GET_GATEWAY_MAC_ADDRESS, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+			Jxnet.PcapClose(StaticField.PCAP);
+			System.exit(1);
+                }
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_GATEWAY_MAC_ADDRESS);
             }
         } else {

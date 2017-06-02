@@ -111,7 +111,11 @@ public class Language {
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Check your network connection";
 
-	public static String SUCCESS = "Berhasil";
+	public static String SUCCESS = "Success";
+
+	public static String NOT_CONNECTED = "Check your network connection.";
+	
+	public static String NOT_ETHERNET_TYPE = "";
 
 	*/
 
@@ -219,13 +223,17 @@ public class Language {
 
 	public static String FAILED_TO_GET_INET4_ADDRESS = "Gagal mendapatkan IP Address";
 
-	public static String FAILED_TO_GET_GATEWAY_INET4_ADDRESS = "Gagal mendapatkan Gateway";
+	public static String FAILED_TO_GET_GATEWAY_INET4_ADDRESS = "Gagal mendapatkan Gateway. Periksa koneksi jaringan anda.";
 
-	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Gagal mendapatkan Gateway MAC";
+	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Gagal mendapatkan Gateway MAC. Periksa koneksi jaringan anda.";
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Periksa koneksi jaringan anda";
 
 	public static String SUCCESS = "Berhasil";
+
+	public static String NOT_CONNECTED = "Periksa koneksi jaringan anda. Silahkan tutup aplikasi.";
+
+	public static String NOT_ETHERNET_TYPE = "Tidak bertipe Ethernet";
 
 }
 
