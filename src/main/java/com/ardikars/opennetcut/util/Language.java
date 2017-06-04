@@ -2,7 +2,7 @@ package com.ardikars.opennetcut.util;
 
 public class Language {
 
-	/*
+	
 	public static String APPLICATION_NAME = "OpenNetcut";
 	
 	public static String VERSION = "1.0.0";
@@ -111,11 +111,20 @@ public class Language {
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Check your network connection";
 
+<<<<<<< HEAD
 	public static String SUCCESS = "Seccesseded";
+=======
+	public static String SUCCESS = "Success";
 
-	*/
+	public static String NOT_CONNECTED = "Check your network connection.";
+	
+	public static String NOT_ETHERNET_TYPE = "";
+>>>>>>> 6b78547b8eb66b250300464b7c6986b133559bee
+
 
 	///////////////////////////////////////////////////////
+
+	/*
 
 	public static String APPLICATION_NAME = "Deteksi Serangan Pada ARP";
 	
@@ -219,13 +228,19 @@ public class Language {
 
 	public static String FAILED_TO_GET_INET4_ADDRESS = "Gagal mendapatkan IP Address";
 
-	public static String FAILED_TO_GET_GATEWAY_INET4_ADDRESS = "Gagal mendapatkan Gateway";
+	public static String FAILED_TO_GET_GATEWAY_INET4_ADDRESS = "Gagal mendapatkan Gateway. Periksa koneksi jaringan anda.";
 
-	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Gagal mendapatkan Gateway MAC";
+	public static String FAILED_TO_GET_GATEWAY_MAC_ADDRESS = "Gagal mendapatkan Gateway MAC. Periksa koneksi jaringan anda.";
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Periksa koneksi jaringan anda";
 
 	public static String SUCCESS = "Berhasil memilih kartu jaringan";
+
+	public static String NOT_CONNECTED = "Periksa koneksi jaringan anda. Silahkan tutup aplikasi.";
+
+	public static String NOT_ETHERNET_TYPE = "Tidak bertipe Ethernet";
+
+	*/
 
 }
 
