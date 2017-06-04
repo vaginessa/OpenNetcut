@@ -111,7 +111,7 @@ public class Language {
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Check your network connection";
 
-	public static String SUCCESS = "Berhasil";
+	public static String SUCCESS = "Seccesseded";
 
 	*/
 
@@ -225,7 +225,7 @@ public class Language {
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Periksa koneksi jaringan anda";
 
-	public static String SUCCESS = "Berhasil";
+	public static String SUCCESS = "Berhasil memilih kartu jaringan";
 
 }
 
