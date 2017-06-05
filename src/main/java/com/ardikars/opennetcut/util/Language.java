@@ -111,11 +111,15 @@ public class Language {
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Check your network connection";
 
+<<<<<<< HEAD
+	public static String SUCCESS = "Seccesseded";
+=======
 	public static String SUCCESS = "Success";
 
 	public static String NOT_CONNECTED = "Check your network connection.";
 	
 	public static String NOT_ETHERNET_TYPE = "";
+>>>>>>> 6b78547b8eb66b250300464b7c6986b133559bee
 
 
 	///////////////////////////////////////////////////////
@@ -230,7 +234,7 @@ public class Language {
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Periksa koneksi jaringan anda";
 
-	public static String SUCCESS = "Berhasil";
+	public static String SUCCESS = "Berhasil memilih kartu jaringan";
 
 	public static String NOT_CONNECTED = "Periksa koneksi jaringan anda. Silahkan tutup aplikasi.";
 
