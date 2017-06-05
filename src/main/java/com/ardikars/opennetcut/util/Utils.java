@@ -194,13 +194,50 @@ public class Utils {
                     StaticField.ERRBUF
             );
         }
+
         StaticField.SNAPLEN = snaplen;
         StaticField.PROMISC = promisc;
         StaticField.TIMEOUT = to_ms;
 
         if (StaticField.SOURCE == null) {
+            if (JOptionPane.showConfirmDialog(null, CHECK_YOUR_NETWORK_CONNECTION, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                if (StaticField.PCAP != null ) {
+                    if (!StaticField.PCAP.isClosed()) {
+                        Jxnet.PcapClose(StaticField.PCAP);
+                    }
+                }
+                System.exit(1);
+            }
             if (StaticField.LOGGER != null) {
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + CHECK_YOUR_NETWORK_CONNECTION);
+            }
+        }
+
+        try {
+            StaticField.GATEWAY_ADDRESS = AddrUtils.GetGatewayAddress();
+        } catch (IOException e) {
+            if (JOptionPane.showConfirmDialog(null, NOT_CONNECTED, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                if (StaticField.PCAP != null) {
+                    if (!StaticField.PCAP.isClosed()) {
+                        Jxnet.PcapClose(StaticField.PCAP);
+                    }
+                }
+                System.exit(1);
+            }
+            e.printStackTrace();
+        }
+
+        if (StaticField.GATEWAY_ADDRESS == null) {
+            if (StaticField.LOGGER != null) {
+                if (JOptionPane.showConfirmDialog(null, NOT_CONNECTED, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    if (StaticField.PCAP != null) {
+                        if (!StaticField.PCAP.isClosed()) {
+                            Jxnet.PcapClose(StaticField.PCAP);
+                        }
+                    }
+                    System.exit(1);
+                }
+                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_INET4_ADDRESS);
             }
         }
 
@@ -212,34 +249,18 @@ public class Utils {
 
         if ((short) PcapDataLink(StaticField.PCAP) != DataLinkType.EN10MB.getValue()) {
             if (JOptionPane.showConfirmDialog(null, StaticField.SOURCE + ": " + NOT_ETHERNET_TYPE, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                  Jxnet.PcapClose(StaticField.PCAP);
-                  //System.exit(1);
+                if (StaticField.PCAP != null ) {
+                    if (!StaticField.PCAP.isClosed()) {
+                        Jxnet.PcapClose(StaticField.PCAP);
+                    }
+                }
+                System.exit(1);
             }
             if (StaticField.LOGGER != null) {
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + StaticField.SOURCE + " is not Ethernet link type.");
+		        StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + StaticField.SOURCE + " " + NOT_ETHERNET_TYPE);
             }
         } else {
             StaticField.DATALINK_TYPE = DataLinkType.EN10MB;
-        }
-
-
-        try {
-            StaticField.GATEWAY_ADDRESS = AddrUtils.GetGatewayAddress();
-        } catch (IOException e) {
-		    if (JOptionPane.showConfirmDialog(null, NOT_CONNECTED, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                  Jxnet.PcapClose(StaticField.PCAP);
-                  //System.exit(1);
-            }
-            e.printStackTrace();
-        }
-        if (StaticField.GATEWAY_ADDRESS == null) {
-            if (StaticField.LOGGER != null) {
-		        if (JOptionPane.showConfirmDialog(null, NOT_CONNECTED, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    Jxnet.PcapClose(StaticField.PCAP);
-                    //System.exit(1);
-                }
-                StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_INET4_ADDRESS);
-            }
         }
 
 	    System.out.println("Interface           : " + StaticField.SOURCE);
@@ -252,9 +273,13 @@ public class Utils {
         StaticField.GATEWAY_MAC_ADDRESS = getGwHwAddrFromArp();
         if (StaticField.GATEWAY_MAC_ADDRESS == null) {
             if (StaticField.LOGGER != null) {
-		        if (JOptionPane.showConfirmDialog(null, FAILED_TO_GET_GATEWAY_MAC_ADDRESS, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    Jxnet.PcapClose(StaticField.PCAP);
-                    //System.exit(1);
+                if (JOptionPane.showConfirmDialog(null, FAILED_TO_GET_GATEWAY_MAC_ADDRESS, "[ " + WARNING + " ]", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    if (StaticField.PCAP != null) {
+                        if (!StaticField.PCAP.isClosed()) {
+                            Jxnet.PcapClose(StaticField.PCAP);
+                        }
+                    }
+                    System.exit(1);
                 }
                 StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + FAILED_TO_GET_GATEWAY_MAC_ADDRESS);
             }
@@ -262,6 +287,7 @@ public class Utils {
             System.out.println(" (" + StaticField.GATEWAY_MAC_ADDRESS + ")");
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ "+ INFORMATION +" ] :: " + SUCCESS);
         }
+
     }
 
     public static String getPcapTmpFileName() {
