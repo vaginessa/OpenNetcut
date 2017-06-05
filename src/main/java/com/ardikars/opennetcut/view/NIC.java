@@ -261,38 +261,40 @@ public class NIC extends javax.swing.JFrame {
 
     private void btn_okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_okActionPerformed
         if (!isConnected) {
-		JOptionPane.showMessageDialog(null, "Kartu jaringan tidak terkoneksi.");
-		return;
-	}
-	StringBuilder errbuf = new StringBuilder();
+            JOptionPane.showMessageDialog(null, CHECK_YOUR_NETWORK_CONNECTION);
+            return;
+	    }
+	    StringBuilder errbuf = new StringBuilder();
         String device = lbl_dev_name.getText();
         int newSnaplen = Integer.valueOf(lbl_snaplen.getText());
         int newPromisc = (cb_promisc.isSelected() ? 1 : 0);
         int newToMs = Integer.valueOf(SpinnerBufferSize.getValue().toString());
         try {
+            if (!StaticField.PCAP.isClosed()) {
+                Jxnet.PcapClose(StaticField.PCAP);
+            }
             Utils.initialize(device, newSnaplen, newPromisc, newToMs);
-            Utils.compile(StaticField.PCAP, StaticField.BPF_PROGRAM, "arp");
-            Utils.filter(StaticField.PCAP, StaticField.BPF_PROGRAM);
+            MainWindow.main_windows.initMyComponents();
         } catch (JxnetException ex) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ PERINGATAN ] :: " + ex.toString());
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING+ " ] :: " + ex.toString());
         }
     }//GEN-LAST:event_btn_okActionPerformed
 
     private void NICTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NICTableMouseClicked
         int selectedRow = NICTable.getSelectedRow();
         lbl_dev_name.setText(NICTable.getValueAt(selectedRow, 1).toString());
-	Inet4Address addr = Inet4Address.ZERO;
-	try {
-		addr = Inet4Address.valueOf(NICTable.getValueAt(selectedRow, 2).toString());
-	} catch (Exception e) {
-		isConnected = false;
-		return;
-	}
-	if (addr.equals(Inet4Address.ZERO) || addr.equals(Inet4Address.LOCALHOST)) {
-		isConnected = false;
-	} else {
-		isConnected = true;
-	}
+        Inet4Address addr = Inet4Address.ZERO;
+        try {
+            addr = Inet4Address.valueOf(NICTable.getValueAt(selectedRow, 2).toString());
+        } catch (Exception e) {
+            isConnected = false;
+            return;
+        }
+        if (addr.equals(Inet4Address.ZERO) || addr.equals(Inet4Address.LOCALHOST)) {
+            isConnected = false;
+        } else {
+            isConnected = true;
+        }
     }//GEN-LAST:event_NICTableMouseClicked
 
     private void refresh() {
@@ -308,7 +310,7 @@ public class NIC extends javax.swing.JFrame {
         
         List<PcapIf> alldevsp = new ArrayList<PcapIf>();
         if(PcapFindAllDevs(alldevsp, StaticField.ERRBUF) != 0) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ PERINGATAN ] :: " + StaticField.ERRBUF.toString());
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING+ " ] :: " + StaticField.ERRBUF.toString());
         }
 	
         String[] list = new String[6];
@@ -338,35 +340,7 @@ public class NIC extends javax.swing.JFrame {
                 no++;
             }
         }
-	/*
-	String[] list = new String[6];
-	int no = 1;
-	String tmp_dev = null, tmp_ip = null, tmp_mac = null, tmp_desc = null;
-	for (PcapIf devs : alldevsp) {
-		for (PcapAddr dev : devs.getAddresses()) {
-			if (dev.getAddr().getSaFamily() == SockAddr.Family.AF_INET) {
-				tmp_dev = devs.getName();
-				tmp_ip = dev.getAddr().toString();
-				MacAddress macAddr = MacAddress.fromNicName(tmp_dev);
-				if (macAddr != null) {
-					tmp_mac = macAddr.toString();
-				}
-				tmp_desc = devs.getDescription();
-			} else {
-				tmp_dev = null;
-			}
-		}
-		if (tmp_dev != null) {
-			list[0] = String.valueOf(no);
-			list[1] = tmp_dev;
-			list[2] = tmp_ip;
-			list[3] = "";
-			list[4] = tmp_mac;
-			list[5] = tmp_desc;
-			dtm.addRow(list);
-			no ++;
-		}
-	}*/
+
         NICTable.setModel(dtm);
         NICTable.getColumnModel().getColumn(0).setMaxWidth(50);
         NICTable.getColumnModel().getColumn(0).setMinWidth(50);

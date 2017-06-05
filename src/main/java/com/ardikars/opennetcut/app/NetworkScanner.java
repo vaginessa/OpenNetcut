@@ -54,8 +54,8 @@ public class NetworkScanner extends Thread {
     private int index;
 
     public NetworkScanner(PacketHandler handler) {
-        SubnetUtils su = new SubnetUtils(StaticField.CURRENT_NETWORK_ADDRESS.toString(),
-                StaticField.CURRENT_NETMASK_ADDRESS.toString());
+        SubnetUtils su = new SubnetUtils(StaticField.NETWORK_ADDRESS.toString(),
+                StaticField.NETMASK_ADDRESS.toString());
 
         String[] strips = su.getInfo().getAllAddresses();
         for (String ip : strips) {
@@ -76,7 +76,7 @@ public class NetworkScanner extends Thread {
         if (StaticField.LOGGER != null)
             StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + INFORMATION + " ] :: " + SCAN_STARTED);
         ethernet.setDestinationMacAddress(MacAddress.BROADCAST)
-                .setSourceMacAddress(StaticField.CURRENT_MAC_ADDRESS)
+                .setSourceMacAddress(StaticField.MAC_ADDRESS)
                 .setEthernetType(ProtocolType.ARP)
                 .setPadding(true);
                 
@@ -85,8 +85,8 @@ public class NetworkScanner extends Thread {
                 .setHardwareAddressLength((byte) 6)
                 .setProtocolAddressLength((byte) 4)
                 .setOperationCode(ARPOperationCode.ARP_REQUEST)
-                .setSenderHardwareAddress(StaticField.CURRENT_MAC_ADDRESS)
-                .setSenderProtocolAddress(StaticField.CURRENT_INET4ADDRESS)
+                .setSenderHardwareAddress(StaticField.MAC_ADDRESS)
+                .setSenderProtocolAddress(StaticField.ADDRESS)
                 .setTargetHardwareAddress(MacAddress.ZERO);
         
         switch (index) {
@@ -112,7 +112,6 @@ public class NetworkScanner extends Thread {
         PcapPktHdr pktHdr = new PcapPktHdr();
         ByteBuffer buffer = null;
 
-        int no=1;
         int ipsSize = ips.size();
         for(int i=0; i<ipsSize; i++) {
             arp.setTargetProtocolAddress(ips.get(i));
@@ -129,8 +128,7 @@ public class NetworkScanner extends Thread {
                     ARP capArp = (ARP) packets.get(ARP.class);
                     if (capArp.getOperationCode() == ARPOperationCode.ARP_REPLY) {
                         Jxnet.PcapDump(dumper, pktHdr, FormatUtils.toDirectBuffer(packets.get(Ethernet.class).toBytes()));
-                        this.handler.nextPacket(no, pktHdr, packets);
-                        no++;
+                        this.handler.nextPacket(null, pktHdr, packets);
                     }
                 }
             }

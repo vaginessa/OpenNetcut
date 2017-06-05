@@ -111,15 +111,17 @@ public class Language {
 
 	public static String CHECK_YOUR_NETWORK_CONNECTION = "Check your network connection";
 
-<<<<<<< HEAD
-	public static String SUCCESS = "Seccesseded";
-=======
 	public static String SUCCESS = "Success";
 
 	public static String NOT_CONNECTED = "Check your network connection.";
 	
 	public static String NOT_ETHERNET_TYPE = "";
->>>>>>> 6b78547b8eb66b250300464b7c6986b133559bee
+
+	public static String INVALID_GATEWAY_ADDRESS = "Invalid gateway address.";
+
+	public static String INVALID_GATEWAY_MAC_ADDRESS = "Invalid gateway Mac address.";
+
+	public static String NO_VICTIM = "No victim.";
 
 
 	///////////////////////////////////////////////////////
@@ -239,6 +241,12 @@ public class Language {
 	public static String NOT_CONNECTED = "Periksa koneksi jaringan anda. Silahkan tutup aplikasi.";
 
 	public static String NOT_ETHERNET_TYPE = "Tidak bertipe Ethernet";
+
+	public static String INVALID_GATEWAY_ADDRESS = "Gateway address tidak valid.";
+
+	public static String INVALID_GATEWAY_MAC_ADDRESS = "Gateway Mac address tidak valid.";
+
+	public static String NO_VICTIM = "Tidak ada target.";
 
 	*/
 

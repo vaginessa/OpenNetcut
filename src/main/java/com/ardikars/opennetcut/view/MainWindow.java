@@ -73,8 +73,6 @@ public class MainWindow extends javax.swing.JFrame {
             }
         };
         Utils.initialize(null, StaticField.SNAPLEN, StaticField.PROMISC, StaticField.TIMEOUT);
-        Utils.compile(StaticField.PCAP, StaticField.BPF_PROGRAM, "arp");
-        Utils.filter(StaticField.PCAP, StaticField.BPF_PROGRAM);
         DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, MANUFACTURE});
         DtmTargetTable = Utils.createDefaultTableModel(new String[] {IPV4_ADDRESS, ADD});
         setScanTableModel(DtmScanTable);
@@ -85,8 +83,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     public void initMyComponents() {
         TxtNicName.setText(StaticField.SOURCE);
-        TxtHwAddr.setText(StaticField.CURRENT_MAC_ADDRESS.toString());
-        TxtGwIpAddr.setText(StaticField.GATEWAY_INET4ADDRESS.toString());
+        TxtHwAddr.setText(StaticField.MAC_ADDRESS.toString());
+        TxtGwIpAddr.setText(StaticField.GATEWAY_ADDRESS.toString());
         TxtGwHwAddr.setText(StaticField.GATEWAY_MAC_ADDRESS.toString());
     }
 
@@ -628,30 +626,33 @@ public class MainWindow extends javax.swing.JFrame {
 
     private boolean scanOp = true;
     private NetworkScanner scanner = null;
+    private static int counter = 0;
     private void _btnScanActionPerformed(java.awt.event.ActionEvent evt) {
+
+        counter = 0;
 
         DtmScanTable = Utils.createDefaultTableModel(new String[] {NO, ADD, IPV4_ADDRESS, MAC_ADDRESS, MANUFACTURE});
         
-        PacketHandler<Integer> handler = (Integer no, PcapPktHdr pktHdr, Map<Class, Packet> packets) -> {
+        PacketHandler<String> handler = (String str, PcapPktHdr pktHdr, Map<Class, Packet> packets) -> {
             ARP arp = (ARP) packets.get(ARP.class);
             if (arp == null) return;
             if (arp.getOperationCode() == ARPOperationCode.ARP_REPLY) {
-		boolean isAvaible = false;
-		for (int i=0; i<TblScan.getRowCount(); i++) {
-			if (TblScan.getValueAt(i, 2).equals(arp.getSenderProtocolAddress().toString().toUpperCase())) {
-				isAvaible = true;
-			}
-		}
-		if (!isAvaible && !arp.getSenderProtocolAddress().equals(Inet4Address.valueOf(TxtGwIpAddr.getText()))) {
-                    DtmScanTable.addRow(new Object[] {
-                        Integer.toString(no),
-                        false,
-                        arp.getSenderProtocolAddress().toString().toUpperCase(),
-                        arp.getSenderHardwareAddress().toString().toUpperCase(),
-                        OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
-                    });
-                    setScanTableModel(DtmScanTable);
-		}
+                boolean isAvaible = false;
+                for (int i=0; i<TblScan.getRowCount(); i++) {
+                    if (TblScan.getValueAt(i, 2).equals(arp.getSenderProtocolAddress().toString().toUpperCase())) {
+                        isAvaible = true;
+                    }
+                }
+                if (!isAvaible && !arp.getSenderProtocolAddress().equals(Inet4Address.valueOf(TxtGwIpAddr.getText()))) {
+                            DtmScanTable.addRow(new Object[] {
+                                Integer.toString(++counter),
+                                false,
+                                arp.getSenderProtocolAddress().toString().toUpperCase(),
+                                arp.getSenderHardwareAddress().toString().toUpperCase(),
+                                OUI.searchVendor(arp.getSenderHardwareAddress().toString().toUpperCase())
+                            });
+                            setScanTableModel(DtmScanTable);
+                }
             }
         };
         if (scanOp) {
@@ -679,10 +680,10 @@ public class MainWindow extends javax.swing.JFrame {
             scanOp = true;
             _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
             try {
-                Thread.sleep(300);
+                Thread.sleep(StaticField.TIMEOUT);
             } catch (InterruptedException ex) {
                 if (StaticField.LOGGER != null)
-                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + ex.getMessage());
             }
         }
     }
@@ -786,17 +787,17 @@ public class MainWindow extends javax.swing.JFrame {
     private List<NetworkSpoofer> nss = new ArrayList<NetworkSpoofer>();
     
     private void _btnCutActionPerformed(java.awt.event.ActionEvent evt) {
-	if (TblTarget.getRowCount() < 1) {
-		JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
-		return;
-	}
+        if (TblTarget.getRowCount() < 1) {
+            JOptionPane.showMessageDialog(null, NO_VICTIM);
+            return;
+        }
 	
         if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + INVALID_GATEWAY_ADDRESS);
             return;
         }
         if (!MacAddress.isValidAddress(TxtGwHwAddr.getText())) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway Mac Address is not valid.");
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + INVALID_GATEWAY_MAC_ADDRESS);
             return;
         }
         Inet4Address gwIp = Inet4Address.valueOf(TxtGwIpAddr.getText());
@@ -821,7 +822,7 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             }
             if (nss.size() < 1) {
-                JOptionPane.showMessageDialog(null, "Pilih target terlebih dahulu.");
+                JOptionPane.showMessageDialog(null, NO_VICTIM);
 		return;
             }
             for (NetworkSpoofer ns : nss) {
@@ -864,15 +865,15 @@ public class MainWindow extends javax.swing.JFrame {
     private List<NetworkSpoofer> nssMITM = new ArrayList<NetworkSpoofer>();
     private void _btnMITMActionPerformed(java.awt.event.ActionEvent evt) {
 	if (TblTarget.getRowCount() < 1) {
-		JOptionPane.showMessageDialog(null, "Target tidak tersedia.");
+		JOptionPane.showMessageDialog(null, NO_VICTIM);
 		return;
 	}
 	if (!Inet4Address.isValidAddress(TxtGwIpAddr.getText())) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway address is not valid.");
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + INVALID_GATEWAY_ADDRESS);
             return;
         }
         if (!MacAddress.isValidAddress(TxtGwHwAddr.getText())) {
-            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: Gateway Mac Address is not valid.");
+            StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + INVALID_GATEWAY_MAC_ADDRESS);
             return;
         }
         Inet4Address gwIp = Inet4Address.valueOf(TxtGwIpAddr.getText());
@@ -886,20 +887,20 @@ public class MainWindow extends javax.swing.JFrame {
                     nssMITM.add(new NetworkSpoofer(
                             gwHw,
                             gwIp,
-                            StaticField.CURRENT_MAC_ADDRESS,
+                            StaticField.MAC_ADDRESS,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
                             1800));
                     //Vic
                     nssMITM.add(new NetworkSpoofer(
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
-                            StaticField.CURRENT_MAC_ADDRESS,
+                            StaticField.MAC_ADDRESS,
                             gwIp,
                             1800));
                 }
             }
             if (nssMITM.size() < 1) {
-                JOptionPane.showMessageDialog(null, "Pilih target terlebih dahulu.");
+                JOptionPane.showMessageDialog(null, NO_VICTIM);
                 return;
             }
             for (NetworkSpoofer ns : nssMITM) {
@@ -957,7 +958,7 @@ public class MainWindow extends javax.swing.JFrame {
                 Utils.copyFileUsingFileChannels(new File(StaticField.RANDOM_STRING), new File(fileName));
             } catch (IOException ex) {
                 if (StaticField.LOGGER != null)
-                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ WARNING ] :: " + ex.getMessage());
+                    StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + ex.getMessage());
                 return;
             }
         }
