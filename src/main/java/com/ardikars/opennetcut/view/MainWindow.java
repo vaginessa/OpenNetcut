@@ -680,7 +680,7 @@ public class MainWindow extends javax.swing.JFrame {
             scanOp = true;
             _btnScan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ardikars/opennetcut/images/16x16/media-playback-start.png")));
             try {
-                Thread.sleep(StaticField.TIMEOUT);
+                Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);
             } catch (InterruptedException ex) {
                 if (StaticField.LOGGER != null)
                     StaticField.LOGGER.log(LoggerStatus.COMMON, "[ " + WARNING + " ] :: " + ex.getMessage());
@@ -812,13 +812,13 @@ public class MainWindow extends javax.swing.JFrame {
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             Utils.randomMacAddress(), 
                             gwIp,
-                            StaticField.TIMEOUT));
+                            StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER));
                     nss.add(new NetworkSpoofer(
                             gwHw,
                             gwIp,
                             Utils.randomMacAddress(), 
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
-                            StaticField.TIMEOUT));
+                            StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER));
                 }
             }
             if (nss.size() < 1) {
@@ -836,7 +836,7 @@ public class MainWindow extends javax.swing.JFrame {
                 ns.stopThread();
             }
             try {
-                Thread.sleep(StaticField.TIMEOUT);
+                Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -851,9 +851,16 @@ public class MainWindow extends javax.swing.JFrame {
                     toVic = PacketBuilder.arpBuilder(victimMac, ARPOperationCode.ARP_REPLY,
                             gwHw, gwIp, victimMac, Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()))
                             .toBytes();
-
-                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
-                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
+                    for (int z=0; z<5; z++) {
+                        Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
+                        Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
+                        try {
+                            Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);
+                        } catch (InterruptedException e) {
+                    		e.printStackTrace();
+                        }
+		            }
+                    
                 }
             }
             statusTargetButton(true);
@@ -889,14 +896,14 @@ public class MainWindow extends javax.swing.JFrame {
                             gwIp,
                             StaticField.MAC_ADDRESS,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
-                            StaticField.TIMEOUT));
+                            StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER));
                     //Vic
                     nssMITM.add(new NetworkSpoofer(
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             StaticField.MAC_ADDRESS,
                             gwIp,
-                            StaticField.TIMEOUT));
+                            StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER));
                 }
             }
             if (nssMITM.size() < 1) {
@@ -914,7 +921,7 @@ public class MainWindow extends javax.swing.JFrame {
                 ns.stopThread();
             }
             try {
-                Thread.sleep(StaticField.TIMEOUT);
+                Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -930,11 +937,15 @@ public class MainWindow extends javax.swing.JFrame {
                             gwHw, gwIp, victimMac, Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()))
                             .toBytes();
 
-                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
-                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
-                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
-                    Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
- 
+		    for (int z=0; z<5; z++) {
+                    	Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
+                   	Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length); 
+			try {
+                		Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);
+			} catch (InterruptedException e) {
+                		e.printStackTrace();
+            		}
+		    }
                 }
             }
             statusTargetButton(true);

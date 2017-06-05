@@ -17,6 +17,7 @@ public class StaticField {
     public static int PROMISC = 1;
     public static int TIMEOUT = 300;
     public static int IMMEDIATE = 1;
+    public static int TIMEOUT_MULTIPLIER = 5;
     public static StringBuilder ERRBUF = new StringBuilder();
 
     public static BpfProgram BPF_PROGRAM = new BpfProgram();
