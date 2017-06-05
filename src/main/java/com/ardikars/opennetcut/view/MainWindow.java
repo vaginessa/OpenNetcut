@@ -812,13 +812,13 @@ public class MainWindow extends javax.swing.JFrame {
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             Utils.randomMacAddress(), 
                             gwIp,
-                            1800));
+                            StaticField.TIMEOUT));
                     nss.add(new NetworkSpoofer(
                             gwHw,
                             gwIp,
                             Utils.randomMacAddress(), 
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
-                            1800));
+                            StaticField.TIMEOUT));
                 }
             }
             if (nss.size() < 1) {
@@ -836,7 +836,7 @@ public class MainWindow extends javax.swing.JFrame {
                 ns.stopThread();
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(StaticField.TIMEOUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -889,14 +889,14 @@ public class MainWindow extends javax.swing.JFrame {
                             gwIp,
                             StaticField.MAC_ADDRESS,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()),
-                            1800));
+                            StaticField.TIMEOUT));
                     //Vic
                     nssMITM.add(new NetworkSpoofer(
                             victimMac,
                             Inet4Address.valueOf(TblTarget.getValueAt(i, 0).toString()), 
                             StaticField.MAC_ADDRESS,
                             gwIp,
-                            1800));
+                            StaticField.TIMEOUT));
                 }
             }
             if (nssMITM.size() < 1) {
@@ -914,7 +914,7 @@ public class MainWindow extends javax.swing.JFrame {
                 ns.stopThread();
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(StaticField.TIMEOUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -2,7 +2,7 @@ package com.ardikars.opennetcut.util;
 
 public class Language {
 
-	
+	/*
 	public static String APPLICATION_NAME = "OpenNetcut";
 	
 	public static String VERSION = "1.0.0";
@@ -123,12 +123,11 @@ public class Language {
 
 	public static String NO_VICTIM = "No victim.";
 
-
+	*/
 	///////////////////////////////////////////////////////
 
-	/*
 
-	public static String APPLICATION_NAME = "Deteksi Serangan Pada ARP";
+	public static String APPLICATION_NAME = "Serangan Pada ARP";
 	
 	public static String VERSION = "versi 1.0.0";
 
@@ -248,7 +247,6 @@ public class Language {
 
 	public static String NO_VICTIM = "Tidak ada target.";
 
-	*/
 
 }
 
