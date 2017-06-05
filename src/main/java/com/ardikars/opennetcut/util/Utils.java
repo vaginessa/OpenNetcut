@@ -56,7 +56,7 @@ public class Utils {
                     arp.getSenderProtocolAddress().equals(StaticField.GATEWAY_ADDRESS)) {
                 return arp.getSenderHardwareAddress();
             }
-            try{Thread.sleep(StaticField.TIMEOUT);}catch(InterruptedException e){System.out.println(e);}
+            try{Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);}catch(InterruptedException e){System.out.println(e);}
         }
         return null;
     }
