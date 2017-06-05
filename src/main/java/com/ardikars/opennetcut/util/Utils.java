@@ -72,7 +72,7 @@ public class Utils {
         ByteBuffer buffer = FormatUtils.toDirectBuffer(ethernet.toBytes());
         PcapPktHdr pktHdr = new PcapPktHdr();
         byte[] bytes;
-        for (int i=0; i<10; i++) {
+        for (int i=0; i<100; i++) {
             if (PcapSendPacket(StaticField.PCAP, buffer, buffer.capacity()) != 0) {
                 JOptionPane.showMessageDialog(null, FAILED_TO_SEND_PACKET);
                 return null;
@@ -85,6 +85,7 @@ public class Utils {
                     arp.getSenderProtocolAddress().equals(StaticField.GATEWAY_INET4ADDRESS)) {
                 return arp.getSenderHardwareAddress();
             }
+            try{Thread.sleep(StaticField.TIMEOUT);}catch(InterruptedException e){System.out.println(e);}
         }
         return null;
     }
