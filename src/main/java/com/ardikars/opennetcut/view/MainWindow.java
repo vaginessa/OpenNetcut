@@ -855,7 +855,7 @@ public class MainWindow extends javax.swing.JFrame {
                         Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
                         Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length);
                         try {
-                            Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);
+                            Thread.sleep(StaticField.TIMEOUT);
                         } catch (InterruptedException e) {
                     		e.printStackTrace();
                         }
@@ -941,7 +941,7 @@ public class MainWindow extends javax.swing.JFrame {
                     	Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toGw), toGw.length);
                    	Jxnet.PcapSendPacket(StaticField.PCAP, FormatUtils.toDirectBuffer(toVic), toVic.length); 
 			try {
-                		Thread.sleep(StaticField.TIMEOUT * StaticField.TIMEOUT_MULTIPLIER);
+                		Thread.sleep(StaticField.TIMEOUT);
 			} catch (InterruptedException e) {
                 		e.printStackTrace();
             		}
